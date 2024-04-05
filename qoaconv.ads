@@ -38,8 +38,6 @@ package Qoaconv is
      (File_Path : String; Sample_Data : Short_Integer;
       Qoa_Desc  : Qoa_Description) return Integer;
 
-    procedure Qoa_Max_Frame_Size (Qoa : Qoa_Description);
-
     procedure Qoaconv_Fwrite_U32_Le
      (v : Unsigned_32; Fd : File_Descriptor);
 
