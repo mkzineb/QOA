@@ -1,22 +1,24 @@
 with Ada.Text_IO; use Ada.Text_IO;
 package body Qoaconv is
+
    function Shift_Left (Value : Integer; Amount : Natural) return Integer with
      Import, Convention => Intrinsic;
 
    function Shift_Right (Value : Integer; Amount : Natural) return Integer with
      Import, Convention => Intrinsic;
 
-   --  TODO : A VOIR SHORT INTEGER FOR V
-   --  UnFinished boucle for
    procedure Qoa_Write_U64
-     (V : qoa_uint64_t; Bytes : in out Audio_Buffer_Access; P : in out Integer)
+     (V : Unsigned_64; Bytes : in out Bytes_Char_Acc; P : in out Unsigned_32)
    is
-
+      Index : constant Integer := 8;
    begin
-      Bytes (Bytes'First) := Bytes (P);
-      null;
+      Bytes (Bytes'First) := Bytes (Integer (P));
+      P                   := P + Unsigned_32 (8);
+      for i in reverse 0 .. Index - 1 loop
+         Bytes (Bytes'First + i) := Unsigned_Char ((V / (2**(i * 8))) mod 256);
+      end loop;
    end Qoa_Write_U64;
-   --  Finished
+
    function Qoa_Clamp_s16 (V : Integer) return Integer is
    begin
       if V + 32_768 > 65_535 then
@@ -29,33 +31,33 @@ package body Qoaconv is
       end if;
       return V;
    end Qoa_Clamp_s16;
-   --  Finished
+
    function Qoa_Lms_Predict (lms : Qoa_Lms_T) return Integer is
       Prediction : Integer := 0;
    begin
-      for i in 1 .. Qoa_LMS_Len loop
+      for i in 0 .. Qoa_LMS_Len - 1 loop
          Prediction := Prediction + lms.Weight (i) * lms.History (i);
       end loop;
       return Integer (Shift_Right_Arithmetic (Unsigned_64 (Prediction), 13));
    end Qoa_Lms_Predict;
-   --  Finished
+
    procedure Qoa_Lms_Update
      (lms : out Qoa_Lms_T; Sample : Integer; Residual : Integer)
    is
       Delta_q : constant Integer := Shift_Right (Residual, 4);
    begin
-      for i in 1 .. Qoa_LMS_Len loop
+      for i in 0 .. Qoa_LMS_Len - 1 loop
          lms.Weight (i) :=
            (if lms.History (i) < 0 then lms.Weight (i) - Delta_q
             else lms.Weight (i) + Delta_q);
       end loop;
 
-      for i in 1 .. Qoa_LMS_Len - 3 loop
+      for i in 0 .. Qoa_LMS_Len - 2 loop
          lms.History (i) := lms.History (i + 1);
       end loop;
       lms.History (Qoa_LMS_Len - 1) := Sample;
    end Qoa_Lms_Update;
-   --  Finished
+
    function Qoa_Div (V : Integer; ScaleFactor : Integer) return Integer is
       Reciprocal : constant Integer := Qoa_Reciprocal_Tab (ScaleFactor);
       N          : Integer;
@@ -68,23 +70,38 @@ package body Qoaconv is
         (Shift_Right (N, 0) - Shift_Left (N, 0));
       return N;
    end Qoa_Div;
-   --  Finished
+
    function Qoa_Write
-     (File_Path : String; Sample_Data : Short_Integer;
-      Qoa_Desc  : Qoa_Description) return Integer
+     (File_Path :     String; Sample_Data : Audio_Buffer_Access;
+      Qoa_Desc  : out Qoa_Description) return Integer
    is
-      FD      : File_Descriptor;
-      Encoded : Natural;
-      Size    : Natural;
-      Result  : Integer;
+      Num_Frames   : Unsigned_32;
+      Num_Slices   : Unsigned_32;
+      FD           : File_Descriptor;
+      Encoded      : Bytes_Char_Acc;
+      Size         : Natural;
+      Result       : Integer;
+      Encoded_Size : Unsigned_32;
    begin
-      FD := Create_File (File_Path, Binary);
+      Num_Frames   :=
+        (Qoa_Desc.Samples + Unsigned_32 (Qoa_Frame_Len - 1)) /
+        Unsigned_32 (Qoa_Frame_Len);
+      Num_Slices   :=
+        (Qoa_Desc.Samples + Unsigned_32 (Qoa_Slice_Len - 1)) /
+        Unsigned_32 (Qoa_Slice_Len);
+      Encoded_Size :=
+        8 + Num_Frames * 8 +
+        Num_Frames * Unsigned_32 (Qoa_LMS_Len) * 4 * Qoa_Desc.Channels +
+        Num_Slices * 8 * Qoa_Desc.Channels;
+      FD           := Create_File (File_Path, Binary);
+
+      Encoded := new Bytes_Char (0 .. Integer (Encoded_Size) - 1);
       if FD = Invalid_FD then
          Put_Line (Errno_Message);
          return 0;
       end if;
-      --  Encoded :=  Qoa_Encode (Sample_Data, Qoa_Desc, Unsigned_32(Size));
-      if Encoded /= 0 then
+      Encoded := Qoa_Encode (Sample_Data, Qoa_Desc, Unsigned_32 (Size));
+      if Encoded = null then
          Close (FD);
          return 0;
       end if;
@@ -92,45 +109,19 @@ package body Qoaconv is
       Close (FD);
       return Integer (Size);
    end Qoa_Write;
-   --  Finished
-   function Qoaconv_Wav_Write
-     (File_Path : String; sample_data : Short_Integer;
-      Qoa_Desc  : Qoa_Description) return Integer
-   is
-      Data_Size       : Unsigned_32;
-      Samplerate      : Unsigned_32;
-      Bits_Per_Sample : Short_Integer;
-      Channels        : Unsigned_32;
-      Fd              : File_Descriptor;
-      Value           : Integer;
-   begin
-      Data_Size := Qoa_Desc.Samples * Qoa_Desc.Channels * Short_Integer'Size;
-      Samplerate      := Qoa_Desc.Samplerate;
-      Bits_Per_Sample := 16;
-      Channels        := Qoa_Desc.Channels;
 
-      Fd := Open_Read_Write (File_Path, Binary);
-      if Fd = Invalid_FD then
-         Put_Line (Errno_Message);
-      else
-         Qoaconv_Fwrite_U32_Le (Unsigned_32 (Data_Size + 44 - 8), Fd);
-      end if;
-      return 44 - 8;
-   end Qoaconv_Wav_Write;
-   --  Finished
    procedure Qoaconv_Fwrite_U32_Le (v : Unsigned_32; Fd : File_Descriptor) is
       type Buf_Type is array (Unsigned_32) of Unsigned_8;
       Buffer : Buf_Type;
       Value  : Integer;
    begin
-      Buffer (1) := Unsigned_8 (v and 16#FF#);
-      Buffer (2) := Unsigned_8 ((Shift_Right_Arithmetic (v, 8)) and 16#FF#);
-      Buffer (3) := Unsigned_8 ((Shift_Right_Arithmetic (v, 16)) and 16#FF#);
-      Buffer (4) := Unsigned_8 ((Shift_Right_Arithmetic (v, 24)) and 16#FF#);
+      Buffer (0) := Unsigned_8 (v and 16#FF#);
+      Buffer (1) := Unsigned_8 ((Shift_Right_Arithmetic (v, 8)) and 16#FF#);
+      Buffer (2) := Unsigned_8 ((Shift_Right_Arithmetic (v, 16)) and 16#FF#);
+      Buffer (3) := Unsigned_8 ((Shift_Right_Arithmetic (v, 24)) and 16#FF#);
       Value      := Write (Fd, Buffer'Address, 4);
-      null;
    end Qoaconv_Fwrite_U32_Le;
-   --  Finished
+
    procedure Qoaconv_Fwrite_U16_Le (v : Unsigned_16; Fd : File_Descriptor) is
       type Buf_Type is array (Unsigned_32) of Unsigned_8;
       Buffer : Buf_Type;
@@ -140,7 +131,7 @@ package body Qoaconv is
       Buffer (2) := Unsigned_8 ((Shift_Right_Arithmetic (v, 8)) and 16#FF#);
       Value      := Write (Fd, Buffer'Address, 2);
    end Qoaconv_Fwrite_U16_Le;
-   --  Finished
+
    function Qoa_Clamp
      (v : Integer; min : Integer; max : Integer) return Integer
    is
@@ -153,7 +144,7 @@ package body Qoaconv is
       end if;
       return v;
    end Qoa_Clamp;
-   --  Finished
+
    function Qoa_Frame_Size
      (Channels : Unsigned_32; Slices : Unsigned_32) return Unsigned_32
    is
@@ -161,38 +152,37 @@ package body Qoaconv is
       return
         8 + Unsigned_32 (Qoa_LMS_Len) * 4 * Channels + 8 * Slices * Channels;
    end Qoa_Frame_Size;
-   --  UnFinished
+
    function Qoa_Encode_Frame
-     (Sample_Data : Sample_Buffer; Qoa_Desc : out Qoa_Description;
-      Frame_Len   : Unsigned_32; Bytes : out Audio_Buffer_Access)
-      return Unsigned_32
+     (Sample_Data : Integer; Qoa_Desc : out Qoa_Description;
+      Frame_Len   : Unsigned_32; Bytes : out Bytes_Char_Acc) return Unsigned_32
    is
-      Channels   : Unsigned_32 := Qoa_Desc.Channels;
-      P          : Integer;
-      Slices     : Unsigned_32 :=
+      Channels   : constant Unsigned_32 := Qoa_Desc.Channels;
+      P          : Unsigned_32          := 0;
+      Slices     : constant Unsigned_32 :=
         (Frame_Len + Unsigned_32 (Qoa_Slice_Len) - 1) /
         Unsigned_32 (Qoa_Slice_Len);
-      Frame_Size : Unsigned_32 := Qoa_Frame_Size (Channels, Slices);
+      Frame_Size : constant Unsigned_32 := Qoa_Frame_Size (Channels, Slices);
 
-      type Ch_Buffer is array (1 .. Qoa_Max_Channels) of Integer;
-      Prev_ScaleFactor : Ch_Buffer    := (others => 0);
-      Weights          : qoa_uint64_t := 0;
-      History          : qoa_uint64_t := 0;
-      Sample_Index     : Integer      := 0;
-      Slice_Len        : Integer      := 0;
-      Slice_Start      : Integer      := 0;
-      Slice_End        : Integer      := 0;
-      Best_Rank        : qoa_uint64_t := -1;
-      Best_Error       : qoa_uint64_t := -1;
-      Best_Slice       : qoa_uint64_t;
+      type Ch_Buffer is array (0 .. Qoa_Max_Channels - 1) of Integer;
+      Prev_ScaleFactor : Ch_Buffer   := (others => 0);
+      Weights          : Unsigned_64 := 0;
+      History          : Unsigned_64 := 0;
+      Sample_Index     : Integer     := 0;
+      Slice_Len        : Integer     := 0;
+      Slice_Start      : Integer     := 0;
+      Slice_End        : Integer     := 0;
+      Best_Rank        : Unsigned_64 := -1;
+      Best_Error       : Unsigned_64 := -1;
+      Best_Slice       : Unsigned_64;
       Best_Lms         : Qoa_Lms_T;
       Best_ScaleFactor : Integer;
       ScaleFactor      : Integer;
       Index            : Natural;
       lms              : Qoa_Lms_T;
-      Slice            : qoa_uint64_t;
-      Current_Rank     : qoa_uint64_t := 0;
-      Current_Error    : qoa_uint64_t := 0;
+      Slice            : Unsigned_64;
+      Current_Rank     : Unsigned_64 := 0;
+      Current_Error    : Unsigned_64 := 0;
       Index_Slice      : Natural;
       Si               : Natural;
 
@@ -207,31 +197,35 @@ package body Qoaconv is
 
       Weights_Penalty : Integer;
       Error           : Long_Long_Integer;
-      Error_Sq        : qoa_uint64_t;
+      Error_Sq        : Unsigned_64;
    begin
       Index       := Natural (Channels);
       Index_Slice := Natural (Slice_End);
 
       Qoa_Write_U64
-        (qoa_uint64_t (Shift_Left (Qoa_Desc.Channels, 56)) or
-         qoa_uint64_t (Shift_Left (Qoa_Desc.Samplerate, 32)) or
-         qoa_uint64_t (Shift_Left (Frame_Len, 16)) or
-         qoa_uint64_t (Shift_Left (Frame_Size, 32)),
+        ((Shift_Left (Unsigned_64 (Qoa_Desc.Channels), 56)) or
+         (Shift_Left (Unsigned_64 (Qoa_Desc.Samplerate), 32)) or
+         (Shift_Left (Unsigned_64 (Frame_Len), 16)) or
+         (Shift_Left (Unsigned_64 (Frame_Size), 32)),
          Bytes, P);
 
       --  write the current lms state
-      for i in 1 .. Index loop
-         for j in 1 .. Qoa_LMS_Len loop
+      for i in 0 .. Index - 1 loop
+         for j in 0 .. Qoa_LMS_Len - 1 loop
             History :=
-              qoa_uint64_t (Shift_Left (Unsigned_64 (History), 16)) or
-              qoa_uint64_t
-                (Qoa_Clamp_s16
-                   (Integer (qoa_uint64_t (Qoa_Desc.lms (i).History (j)))));
+              (Shift_Left (History, 16)) or
+              Unsigned_64
+                ((Qoa_Clamp_s16
+                    (Integer
+                       (Unsigned_64 (Qoa_Desc.lms (i).History (j)) and
+                        Unsigned_64 (16#FFFF#)))));
             Weights :=
-              qoa_uint64_t (Shift_Left (Unsigned_64 (Weights), 16)) or
-              qoa_uint64_t
-                (Qoa_Clamp_s16
-                   (Integer (qoa_uint64_t (Qoa_Desc.lms (i).Weight (j)))));
+              (Shift_Left (Weights, 16)) or
+              Unsigned_64
+                ((Qoa_Clamp_s16
+                    (Integer
+                       (Unsigned_64 (Qoa_Desc.lms (i).History (j)) and
+                        Unsigned_64 (16#FFFF#)))));
          end loop;
          Qoa_Write_U64 (History, Bytes, P);
          Qoa_Write_U64 (Weights, Bytes, P);
@@ -239,19 +233,20 @@ package body Qoaconv is
 
       --  encode all samples
       while Sample_Index < Integer (Frame_Len) loop
-         for c in 1 .. Index loop
+         for c in 0 .. Index - 1 loop
             Slice_Len   :=
               Qoa_Clamp (Qoa_Slice_Len, 0, Integer (Frame_Len) - Sample_Index);
             Slice_Start := Sample_Index * Integer (Channels) + c;
             Slice_End   := (Sample_Index + Slice_Len) * Integer (Channels) + c;
 
-            for sfi in 1 .. 16 loop
+            for sfi in 0 .. 15 loop
                ScaleFactor := (sfi + Prev_ScaleFactor (c)) mod 16;
                lms         := Qoa_Desc.lms (c);
-               Slice       := qoa_uint64_t (ScaleFactor);
+               Slice       := Unsigned_64 (ScaleFactor);
                Si          := Slice_Start;
                while Si < Slice_End loop
-                  Sample    := Integer (Sample_Data (Si));
+                  --  TODO
+                  Sample    := Integer (Sample_Data);
                   Predicted := Qoa_Lms_Predict (lms);
 
                   Residual      := Sample - Predicted;
@@ -274,18 +269,16 @@ package body Qoaconv is
                      Weights_Penalty := 0;
                   end if;
                   Error         := Long_Long_Integer (Sample - Reconstructed);
-                  Error_Sq      := qoa_uint64_t (Error * Error);
+                  Error_Sq      := Unsigned_64 (Error * Error);
                   Current_Rank  :=
                     Current_Rank + Error_Sq +
-                    qoa_uint64_t (Weights_Penalty * Weights_Penalty);
+                    Unsigned_64 (Weights_Penalty * Weights_Penalty);
                   Current_Error := Current_Error + Error_Sq;
                   if Current_Rank > Best_Rank then
                      exit;
                   end if;
                   Qoa_Lms_Update (lms, Reconstructed, Dequantized);
-                  Slice :=
-                    qoa_uint64_t (Shift_Left (Integer (Slice), 3)) or
-                    qoa_uint64_t (Quantized);
+                  Slice := (Shift_Left (Slice, 3)) or Unsigned_64 (Quantized);
 
                   Si := Si + Natural (Channels);
                end loop;
@@ -301,7 +294,7 @@ package body Qoaconv is
             Qoa_Desc.lms (c)     := Best_Lms;
 
             Best_Slice :=
-              Best_Slice * qoa_uint64_t ((2**(Qoa_Slice_Len - Slice_Len) * 3));
+              Best_Slice * Unsigned_64 ((2**(Qoa_Slice_Len - Slice_Len) * 3));
             Qoa_Write_U64 (Best_Slice, Bytes, P);
          end loop;
 
@@ -309,43 +302,41 @@ package body Qoaconv is
       end loop;
       return Unsigned_32 (P);
    end Qoa_Encode_Frame;
-   --  Todo : P size
-   --  UnFinished
+
    function Qoa_Encode_Header
-     (Qoa_Desc : Qoa_Description; Bytes : out Audio_Buffer_Access)
-      return Integer
+     (Qoa_Desc : Qoa_Description; Bytes : out Bytes_Char_Acc)
+      return Unsigned_32
    is
-      P : Integer := 0;
+      P : Unsigned_32 := 0;
    begin
       Qoa_Write_U64
-        (qoa_uint64_t (Shift_Left (Unsigned_64 (Qoa_Magic), 32)) or
-         qoa_uint64_t (Qoa_Desc.Samples),
+        (Shift_Left (Unsigned_64 (Qoa_Magic), 32) or
+         Unsigned_64 (Qoa_Desc.Samples),
          Bytes, P);
-      return P;
+      return Unsigned_32 (P);
    end Qoa_Encode_Header;
 
    function Qoa_Encode
-     (Sample_Data :     Short_Integer; Qoa_Desc : out Qoa_Description;
-      Out_Len     : out Unsigned_32) return Natural
+     (Sample_Data :     Audio_Buffer_Access; Qoa_Desc : out Qoa_Description;
+      Out_Len     : out Unsigned_32) return Bytes_Char_Acc
    is
       Num_Frames    : Unsigned_32;
       Num_Slices    : Unsigned_32;
       Encoded_Size  : Unsigned_32;
-      Bytes         : Integer;
-      Header        : Unsigned_32;
       Frame_Len     : Integer;
-      Frame_Samples : Unsigned_16;
+      Frame_Samples : Integer;
       Frame_Size    : Unsigned_32;
-
+      Bytes         : Bytes_Char_Acc :=
+        new Bytes_Char (0 .. Integer (Encoded_Size) - 1);
+      P             : Unsigned_32;
+      Sample_Index  : Integer        := 0;
    begin
       if Qoa_Desc.Channels = 0 or
         Qoa_Desc.Channels > Unsigned_32 (Qoa_Max_Channels) or
         Qoa_Desc.Samples = 0 or Qoa_Desc.Samplerate = 0 or
         Qoa_Desc.Samplerate > 16#FF_FFFF#
       then
-         return 0;
-      else --  a v jeudi
-         null;
+         return null;
       end if;
       Num_Frames   :=
         (Qoa_Desc.Samples + Unsigned_32 (Qoa_Frame_Len - 1)) /
@@ -357,29 +348,37 @@ package body Qoaconv is
         8 + Num_Frames * 8 +
         Num_Frames * Unsigned_32 (Qoa_LMS_Len) * 4 * Qoa_Desc.Channels +
         Num_Slices * 8 * Qoa_Desc.Channels;
-      --  for i in 0 .. Integer(Qoa_Desc.Channels) loop
-      --     Qoa_Desc.lms(i).Weight(1) := 0;
-      --     Qoa_Desc.lms(i).Weight(2) := 0;
-      --     Qoa_Desc.lms(i).Weight(3) := - (Shift_Left(1,13));
-      --     Qoa_Desc.lms(i).Weight(4) := Shift_Left(1, 14);
-      --     for j in 1 .. Qoa_LMS_Len loop
-      --        Qoa_Desc.lms(j).History(j) := 0;
-      --     end loop;
-      --  end loop;
 
-      Frame_Len := Qoa_Frame_Len;
-      for Sample_Index in 1 .. Qoa_Desc.Samples loop  --  when Frame_Len loop
-         --  Frame_Len     := Qoa_Clamp (Qoa_Frame_Len, 0,
-         --  Qoa_Desc.Samples - Integer(Sample_Index));
-         --  Frame_Samples := Sample_Data + Sample_Index * Qoa_Desc.Channels;
-         --  Frame_Size    := Qoa_Encode_Frame(Frame_Samples, Qoa_Desc,
-         --  Frame_Len, Bytes, Header);
-         Header := Header + Frame_Size;
+      Bytes := new Bytes_Char (0 .. Integer (Encoded_Size) - 1);
+
+      for i in 0 .. Integer (Qoa_Desc.Channels) - 1 loop
+         Qoa_Desc.lms (i).Weight (0) := 0;
+         Qoa_Desc.lms (i).Weight (1) := 0;
+         Qoa_Desc.lms (i).Weight (2) := -(Shift_Left (1, 13));
+         Qoa_Desc.lms (i).Weight (3) := Shift_Left (1, 14);
+         for j in 0 .. Qoa_LMS_Len - 1 loop
+            Qoa_Desc.lms (i).History (j) := 0;
+         end loop;
       end loop;
-      Out_Len := Header;
+      P         := Qoa_Encode_Header (Qoa_Desc, Bytes);
+      Frame_Len := Qoa_Frame_Len;
+      while Sample_Index < Integer (Qoa_Desc.Samples) loop
+         Frame_Len     :=
+           Qoa_Clamp
+             (Qoa_Frame_Len, 0, Integer (Qoa_Desc.Samples) - Sample_Index);
+         Frame_Samples :=
+           Integer
+             (Sample_Data ((Sample_Index) * Integer (Qoa_Desc.Channels)));
+         Frame_Size    :=
+           Qoa_Encode_Frame
+             (Frame_Samples, Qoa_Desc, Unsigned_32 (Frame_Len), Bytes);
+
+         P := P + Frame_Size;
+      end loop;
+      Out_Len := P;
       return Bytes;
    end Qoa_Encode;
-   --  functions to read wav file
+
    function Qoaconv_Fread_u16_le (Fd : File_Descriptor) return Unsigned_16 is
       Count : Integer;
       type Unsigned_Char is mod 256;
@@ -391,7 +390,7 @@ package body Qoaconv is
       return
         Shift_Left (Unsigned_16 (Buffer (2)), 8) or Unsigned_16 (Buffer (1));
    end Qoaconv_Fread_u16_le;
-   --  Finished
+
    function Qoaconv_Fread_u32_le (Fd : File_Descriptor) return Unsigned_32 is
       Count : Integer;
       type Unsigned_Char is mod 256;
@@ -405,7 +404,7 @@ package body Qoaconv is
         Shift_Left (Unsigned_32 (Buffer (3)), 16) or
         Shift_Left (Unsigned_32 (Buffer (2)), 8) or Unsigned_32 (Buffer (1));
    end Qoaconv_Fread_u32_le;
-   --  Finished
+
    function Get_Chunk_Id (S : String) return Unsigned_32 is
       Chunk_ID : Unsigned_32 := 0;
    begin
@@ -416,7 +415,7 @@ package body Qoaconv is
         (Shift_Left (Character'Pos (S (4)), 24));
       return Chunk_ID;
    end Get_Chunk_Id;
-   --  Finished
+
    function Qoaconv_Wav_Read
      (File_Path : String; Qoa_Desc : out Qoa_Description)
       return Audio_Buffer_Access
