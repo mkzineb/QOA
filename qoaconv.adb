@@ -1,23 +1,23 @@
 with Ada.Text_IO; use Ada.Text_IO;
 package body Qoaconv is
 
-   function Shift_Left (Value : Integer; Amount : Natural) return Integer with
-     Import, Convention => Intrinsic;
-
-   function Shift_Right (Value : Integer; Amount : Natural) return Integer with
-     Import, Convention => Intrinsic;
-
    procedure Qoa_Write_U64
      (V : Unsigned_64; Bytes : in out Bytes_Char_Acc; P : in out Unsigned_32)
    is
       Index : constant Integer := 8;
    begin
-      Bytes (Bytes'First) := Bytes (Integer (P));
-      P                   := P + Unsigned_32 (8);
+      P := P + Unsigned_32 (8);
       for i in reverse 0 .. Index - 1 loop
-         Bytes (Bytes'First + i) := Unsigned_Char ((V / (2**(i * 8))) mod 256);
+         Bytes.all (Natural (P) + i) :=
+           Unsigned_Char ((V / (2**(i * 8))) mod 256);
       end loop;
    end Qoa_Write_U64;
+
+   function Shift_Left (Value : Integer; Amount : Natural) return Integer with
+     Import, Convention => Intrinsic;
+
+   function Shift_Right (Value : Integer; Amount : Natural) return Integer with
+     Import, Convention => Intrinsic;
 
    function Qoa_Clamp_s16 (V : Integer) return Integer is
    begin
@@ -38,7 +38,7 @@ package body Qoaconv is
       for i in 0 .. Qoa_LMS_Len - 1 loop
          Prediction := Prediction + lms.Weight (i) * lms.History (i);
       end loop;
-      return Integer (Shift_Right_Arithmetic (Unsigned_64 (Prediction), 13));
+      return Shift_Right (Prediction, 13);
    end Qoa_Lms_Predict;
 
    procedure Qoa_Lms_Update
@@ -48,8 +48,8 @@ package body Qoaconv is
    begin
       for i in 0 .. Qoa_LMS_Len - 1 loop
          lms.Weight (i) :=
-           (if lms.History (i) < 0 then lms.Weight (i) - Delta_q
-            else lms.Weight (i) + Delta_q);
+           (if lms.History (i) < 0 then lms.History (i) - Delta_q
+            else lms.History (i) + Delta_q);
       end loop;
 
       for i in 0 .. Qoa_LMS_Len - 2 loop
@@ -64,7 +64,7 @@ package body Qoaconv is
       Tmp        : Integer;
    begin
       Tmp := V * Reciprocal + Shift_Left (1, 15);
-      N   := Shift_Right (V * Reciprocal + Shift_Left (1, 15), 16);
+      N   := Shift_Right (Tmp, 16);
       N   :=
         N + (Shift_Right (V, 0) - Shift_Left (V, 0)) -
         (Shift_Right (N, 0) - Shift_Left (N, 0));
@@ -111,7 +111,7 @@ package body Qoaconv is
    end Qoa_Write;
 
    procedure Qoaconv_Fwrite_U32_Le (v : Unsigned_32; Fd : File_Descriptor) is
-      type Buf_Type is array (Unsigned_32) of Unsigned_8;
+      type Buf_Type is array (0 .. 3) of Unsigned_8;
       Buffer : Buf_Type;
       Value  : Integer;
    begin
@@ -123,12 +123,12 @@ package body Qoaconv is
    end Qoaconv_Fwrite_U32_Le;
 
    procedure Qoaconv_Fwrite_U16_Le (v : Unsigned_16; Fd : File_Descriptor) is
-      type Buf_Type is array (Unsigned_32) of Unsigned_8;
+      type Buf_Type is array (0 .. 1) of Unsigned_8;
       Buffer : Buf_Type;
       Value  : Integer;
    begin
-      Buffer (1) := Unsigned_8 (v and 16#FF#);
-      Buffer (2) := Unsigned_8 ((Shift_Right_Arithmetic (v, 8)) and 16#FF#);
+      Buffer (0) := Unsigned_8 (v and 16#FF#);
+      Buffer (1) := Unsigned_8 ((Shift_Right_Arithmetic (v, 8)) and 16#FF#);
       Value      := Write (Fd, Buffer'Address, 2);
    end Qoaconv_Fwrite_U16_Le;
 
@@ -154,7 +154,7 @@ package body Qoaconv is
    end Qoa_Frame_Size;
 
    function Qoa_Encode_Frame
-     (Sample_Data : Integer; Qoa_Desc : out Qoa_Description;
+     (Sample_Data : Audio_Buffer_Access; Qoa_Desc : out Qoa_Description;
       Frame_Len   : Unsigned_32; Bytes : out Bytes_Char_Acc) return Unsigned_32
    is
       Channels   : constant Unsigned_32 := Qoa_Desc.Channels;
@@ -208,7 +208,6 @@ package body Qoaconv is
          (Shift_Left (Unsigned_64 (Frame_Len), 16)) or
          (Shift_Left (Unsigned_64 (Frame_Size), 32)),
          Bytes, P);
-
       --  write the current lms state
       for i in 0 .. Index - 1 loop
          for j in 0 .. Qoa_LMS_Len - 1 loop
@@ -229,6 +228,7 @@ package body Qoaconv is
          end loop;
          Qoa_Write_U64 (History, Bytes, P);
          Qoa_Write_U64 (Weights, Bytes, P);
+
       end loop;
 
       --  encode all samples
@@ -245,8 +245,7 @@ package body Qoaconv is
                Slice       := Unsigned_64 (ScaleFactor);
                Si          := Slice_Start;
                while Si < Slice_End loop
-                  --  TODO
-                  Sample    := Integer (Sample_Data);
+                  Sample    := Integer (Sample_Data (Si));
                   Predicted := Qoa_Lms_Predict (lms);
 
                   Residual      := Sample - Predicted;
@@ -297,10 +296,9 @@ package body Qoaconv is
               Best_Slice * Unsigned_64 ((2**(Qoa_Slice_Len - Slice_Len) * 3));
             Qoa_Write_U64 (Best_Slice, Bytes, P);
          end loop;
-
          Sample_Index := Sample_Index + Qoa_Slice_Len;
       end loop;
-      return Unsigned_32 (P);
+      return P;
    end Qoa_Encode_Frame;
 
    function Qoa_Encode_Header
@@ -371,9 +369,10 @@ package body Qoaconv is
              (Sample_Data ((Sample_Index) * Integer (Qoa_Desc.Channels)));
          Frame_Size    :=
            Qoa_Encode_Frame
-             (Frame_Samples, Qoa_Desc, Unsigned_32 (Frame_Len), Bytes);
+             (Sample_Data, Qoa_Desc, Unsigned_32 (Frame_Len), Bytes);
 
-         P := P + Frame_Size;
+         P            := P + Frame_Size;
+         Sample_Index := Sample_Index + Frame_Len;
       end loop;
       Out_Len := P;
       return Bytes;
@@ -382,27 +381,27 @@ package body Qoaconv is
    function Qoaconv_Fread_u16_le (Fd : File_Descriptor) return Unsigned_16 is
       Count : Integer;
       type Unsigned_Char is mod 256;
-      type buff is array (1 .. 2) of Unsigned_Char;
+      type buff is array (0 .. 1) of Unsigned_Char;
       Buffer : buff;
    begin
       Count := Read (Fd, Buffer'Address, 2);
       pragma Assert (Count = 2, "16bits not read entirely");
       return
-        Shift_Left (Unsigned_16 (Buffer (2)), 8) or Unsigned_16 (Buffer (1));
+        Shift_Left (Unsigned_16 (Buffer (1)), 8) or Unsigned_16 (Buffer (0));
    end Qoaconv_Fread_u16_le;
 
    function Qoaconv_Fread_u32_le (Fd : File_Descriptor) return Unsigned_32 is
       Count : Integer;
       type Unsigned_Char is mod 256;
-      type buff is array (1 .. 4) of Unsigned_Char;
+      type buff is array (0 .. 3) of Unsigned_Char;
       Buffer : buff;
    begin
       Count := Read (Fd, Buffer'Address, 4);
       pragma Assert (Count = 4, "32bits not read entirely");
       return
-        Shift_Left (Unsigned_32 (Buffer (4)), 24) or
-        Shift_Left (Unsigned_32 (Buffer (3)), 16) or
-        Shift_Left (Unsigned_32 (Buffer (2)), 8) or Unsigned_32 (Buffer (1));
+        Shift_Left (Unsigned_32 (Buffer (3)), 24) or
+        Shift_Left (Unsigned_32 (Buffer (2)), 16) or
+        Shift_Left (Unsigned_32 (Buffer (1)), 8) or Unsigned_32 (Buffer (0));
    end Qoaconv_Fread_u32_le;
 
    function Get_Chunk_Id (S : String) return Unsigned_32 is
