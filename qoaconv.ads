@@ -109,8 +109,9 @@ package Qoaconv is
       return Audio_Buffer_Access;
 
    function Qoa_Encode_Frame
-     (Sample_Data : Audio_Buffer_Access; Qoa_Desc : out Qoa_Description;
-      Frame_Len : Unsigned_32; Bytes : out Bytes_Char_Acc) return Unsigned_32;
+     (Sample_Data :     Audio_Buffer_Access; Frame_Samples : Integer;
+      Qoa_Desc    : out Qoa_Description; Frame_Len : Unsigned_32;
+      Bytes       : out Bytes_Char_Acc) return Unsigned_32;
 
    function Qoa_Div (V : Integer; ScaleFactor : Integer) return Integer;
 

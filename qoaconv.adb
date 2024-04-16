@@ -6,10 +6,10 @@ package body Qoaconv is
    is
       Index : constant Integer := 8;
    begin
-      P := P + Unsigned_32 (8);
-      for i in reverse 0 .. Index - 1 loop
-         Bytes.all (Natural (P) + i) :=
-           Unsigned_Char ((V / (2**(i * 8))) mod 256);
+      for i in 0 .. Index - 1 loop
+         Bytes.all (i) :=
+           Unsigned_Char ((V / (2**((Index - i - 1) * 8))) mod 256);
+         P             := P + 1;
       end loop;
    end Qoa_Write_U64;
 
@@ -154,8 +154,9 @@ package body Qoaconv is
    end Qoa_Frame_Size;
 
    function Qoa_Encode_Frame
-     (Sample_Data : Audio_Buffer_Access; Qoa_Desc : out Qoa_Description;
-      Frame_Len   : Unsigned_32; Bytes : out Bytes_Char_Acc) return Unsigned_32
+     (Sample_Data :     Audio_Buffer_Access; Frame_Samples : Integer;
+      Qoa_Desc    : out Qoa_Description; Frame_Len : Unsigned_32;
+      Bytes       : out Bytes_Char_Acc) return Unsigned_32
    is
       Channels   : constant Unsigned_32 := Qoa_Desc.Channels;
       P          : Unsigned_32          := 0;
@@ -228,7 +229,6 @@ package body Qoaconv is
          end loop;
          Qoa_Write_U64 (History, Bytes, P);
          Qoa_Write_U64 (Weights, Bytes, P);
-
       end loop;
 
       --  encode all samples
@@ -245,7 +245,8 @@ package body Qoaconv is
                Slice       := Unsigned_64 (ScaleFactor);
                Si          := Slice_Start;
                while Si < Slice_End loop
-                  Sample    := Integer (Sample_Data (Si));
+                  --  TODO
+                  Sample    := Integer (Sample_Data (Frame_Samples + Si));
                   Predicted := Qoa_Lms_Predict (lms);
 
                   Residual      := Sample - Predicted;
@@ -298,6 +299,8 @@ package body Qoaconv is
          end loop;
          Sample_Index := Sample_Index + Qoa_Slice_Len;
       end loop;
+      Put_Line (Integer'Image (Sample));
+
       return P;
    end Qoa_Encode_Frame;
 
@@ -369,7 +372,8 @@ package body Qoaconv is
              (Sample_Data ((Sample_Index) * Integer (Qoa_Desc.Channels)));
          Frame_Size    :=
            Qoa_Encode_Frame
-             (Sample_Data, Qoa_Desc, Unsigned_32 (Frame_Len), Bytes);
+             (Sample_Data, Frame_Samples, Qoa_Desc, Unsigned_32 (Frame_Len),
+              Bytes);
 
          P            := P + Frame_Size;
          Sample_Index := Sample_Index + Frame_Len;
