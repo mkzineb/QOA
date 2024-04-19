@@ -12,7 +12,7 @@ procedure Qoaproject is
      (Audio_Buffer, Audio_Buffer_Access);
    Bytes_Written : Integer;
 begin
-   Bytes_Written := Qoa_Write ("test.qoa", Sample_data, Qoa_D);
-   Put_Line (Integer'Image (Bytes_Written));
+
+   Bytes_Written := Qoa_Write ("toto.qoa", Sample_data, Qoa_D);
    Free (Sample_data);
 end Qoaproject;

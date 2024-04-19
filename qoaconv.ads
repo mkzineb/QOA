@@ -10,8 +10,8 @@ package Qoaconv is
    Qoa_Frame_Len : constant Integer := (Qoa_Slice_Per_Frame * Qoa_Slice_Len);
    Qoa_Magic           : constant Integer := 16#716F_6166#;
 
-   type History_T is array (0 .. Qoa_LMS_Len - 1) of Integer;
-   type Weights_T is array (0 .. Qoa_LMS_Len - 1) of Integer;
+   type History_T is array (0 .. Qoa_LMS_Len - 1) of Unsigned_32;
+   type Weights_T is array (0 .. Qoa_LMS_Len - 1) of Unsigned_32;
 
    type Channel is mod 256;
    type Rate is mod 21;
@@ -22,7 +22,7 @@ package Qoaconv is
       Weight  : Weights_T;
    end record;
 
-   type Lms_T is array (0 .. Qoa_LMS_Len - 1) of Qoa_Lms_T;
+   type Lms_T is array (0 .. Qoa_Max_Channels - 1) of Qoa_Lms_T;
 
    type Qoa_Description is record
       Channels   : Unsigned_32;
@@ -51,9 +51,6 @@ package Qoaconv is
    type Audio_Buffer is array (Integer range <>) of Integer_16;
    type Audio_Buffer_Access is access all Audio_Buffer;
 
-   type Position_Buffer is array (Integer range <>) of Integer_8;
-   type Position_Buffer_Access is access all Position_Buffer;
-
    type Qoa_Dequant_Tab_Type is array (0 .. 127) of Integer;
    Qoa_Dequant_Tab : Qoa_Dequant_Tab_Type :=
      (1, -1, 3, -3, 5, -5, 7, -7, 5, -5, 18, -18, 32, -32, 49, -49, 16, -16,
@@ -69,9 +66,9 @@ package Qoaconv is
       -7_718, 12_005, -12_005, 1_536, -1_536, 5_120, -5_120, 9_216, -9_216,
       14_336, -14_336);
 
-   function Qoa_Encode_Header
-     (Qoa_Desc : Qoa_Description; Bytes : out Bytes_Char_Acc)
-      return Unsigned_32;
+   procedure Qoa_Encode_Header
+     (Qoa_Desc :        Qoa_Description; Bytes : out Bytes_Char_Acc;
+      P        : in out Unsigned_32);
 
    procedure Qoa_Write_U64
      (V : Unsigned_64; Bytes : in out Bytes_Char_Acc; P : in out Unsigned_32);
@@ -109,14 +106,14 @@ package Qoaconv is
       return Audio_Buffer_Access;
 
    function Qoa_Encode_Frame
-     (Sample_Data :     Audio_Buffer_Access; Frame_Samples : Integer;
-      Qoa_Desc    : out Qoa_Description; Frame_Len : Unsigned_32;
-      Bytes       : out Bytes_Char_Acc) return Unsigned_32;
+     (Sample_Data :        Audio_Buffer_Access; Frame_Samples : Integer;
+      Qoa_Desc    : in out Qoa_Description; Frame_Len : Unsigned_32;
+      Bytes : out Bytes_Char_Acc; P : in out Unsigned_32) return Unsigned_32;
 
    function Qoa_Div (V : Integer; ScaleFactor : Integer) return Integer;
 
    function Qoa_Encode
-     (Sample_Data :     Audio_Buffer_Access; Qoa_Desc : out Qoa_Description;
+     (Sample_Data :     Audio_Buffer_Access; Qoa_Desc : in out Qoa_Description;
       Out_Len     : out Unsigned_32) return Bytes_Char_Acc;
 
 end Qoaconv;
