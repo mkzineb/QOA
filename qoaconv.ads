@@ -1,7 +1,8 @@
 with GNAT.OS_Lib; use GNAT.OS_Lib;
 with Interfaces;  use Interfaces;
-
-package Qoaconv is
+package Qoaconv with
+  SPARK_Mode => on
+is
    Qoa_Min_FileSize    : constant Integer := 16;
    Qoa_Max_Channels    : constant Integer := 8;
    Qoa_Slice_Len       : constant Integer := 20;
@@ -10,16 +11,16 @@ package Qoaconv is
    Qoa_Frame_Len : constant Integer := (Qoa_Slice_Per_Frame * Qoa_Slice_Len);
    Qoa_Magic           : constant Integer := 16#716F_6166#;
 
-   type History_T is array (0 .. Qoa_LMS_Len - 1) of Unsigned_32;
-   type Weights_T is array (0 .. Qoa_LMS_Len - 1) of Unsigned_32;
+   type History_T is array (0 .. Qoa_LMS_Len - 1) of Integer_16;
+   type Weights_T is array (0 .. Qoa_LMS_Len - 1) of Integer_16;
 
    type Channel is mod 256;
    type Rate is mod 21;
    type Sample is mod 16;
 
    type Qoa_Lms_T is record
-      History : History_T;
-      Weight  : Weights_T;
+      History : History_T := (others => 0);
+      Weight  : Weights_T := (others => 0);
    end record;
 
    type Lms_T is array (0 .. Qoa_Max_Channels - 1) of Qoa_Lms_T;
@@ -32,8 +33,8 @@ package Qoaconv is
    end record;
 
    type Unsigned_Char is mod 256;
-   type Bytes_Char is array (Integer range <>) of Unsigned_Char;
-   type Bytes_Char_Acc is access all Bytes_Char;
+   type Bytes_Char is array (Natural range <>) of Unsigned_Char;
+   type Bytes_Char_Acc is not null access all Bytes_Char;
 
    type My_Int_Array is array (0 .. 16) of Integer;
    Qoa_Quant_Tab : My_Int_Array :=
@@ -71,7 +72,13 @@ package Qoaconv is
       P        : in out Unsigned_32);
 
    procedure Qoa_Write_U64
-     (V : Unsigned_64; Bytes : in out Bytes_Char_Acc; P : in out Unsigned_32);
+     (V :        Unsigned_64; Bytes : in out Bytes_Char_Acc;
+      P : in out Unsigned_32) with
+     Pre  =>
+      Bytes'First <= Bytes'Last and then P >= Unsigned_32 (Bytes'First)
+      and then Bytes'Last - Bytes'First >= 7
+      and then P <= Unsigned_32 (Bytes'Last - 8),
+     Post => P = P'Old + 8;
 
    function Qoa_Clamp_s16 (V : Integer) return Integer;
 
@@ -90,9 +97,9 @@ package Qoaconv is
    function Qoa_Clamp
      (v : Integer; min : Integer; max : Integer) return Integer;
 
-   function Qoa_Write
+   procedure Qoa_Write
      (File_Path :     String; Sample_Data : Audio_Buffer_Access;
-      Qoa_Desc  : out Qoa_Description) return Integer;
+      Qoa_Desc  : out Qoa_Description; Bytes_writte : out Integer);
 
    function Get_Chunk_Id (S : String) return Unsigned_32;
 
@@ -101,19 +108,20 @@ package Qoaconv is
 
    function Qoaconv_Fread_u32_le (Fd : File_Descriptor) return Unsigned_32;
 
-   function Qoaconv_Wav_Read
-     (File_Path : String; Qoa_Desc : out Qoa_Description)
-      return Audio_Buffer_Access;
+   procedure Qoaconv_Wav_Read
+     (File_Path        :     String; Qoa_Desc : out Qoa_Description;
+      Sample_data_Read : out Audio_Buffer_Access);
 
-   function Qoa_Encode_Frame
+   procedure Qoa_Encode_Frame
      (Sample_Data :        Audio_Buffer_Access; Frame_Samples : Integer;
       Qoa_Desc    : in out Qoa_Description; Frame_Len : Unsigned_32;
-      Bytes : out Bytes_Char_Acc; P : in out Unsigned_32) return Unsigned_32;
+      Bytes       :    out Bytes_Char_Acc; P : in out Unsigned_32;
+      Result      :    out Unsigned_32);
 
    function Qoa_Div (V : Integer; ScaleFactor : Integer) return Integer;
 
-   function Qoa_Encode
+   procedure Qoa_Encode
      (Sample_Data :     Audio_Buffer_Access; Qoa_Desc : in out Qoa_Description;
-      Out_Len     : out Unsigned_32) return Bytes_Char_Acc;
+      Out_Len     : out Unsigned_32; Encode : out Bytes_Char_Acc);
 
 end Qoaconv;
