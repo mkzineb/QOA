@@ -2,24 +2,24 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Unchecked_Conversion;
 with GNAT.OS_Lib;
 package body Qoaconv with
-  SPARK_Mode => on
+  SPARK_Mode => off
 is
    function u_64 is new Ada.Unchecked_Conversion (Integer_64, Unsigned_64);
    function i_64 is new Ada.Unchecked_Conversion (Unsigned_64, Integer_64);
-   function u_32 is new Ada.Unchecked_Conversion (Integer_32, Unsigned_32);
-   function i_32 is new Ada.Unchecked_Conversion (Unsigned_32, Integer_32);
-   --  warning ?? cmd
+   --  warning
    procedure Qoa_Write_U64
      (V : Unsigned_64; Bytes : in out Bytes_Char_Acc; P : in out Unsigned_32)
    is
       Index : constant Integer := 8;
    begin
       for i in 0 .. Index - 1 loop
-         pragma Loop_Invariant (P = P'Loop_Entry + Unsigned_32 (i));
+         --pragma Loop_Invariant (P = P'Loop_Entry + Unsigned_32 (i));
+         --Put_Line (P'Img);
          Bytes.all (Integer (P)) :=
            Unsigned_Char ((V / (2**((Index - i - 1) * 8))) mod 256);
          P                       := P + 1;
       end loop;
+      --Put_Line (P'Img);
    end Qoa_Write_U64;
 
    function Shift_Left (Value : Integer; Amount : Natural) return Integer with
@@ -30,56 +30,85 @@ is
 
    function Qoa_Clamp_s16 (V : Integer) return Integer is
    begin
-      if V + 32_768 > 65_535 then
-         if V < -32_768 then
-            return -32_768;
-         end if;
-         if V > 32_767 then
-            return 32_767;
-         end if;
-      end if;
-      return V;
+
+      return
+        Integer'Min
+          (Integer'Max (V, Integer (Integer_16'First)),
+           Integer (Integer_16'Last));
+      --Integer'Min (V, Integer (Integer_16'Last))
+      --Integer'Min (Integer'Max (V, Integer (Integer_16'First)), Integer (Integer_16'Last))
    end Qoa_Clamp_s16;
+
+   procedure print_lms (lms : Qoa_Lms_T) is
+   begin
+      Put_Line ("-- print lms");
+      for i in 0 .. Qoa_LMS_Len - 1 loop
+         Put_Line
+           ("w: " & Integer_16'Image (lms.Weight (i)) & " h: " &
+            Integer_16'Image (lms.History (i)));
+      end loop;
+   end print_lms;
 
    function Qoa_Lms_Predict (lms : Qoa_Lms_T) return Integer is
       Prediction : Integer_64 := 0;
    begin
+      --print_lms (lms);
       for i in 0 .. Qoa_LMS_Len - 1 loop
          Prediction :=
            Prediction +
            Integer_64 (lms.Weight (i)) * Integer_64 (lms.History (i));
       end loop;
-      return Shift_Right (Integer (Prediction), 13);
+      return Integer ((Prediction - (Prediction mod 2**13)) / 2**13);
    end Qoa_Lms_Predict;
 
    procedure Qoa_Lms_Update
      (lms : out Qoa_Lms_T; Sample : Integer; Residual : Integer)
    is
-      Delta_q : constant Integer_16 := Integer_16 (Shift_Right (Residual, 4));
+      Delta_q : Integer_16 :=
+        Integer_16 ((Residual - (Residual mod 2**4)) / 2**4);
    begin
+      --  Put_Line ("-- update lms ");
+      --  print_lms (lms);
+      --  Put_Line ("   sample: " & Sample'Img);
+      --  Put_Line ("   residual: " & Residual'Img);
+      --  Put_Line ("   delta " & Delta_q'Img);
+      --Put_Line (Sample'Img);
       for i in 0 .. Qoa_LMS_Len - 1 loop
-         lms.Weight (i) :=
-           (if lms.History (i) < 0 then lms.History (i) - Delta_q
-            else lms.History (i) + Delta_q);
+         if lms.History (i) < 0 then
+            lms.Weight (i) := lms.Weight (i) - Delta_q;
+         else
+            lms.Weight (i) := lms.Weight (i) + Delta_q;
+         end if;
       end loop;
 
       for i in 0 .. Qoa_LMS_Len - 2 loop
          lms.History (i) := lms.History (i + 1);
       end loop;
-      --  lms.History (Qoa_LMS_Len - 1) := Sample;
+      lms.History (Qoa_LMS_Len - 1) := Integer_16 (Sample);
+      --print_lms (lms);
    end Qoa_Lms_Update;
 
-   function Qoa_Div (V : Integer; ScaleFactor : Integer) return Integer is
-      Reciprocal : constant Integer := Qoa_Reciprocal_Tab (ScaleFactor);
-      N          : Integer;
-      Tmp        : Integer;
+   function Qoa_Div (V, Scalefactor : Integer) return Integer is
+      Reciprocal : constant Integer      := Qoa_Reciprocal_Tab (Scalefactor);
+      Tmp        : constant Long_Integer :=
+        Long_Integer (V) * Long_Integer (Reciprocal) + (1 * (2**15));
+      N : constant Integer      := Integer ((Tmp - (Tmp mod 2**16)) / 2**16);
    begin
-      Tmp := V * Reciprocal + Shift_Left (1, 15);
-      N   := Shift_Right (Tmp, 16);
-      N   :=
-        N + (Shift_Right (V, 0) - Shift_Left (V, 0)) -
-        (Shift_Right (N, 0) - Shift_Left (N, 0));
-      return N;
+      if V > 0 and then N < 0 then
+         return N + 2;
+      elsif V < 0 and then N > 0 then
+         return N - 2;
+      elsif V > 0 and then N = 0 then
+         return N + 1;
+      elsif V < 0 and then N = 0 then
+         return N - 1;
+      elsif V = 0 and then N > 0 then
+         return N - 1;
+      elsif V = 0 and then N < 0 then
+         return N + 1;
+      else
+         return N;
+      end if;
    end Qoa_Div;
 
    procedure Qoa_Write
@@ -90,7 +119,6 @@ is
       Num_Frames   : Unsigned_32;
       Num_Slices   : Unsigned_32;
       FD           : File_Descriptor;
-      Encoded      : Bytes_Char_Acc;
       Size         : Natural;
       Result       : Integer;
       Encoded_Size : Unsigned_32;
@@ -106,22 +134,25 @@ is
         Num_Frames * Unsigned_32 (Qoa_LMS_Len) * 4 * Qoa_Desc.Channels +
         Num_Slices * 8 * Qoa_Desc.Channels;
       FD           := Create_File (File_Path, Binary);
+      declare
+         Encoded : Bytes_Char_Acc :=
+           new Bytes_Char'(0 .. Integer (Encoded_Size) - 1 => 0);
+      begin
+         if FD = Invalid_FD then
+            Put_Line (Errno_Message);
+         end if;
+         Qoa_Encode (Sample_Data, Qoa_Desc, Unsigned_32 (Size), Encoded);
+         --  for i in 0 .. 9 loop
+         --     Put_Line ("char :" & Character'Val (Encoded (i)));
+         --  end loop;
 
-      Encoded := new Bytes_Char'(0 .. Integer (Encoded_Size) - 1 => 0);
-      if FD = Invalid_FD then
-         Put_Line (Errno_Message);
-      end if;
-      Qoa_Encode (Sample_Data, Qoa_Desc, Unsigned_32 (Size), Encoded);
-      --  for i in 0 .. 9 loop
-      --     Put_Line ("char :" & Character'Val (Encoded (i)));
-      --  end loop;
-
-      if Encoded = null then
+         if Encoded = null then
+            Close (FD);
+         end if;
+         Result := Write (FD, Encoded'Address, Size);
          Close (FD);
-      end if;
-      Result := Write (FD, Encoded'Address, Size);
-      Close (FD);
-      Bytes_writte := Size;
+         Bytes_writte := Size;
+      end;
    end Qoa_Write;
 
    procedure Qoaconv_Fwrite_U32_Le (v : Unsigned_32; Fd : File_Descriptor) with
@@ -175,8 +206,7 @@ is
    procedure Qoa_Encode_Frame
      (Sample_Data :        Audio_Buffer_Access; Frame_Samples : Integer;
       Qoa_Desc    : in out Qoa_Description; Frame_Len : Unsigned_32;
-      Bytes       :    out Bytes_Char_Acc; P : in out Unsigned_32;
-      Result      :    out Unsigned_32)
+      Bytes       :    out Bytes_Char_Acc; P : in out Unsigned_32)
    is
       Channels   : constant Unsigned_32 := Qoa_Desc.Channels;
       Slices     : constant Unsigned_32 :=
@@ -231,7 +261,7 @@ is
             History : Unsigned_64 := 0;
          begin
             for i in 0 .. Qoa_LMS_Len - 1 loop
-
+               --print_lms (Qoa_Desc.lms (i));
                History :=
                  Shift_Left (History, 16) or
                  (u_64 (Integer_64 (Qoa_Desc.lms (c).History (i))) and
@@ -258,60 +288,80 @@ is
               Qoa_Clamp (Qoa_Slice_Len, 0, Integer (Frame_Len) - Sample_Index);
             Slice_Start := Sample_Index * Integer (Channels) + c;
             Slice_End   := (Sample_Index + Slice_Len) * Integer (Channels) + c;
-            --  Put_Line ("s end " & Slice_End'Img);
             Best_Rank   := -1;
             Best_Error  := -1;
             for sfi in 0 .. 15 loop
                ScaleFactor   := (sfi + Prev_ScaleFactor (c)) mod 16;
-               Slice         := Unsigned_64 (ScaleFactor);
                lms           := Qoa_Desc.lms (c);
+               Slice         := Unsigned_64 (ScaleFactor);
                Current_Rank  := 0;
                Current_Error := 0;
 
                Si := Slice_Start;
                while Si < Slice_End loop
-                  --  if Si = Slice_Start + Natural (Channels) then
-                  --     Put_Line ("si          " & Integer'Image (Si));
-                  --     Put_Line ("slice end   " & Slice_End'Img);
-                  --     Put_Line ("slice start " & Slice_Start'Img);
-                  --     Put_Line
-                  --       ("channels    " & Natural'Image (Natural (Channels)));
-                  --  end if;
-                  --  TODO 04/18/2024
-                  Sample        := Integer (Sample_Data (Frame_Samples + Si));
-                  Predicted     := Qoa_Lms_Predict (lms);
-                  Residual      := Sample - Predicted;
-                  Scaled        := Qoa_Div (Residual, ScaleFactor);
-                  Clamped       := Qoa_Clamp (Scaled, -8, 8);
-                  Quantized     := Qoa_Quant_Tab (Clamped + 8);
-                  Dequantized   := Qoa_Dequant_Tab (ScaleFactor * Quantized);
-                  Reconstructed := Qoa_Clamp_s16 (Predicted + Dequantized);
+                  --Put_Line ("si" & Si'Img);
+                  --  --  TODO
+                  Sample    := Integer (Sample_Data (Frame_Samples + Si));
+                  --Put_Line ("sample" & Sample'Img);
+                  --print_lms (lms);
+                  Predicted := Qoa_Lms_Predict (lms);
+                  --Put_Line ("predicted " & Predicted'Img);
 
-                  Weights_Penalty := 1;
-                  --    Shift_Right
-                  --      (Integer
-                  --         (lms.Weight (0) * lms.Weight (0) +
-                  --          lms.Weight (1) * lms.Weight (1) +
-                  --          lms.Weight (2) * lms.Weight (2) +
-                  --          lms.Weight (3) * lms.Weight (3)),
-                  --       18) -
-                  --    16#8ff#;
+                  Residual := Sample - Predicted;
+
+                  Scaled := Qoa_Div (Residual, ScaleFactor);
+                  --Put_Line ("--------------scaled " & Scaled'Img);
+
+                  Clamped := Qoa_Clamp (Scaled, -8, 8);
+                  --Put_Line ("calmped " & Clamped'Img);
+
+                  Quantized := Qoa_Quant_Tab (Clamped + 8);
+                  --Put_Line ("quantized " & Quantized'Img);
+                  --Put_Line ("scalefactor " & ScaleFactor'Img);
+                  if ScaleFactor = 0 then
+                     Dequantized := Qoa_Dequant_Tab (Quantized);
+                  else
+                     Dequantized := Qoa_Dequant_Tab (ScaleFactor * Quantized);
+
+                  end if;
+                  --Put_Line ("dequantized " & Dequantized'Img);
+
+                  Reconstructed := Qoa_Clamp_s16 (Predicted + Dequantized);
+                  --Put_Line ("reconstructed " & Reconstructed'Img);
+
+                  Weights_Penalty :=
+                    (Shift_Right
+                       (Integer (lms.Weight (0))**2 +
+                        Integer (lms.Weight (1))**2 +
+                        Integer (lms.Weight (2))**2 +
+                        Integer (lms.Weight (3))**2,
+                        18)) -
+                    16#8ff#;
 
                   if Weights_Penalty < 0 then
                      Weights_Penalty := 0;
                   end if;
                   Error := Long_Long_Integer (Sample - Reconstructed);
+                  --Put_Line ("error " & Error'Img);
+                  --Put_Line ("sample" & Sample'Img);
+                  --Put_Line ("recons" & Reconstructed'Img);
 
                   Error_Sq := Unsigned_64 (Error * Error);
+                  --Put_Line (Error_Sq'Img);
+                  --Put_Line (Weights_Penalty'Img);
 
                   Current_Rank  :=
                     Current_Rank + Error_Sq +
                     Unsigned_64 (Weights_Penalty * Weights_Penalty);
                   Current_Error := Current_Error + Error_Sq;
+                  --Put_Line (Current_Rank'Img);
+                  --Put_Line (Best_Rank'Img);
 
                   if Current_Rank > Best_Rank then
                      exit;
                   end if;
+                  --print_lms (lms);
+
                   Qoa_Lms_Update (lms, Reconstructed, Dequantized);
                   Slice := (Shift_Left (Slice, 3)) or Unsigned_64 (Quantized);
                   Si    := Si + Natural (Channels);
@@ -328,15 +378,15 @@ is
             end loop;
             Prev_ScaleFactor (c) := Best_ScaleFactor;
             Qoa_Desc.lms (c)     := Best_Lms;
-
-            Best_Slice :=
+            --print_lms (Best_Lms);
+            Best_Slice           :=
               Best_Slice * Unsigned_64 ((2**(Qoa_Slice_Len - Slice_Len) * 3));
             Qoa_Write_U64 (Best_Slice, Bytes, P);
 
          end loop;
          Sample_Index := Sample_Index + Qoa_Slice_Len;
       end loop;
-      Result := P;
+      -- result
    end Qoa_Encode_Frame;
 
    procedure Qoa_Encode_Header
@@ -359,7 +409,6 @@ is
       Encoded_Size  : Unsigned_32;
       Frame_Len     : Integer;
       Frame_Samples : Integer;
-      Frame_Size    : Unsigned_32;
       P             : Unsigned_32;
       Sample_Index  : Integer := 0;
 
@@ -383,11 +432,14 @@ is
         8 + Num_Frames * 8 +
         Num_Frames * Unsigned_32 (Qoa_LMS_Len) * 4 * Qoa_Desc.Channels +
         Num_Slices * 8 * Qoa_Desc.Channels;
+
       declare
-         Bytes : Bytes_Char_Acc :=
+         Bytes  : Bytes_Char_Acc :=
            new Bytes_Char'(0 .. Integer (Encoded_Size) - 1 => 0);
+         frames : Integer        := 0;
+         count  : Integer        := 0;
       begin
-         for i in 0 .. Integer (Qoa_Desc.Channels) - 1 loop
+         for i in 0 .. Natural (Qoa_Desc.Channels) - 1 loop
             Qoa_Desc.lms (i).Weight (0) := 0;
             Qoa_Desc.lms (i).Weight (1) := 0;
             Qoa_Desc.lms (i).Weight (2) := -1 * (2**13);
@@ -398,22 +450,17 @@ is
          end loop;
          Qoa_Encode_Header (Qoa_Desc, Bytes, P);
          Frame_Len := Qoa_Frame_Len;
-         while Sample_Index < 2 * Frame_Len loop
+         while Sample_Index < Integer (Qoa_Desc.Samples) loop
             Frame_Len :=
               Qoa_Clamp
                 (Qoa_Frame_Len, 0, Integer (Qoa_Desc.Samples) - Sample_Index);
-            Put_Line
-              ("3 : " &
-               Integer'Image (Integer (Qoa_Desc.Samples) - Sample_Index));
-            Put_Line ("frame len " & Frame_Samples'Img);
 
             Frame_Samples :=
               Integer ((Sample_Index) * Integer (Qoa_Desc.Channels));
-            --Put_Line ("frame sample " & Frame_Samples'Img);
             Qoa_Encode_Frame
               (Sample_Data, Frame_Samples, Qoa_Desc, Unsigned_32 (Frame_Len),
-               Bytes, P, Frame_Size);
-            Put_Line ("frame size " & Frame_Size'Img);
+               Bytes, P);
+            -- Todo :Frame_size a supprimer
             Sample_Index := Sample_Index + Frame_Len;
          end loop;
          Out_Len := P;

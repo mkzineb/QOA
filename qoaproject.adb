@@ -1,4 +1,5 @@
-with Qoaconv; use Qoaconv;
+with Qoaconv;     use Qoaconv;
+with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Unchecked_Deallocation;
 procedure Qoaproject is
    Qoa_D            : Qoa_Description;
@@ -13,4 +14,7 @@ begin
       Qoa_D, Sample_data_Read);
    Qoa_Write ("toto.qoa", Sample_data_Read, Qoa_D, Bytes_Written);
    Free (Sample_data_Read);
+   Put_Line
+     ("size :" & Integer'Image (Bytes_Written / 1_024) & " kb (" &
+      Bytes_Written'Img & " bytes)");
 end Qoaproject;

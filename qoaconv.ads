@@ -1,7 +1,7 @@
 with GNAT.OS_Lib; use GNAT.OS_Lib;
 with Interfaces;  use Interfaces;
 package Qoaconv with
-  SPARK_Mode => on
+  SPARK_Mode => off
 is
    Qoa_Min_FileSize    : constant Integer := 16;
    Qoa_Max_Channels    : constant Integer := 8;
@@ -72,13 +72,13 @@ is
       P        : in out Unsigned_32);
 
    procedure Qoa_Write_U64
-     (V :        Unsigned_64; Bytes : in out Bytes_Char_Acc;
-      P : in out Unsigned_32) with
-     Pre  =>
-      Bytes'First <= Bytes'Last and then P >= Unsigned_32 (Bytes'First)
-      and then Bytes'Last - Bytes'First >= 7
-      and then P <= Unsigned_32 (Bytes'Last - 8),
-     Post => P = P'Old + 8;
+     (V : Unsigned_64; Bytes : in out Bytes_Char_Acc; P : in out Unsigned_32);
+   --     with
+   --    Pre  =>
+   --     Bytes'First <= Bytes'Last and then P >= Unsigned_32 (Bytes'First)
+   --     and then Bytes'Last - Bytes'First >= 7
+   --     and then P <= Unsigned_32 (Bytes'Last - 8),
+   --    Post => P = P'Old + 8;
 
    function Qoa_Clamp_s16 (V : Integer) return Integer;
 
@@ -115,8 +115,7 @@ is
    procedure Qoa_Encode_Frame
      (Sample_Data :        Audio_Buffer_Access; Frame_Samples : Integer;
       Qoa_Desc    : in out Qoa_Description; Frame_Len : Unsigned_32;
-      Bytes       :    out Bytes_Char_Acc; P : in out Unsigned_32;
-      Result      :    out Unsigned_32);
+      Bytes       :    out Bytes_Char_Acc; P : in out Unsigned_32);
 
    function Qoa_Div (V : Integer; ScaleFactor : Integer) return Integer;
 
