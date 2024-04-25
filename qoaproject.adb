@@ -10,7 +10,7 @@ procedure Qoaproject is
 begin
 
    Qoaconv_Wav_Read
-     ("/home/moubarik/Desktop/test_samples/bandcamp/darkside_narrow_road.wav",
+     ("/home/moubarik/Desktop/QOA/test_samples/bandcamp/darkside_narrow_road.wav",
       Qoa_D, Sample_data_Read);
    Qoa_Write ("toto.qoa", Sample_data_Read, Qoa_D, Bytes_Written);
    Free (Sample_data_Read);

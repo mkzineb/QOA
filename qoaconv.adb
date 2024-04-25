@@ -14,12 +14,10 @@ is
    begin
       for i in 0 .. Index - 1 loop
          --pragma Loop_Invariant (P = P'Loop_Entry + Unsigned_32 (i));
-         --Put_Line (P'Img);
          Bytes.all (Integer (P)) :=
            Unsigned_Char ((V / (2**((Index - i - 1) * 8))) mod 256);
          P                       := P + 1;
       end loop;
-      --Put_Line (P'Img);
    end Qoa_Write_U64;
 
    function Shift_Left (Value : Integer; Amount : Natural) return Integer with
@@ -245,7 +243,6 @@ is
       Weights_Penalty : Integer;
       Error           : Long_Long_Integer;
       Error_Sq        : Unsigned_64;
-
    begin
       Qoa_Write_U64
         ((Shift_Left (Unsigned_64 (Qoa_Desc.Channels), 56)) or
@@ -253,7 +250,6 @@ is
          (Shift_Left (Unsigned_64 (Frame_Len), 16)) or
          ((Unsigned_64 (Frame_Size))),
          Bytes, P);
-
       --  write the current lms state
       for c in 0 .. Natural (Channels) - 1 loop
          declare
@@ -398,6 +394,11 @@ is
         (Shift_Left (Unsigned_64 (Qoa_Magic), 32) or
          Unsigned_64 (Qoa_Desc.Samples),
          Bytes, P);
+      Put_Line
+        (Unsigned_64'Image
+           (Shift_Left (Unsigned_64 (Qoa_Magic), 32) or
+            Unsigned_64 (Qoa_Desc.Samples)));
+
    end Qoa_Encode_Header;
 
    procedure Qoa_Encode
@@ -449,6 +450,12 @@ is
             end loop;
          end loop;
          Qoa_Encode_Header (Qoa_Desc, Bytes, P);
+         Put_Line (Character'Image (Character'Val (Bytes (0))));
+         Put_Line (Character'Image (Character'Val (Bytes (1))));
+         Put_Line (Character'Image (Character'Val (Bytes (2))));
+         Put_Line (Character'Image (Character'Val (Bytes (3))));
+         Put_Line (Character'Image (Character'Val (Bytes (4))));
+         Put_Line (Character'Image (Character'Val (Bytes (5))));
          Frame_Len := Qoa_Frame_Len;
          while Sample_Index < Integer (Qoa_Desc.Samples) loop
             Frame_Len :=
