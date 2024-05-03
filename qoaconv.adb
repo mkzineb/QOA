@@ -147,7 +147,7 @@ is
          if Encoded = null then
             Close (FD);
          end if;
-         Result := Write (FD, Encoded'Address, Size);
+         Result := Write (FD, Encoded.all'Address, Size);
          Close (FD);
          Bytes_writte := Size;
       end;
@@ -250,6 +250,14 @@ is
          (Shift_Left (Unsigned_64 (Frame_Len), 16)) or
          ((Unsigned_64 (Frame_Size))),
          Bytes, P);
+      --  Put_Line (Character'Image (Character'Val (Bytes (P))));
+      --  Put_Line (Character'Image (Character'Val (Bytes (P + 1))));
+      --  Put_Line (Character'Image (Character'Val (Bytes (P + 2))));
+      --  Put_Line (Character'Image (Character'Val (Bytes (P + 3))));
+      --  Put_Line (Character'Image (Character'Val (Bytes (P + 4))));
+      --  Put_Line (Character'Image (Character'Val (Bytes (P + 5))));
+      --  Put_Line (Character'Image (Character'Val (Bytes (P + 6))));
+      --  Put_Line (Character'Image (Character'Val (Bytes (P + 7))));
       --  write the current lms state
       for c in 0 .. Natural (Channels) - 1 loop
          declare
@@ -294,6 +302,7 @@ is
                Current_Error := 0;
 
                Si := Slice_Start;
+               --Put_Line ("sa number :" & sfi'Img);
                while Si < Slice_End loop
                   --Put_Line ("si" & Si'Img);
                   --  --  TODO
@@ -311,15 +320,15 @@ is
                   Clamped := Qoa_Clamp (Scaled, -8, 8);
                   --Put_Line ("calmped " & Clamped'Img);
 
-                  Quantized := Qoa_Quant_Tab (Clamped + 8);
+                  Quantized   := Qoa_Quant_Tab (Clamped + 8);
                   --Put_Line ("quantized " & Quantized'Img);
                   --Put_Line ("scalefactor " & ScaleFactor'Img);
-                  if ScaleFactor = 0 then
-                     Dequantized := Qoa_Dequant_Tab (Quantized);
-                  else
-                     Dequantized := Qoa_Dequant_Tab (ScaleFactor * Quantized);
+                  --  if ScaleFactor = 0 then
+                  --     Dequantized := Qoa_Dequant_Tab (Quantized);
+                  --  else
+                  Dequantized := Qoa_Dequant_Tab (ScaleFactor * 8 + Quantized);
 
-                  end if;
+                  --  end if;
                   --Put_Line ("dequantized " & Dequantized'Img);
 
                   Reconstructed := Qoa_Clamp_s16 (Predicted + Dequantized);
@@ -376,7 +385,8 @@ is
             Qoa_Desc.lms (c)     := Best_Lms;
             --print_lms (Best_Lms);
             Best_Slice           :=
-              Best_Slice * Unsigned_64 ((2**(Qoa_Slice_Len - Slice_Len) * 3));
+              Shift_Left (Best_Slice, (Qoa_Slice_Len - Slice_Len) * 3);
+            Put_Line ("best slice:" & Best_Slice'Img);
             Qoa_Write_U64 (Best_Slice, Bytes, P);
 
          end loop;
@@ -394,11 +404,11 @@ is
         (Shift_Left (Unsigned_64 (Qoa_Magic), 32) or
          Unsigned_64 (Qoa_Desc.Samples),
          Bytes, P);
-      Put_Line
-        (Unsigned_64'Image
-           (Shift_Left (Unsigned_64 (Qoa_Magic), 32) or
-            Unsigned_64 (Qoa_Desc.Samples)));
-
+      --  Put_Line
+      --    ("shift" &
+      --     Unsigned_64'Image
+      --       (Shift_Left (Unsigned_64 (Qoa_Magic), 32) or
+      --        Unsigned_64 (Qoa_Desc.Samples)));
    end Qoa_Encode_Header;
 
    procedure Qoa_Encode
@@ -420,7 +430,7 @@ is
         Qoa_Desc.Channels > Unsigned_32 (Qoa_Max_Channels)
 
       then
-         Put_Line ("1");
+         OS_Exit (1);
          --  TODO
       end if;
       Num_Frames   :=
@@ -435,27 +445,20 @@ is
         Num_Slices * 8 * Qoa_Desc.Channels;
 
       declare
-         Bytes  : Bytes_Char_Acc :=
+         Bytes : Bytes_Char_Acc :=
            new Bytes_Char'(0 .. Integer (Encoded_Size) - 1 => 0);
-         frames : Integer        := 0;
-         count  : Integer        := 0;
+
       begin
-         for i in 0 .. Natural (Qoa_Desc.Channels) - 1 loop
-            Qoa_Desc.lms (i).Weight (0) := 0;
-            Qoa_Desc.lms (i).Weight (1) := 0;
-            Qoa_Desc.lms (i).Weight (2) := -1 * (2**13);
-            Qoa_Desc.lms (i).Weight (3) := 2**14;
+         for c in 0 .. Natural (Qoa_Desc.Channels) - 1 loop
+            Qoa_Desc.lms (c).Weight (0) := 0;
+            Qoa_Desc.lms (c).Weight (1) := 0;
+            Qoa_Desc.lms (c).Weight (2) := -1 * (2**13);
+            Qoa_Desc.lms (c).Weight (3) := 2**14;
             for j in 0 .. Qoa_LMS_Len - 1 loop
-               Qoa_Desc.lms (i).History (j) := 0;
+               Qoa_Desc.lms (c).History (j) := 0;
             end loop;
          end loop;
          Qoa_Encode_Header (Qoa_Desc, Bytes, P);
-         Put_Line (Character'Image (Character'Val (Bytes (0))));
-         Put_Line (Character'Image (Character'Val (Bytes (1))));
-         Put_Line (Character'Image (Character'Val (Bytes (2))));
-         Put_Line (Character'Image (Character'Val (Bytes (3))));
-         Put_Line (Character'Image (Character'Val (Bytes (4))));
-         Put_Line (Character'Image (Character'Val (Bytes (5))));
          Frame_Len := Qoa_Frame_Len;
          while Sample_Index < Integer (Qoa_Desc.Samples) loop
             Frame_Len :=
