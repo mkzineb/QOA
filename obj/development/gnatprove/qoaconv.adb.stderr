@@ -1,0 +1,178 @@
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:52:14: [m[K[01;35m[Kwarning: [m[Kno Global contract available for "Shift_Right"
+   52 |      return [01;35m[KShift_Right (Integer (Prediction), 13[m[K);
+      |             [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+  assuming "Shift_Right" has no effect on global items
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:52:14: [m[K[01;35m[Kwarning: [m[Kno returning annotation available for "Shift_Right"
+   52 |      return [01;35m[KShift_Right (Integer (Prediction), 13[m[K);
+      |             [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+  assuming "Shift_Right" always returns
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:58:52: [m[K[01;35m[Kwarning: [m[Kno Global contract available for "Shift_Right"
+   58 |      Delta_q : constant Integer_16 := Integer_16 ([01;35m[KShift_Right (Residual, 4[m[K));
+      |                                                   [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~[m[K
+  assuming "Shift_Right" has no effect on global items
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:58:52: [m[K[01;35m[Kwarning: [m[Kno returning annotation available for "Shift_Right"
+   58 |      Delta_q : constant Integer_16 := Integer_16 ([01;35m[KShift_Right (Residual, 4[m[K));
+      |                                                   [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~[m[K
+  assuming "Shift_Right" always returns
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:63:18: [m[K[01;31m[Kmedium:[m[K "lms.History" is not set
+   63 |            else [01;31m[Klms.History[m[K (i) + Delta_q);
+      |                 [01;31m[K^~~~~~~~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:67:29: [m[K[01;31m[Kmedium:[m[K "lms.History" is not set
+   67 |         lms.History (i) := [01;31m[Klms.History[m[K (i + 1);
+      |                            [01;31m[K^~~~~~~~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:78:14: [m[K[01;35m[Kwarning: [m[Kno Global contract available for "Shift_Right"
+   78 |      N   := [01;35m[KShift_Right (Tmp, 16[m[K);
+      |             [01;35m[K^~~~~~~~~~~~~~~~~~~~[m[K
+  assuming "Shift_Right" has no effect on global items
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:78:14: [m[K[01;35m[Kwarning: [m[Kno returning annotation available for "Shift_Right"
+   78 |      N   := [01;35m[KShift_Right (Tmp, 16[m[K);
+      |             [01;35m[K^~~~~~~~~~~~~~~~~~~~[m[K
+  assuming "Shift_Right" always returns
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:80:14: [m[K[01;35m[Kwarning: [m[Kno Global contract available for "Shift_Right"
+   80 |        N + ([01;35m[KShift_Right (V, 0[m[K) - Shift_Left (V, 0)) -
+      |             [01;35m[K^~~~~~~~~~~~~~~~~[m[K
+  assuming "Shift_Right" has no effect on global items
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:80:14: [m[K[01;35m[Kwarning: [m[Kno returning annotation available for "Shift_Right"
+   80 |        N + ([01;35m[KShift_Right (V, 0[m[K) - Shift_Left (V, 0)) -
+      |             [01;35m[K^~~~~~~~~~~~~~~~~[m[K
+  assuming "Shift_Right" always returns
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:80:35: [m[K[01;35m[Kwarning: [m[Kno Global contract available for "Shift_Left"
+   80 |        N + (Shift_Right (V, 0) - [01;35m[KShift_Left (V, 0[m[K)) -
+      |                                  [01;35m[K^~~~~~~~~~~~~~~~[m[K
+  assuming "Shift_Left" has no effect on global items
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:80:35: [m[K[01;35m[Kwarning: [m[Kno returning annotation available for "Shift_Left"
+   80 |        N + (Shift_Right (V, 0) - [01;35m[KShift_Left (V, 0[m[K)) -
+      |                                  [01;35m[K^~~~~~~~~~~~~~~~[m[K
+  assuming "Shift_Left" always returns
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:81:10: [m[K[01;35m[Kwarning: [m[Kno Global contract available for "Shift_Right"
+   81 |        ([01;35m[KShift_Right (N, 0[m[K) - Shift_Left (N, 0));
+      |         [01;35m[K^~~~~~~~~~~~~~~~~[m[K
+  assuming "Shift_Right" has no effect on global items
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:81:10: [m[K[01;35m[Kwarning: [m[Kno returning annotation available for "Shift_Right"
+   81 |        ([01;35m[KShift_Right (N, 0[m[K) - Shift_Left (N, 0));
+      |         [01;35m[K^~~~~~~~~~~~~~~~~[m[K
+  assuming "Shift_Right" always returns
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:81:31: [m[K[01;35m[Kwarning: [m[Kno Global contract available for "Shift_Left"
+   81 |        (Shift_Right (N, 0) - [01;35m[KShift_Left (N, 0[m[K));
+      |                              [01;35m[K^~~~~~~~~~~~~~~~[m[K
+  assuming "Shift_Left" has no effect on global items
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:81:31: [m[K[01;35m[Kwarning: [m[Kno returning annotation available for "Shift_Left"
+   81 |        (Shift_Right (N, 0) - [01;35m[KShift_Left (N, 0[m[K));
+      |                              [01;35m[K^~~~~~~~~~~~~~~~[m[K
+  assuming "Shift_Left" always returns
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:93:07: [m[K[01;35m[Kwarning: [m[K(Ada 2005) null-excluding objects must be initialized
+   93 |      [01;35m[KEncoded[m[K      : Bytes_Char_Acc;
+      |      [01;35m[K^~~~~~~[m[K
+  Constraint_Error will be raised at run time
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:191:07: [m[K[01;35m[Kwarning: [m[Kinitialization of "Slice_Len" has no effect
+  191 |      [01;35m[KSlice_Len        : Integer     := 0[m[K;
+      |      [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:192:07: [m[K[01;35m[Kwarning: [m[Kinitialization of "Slice_Start" has no effect
+  192 |      [01;35m[KSlice_Start      : Integer     := 0[m[K;
+      |      [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:193:07: [m[K[01;35m[Kwarning: [m[Kinitialization of "Slice_End" has no effect
+  193 |      [01;35m[KSlice_End        : Integer     := 0[m[K;
+      |      [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:202:07: [m[K[01;35m[Kwarning: [m[Kinitialization of "Current_Rank" has no effect
+  202 |      [01;35m[KCurrent_Rank     : Unsigned_64 := 0[m[K;
+      |      [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:203:07: [m[K[01;35m[Kwarning: [m[Kinitialization of "Current_Error" has no effect
+  203 |      [01;35m[KCurrent_Error    : Unsigned_64 := 0[m[K;
+      |      [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:225:10: [m[K[01;31m[Kmedium:[m[K "Bytes" is not set
+  225 |         [01;31m[KBytes[m[K, P);
+      |         [01;31m[K^~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:263:25: [m[K[01;35m[Kwarning: [m[Kunused assignment
+  263 |            [01;35m[KBest_Error  := -1[m[K;
+      |            [01;35m[K~~~~~~~~~~~~^~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:269:30: [m[K[01;35m[Kwarning: [m[Kunused assignment
+  269 |               [01;35m[KCurrent_Error := 0[m[K;
+      |               [01;35m[K~~~~~~~~~~~~~~^~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:310:33: [m[K[01;35m[Kwarning: [m[Kunused assignment
+  310 |                  [01;35m[KCurrent_Error := Current_Error + Error_Sq[m[K;
+      |                  [01;35m[K~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:322:36: [m[K[01;35m[Kwarning: [m[Kunused assignment
+  322 |                  [01;35m[KBest_Error       := Current_Error[m[K;
+      |                  [01;35m[K~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:329:37: [m[K[01;31m[Kmedium:[m[K "Best_ScaleFactor" might not be initialized
+  329 |            Prev_ScaleFactor (c) := [01;31m[KBest_ScaleFactor[m[K;
+      |                                    [01;31m[K^~~~~~~~~~~~~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:333:15: [m[K[01;31m[Kmedium:[m[K "Best_Slice" might not be initialized
+  333 |              [01;31m[KBest_Slice[m[K * Unsigned_64 ((2**(Qoa_Slice_Len - Slice_Len) * 3));
+      |              [01;31m[K^~~~~~~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:350:10: [m[K[01;31m[Kmedium:[m[K "Bytes" is not set
+  350 |         [01;31m[KBytes[m[K, P);
+      |         [01;31m[K^~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:366:07: [m[K[01;35m[Kwarning: [m[Kinitialization of "Test_D" has no effect
+  366 |      [01;35m[KTest_D : Integer_32 := 0[m[K;
+      |      [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:376:20: [m[K[01;35m[Kwarning: [m[Kunused assignment
+  376>|      Num_Frames   :=
+  377 |        (Qoa_Desc.Samples + Unsigned_32 (Qoa_Frame_Len - 1)) /
+  378 |        Unsigned_32 (Qoa_Frame_Len);
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:379:20: [m[K[01;35m[Kwarning: [m[Kunused assignment
+  379>|      Num_Slices   :=
+  380 |        (Qoa_Desc.Samples + Unsigned_32 (Qoa_Slice_Len - 1)) /
+  381 |        Unsigned_32 (Qoa_Slice_Len);
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:382:20: [m[K[01;35m[Kwarning: [m[Kunused assignment
+  382>|      Encoded_Size :=
+  ... | ...
+  385 |        Num_Slices * 8 * Qoa_Desc.Channels;
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:387:10: [m[K[01;35m[Kwarning: [m[Kinitialization of "Bytes" has no effect
+  387>|         Bytes : Bytes_Char_Acc :=
+  388 |           new Bytes_Char'(0 .. Integer (Encoded_Size) - 1 => 0);
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:399:46: [m[K[01;31m[Khigh:[m[K "P" is not initialized
+  399 |         Qoa_Encode_Header (Qoa_Desc, Bytes, P);
+      |                                             [01;31m[K^ here[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:408:38: [m[K[01;31m[Kmedium:[m[K "Frame_Samples" might not be initialized
+  408 |            Put_Line ("frame len " & [01;31m[KFrame_Samples[m[K'Img);
+      |                                     [01;31m[K^~~~~~~~~~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.adb:455:07: [m[K[01;35m[Kwarning: [m[Kinitialization of "Chunk_ID" has no effect
+  455 |      [01;35m[KChunk_ID : Unsigned_32 := 0[m[K;
+      |      [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.ads:88:28: [m[K[01;35m[Kwarning: [m[Kunused variable "Sample"
+   88 |     (lms : out Qoa_Lms_T; [01;35m[KSample[m[K : Integer; Residual : Integer);
+      |                           [01;35m[K^~~~~~[m[K
+
+[01m[K/home/moubarik/Desktop/qoaproject/src/qoaconv.ads:116:07: [m[K[01;35m[Kwarning: [m[K"Sample_Data" is not modified, parameter type could be rewritten as 'access constant Audio_Buffer'
+  116 |     ([01;35m[KSample_Data[m[K :        Audio_Buffer_Access; Frame_Samples : Integer;
+      |      [01;35m[K^~~~~~~~~~~[m[K

@@ -1,0 +1,22 @@
+[GENERATED OBJECT FILE]
+b__qoaproject.o
+[PROJECT FILES]
+/home/moubarik/Desktop/QOA/qoaproject/qoaproject.gpr
+20240325090547 72a3813f13ceba1429f651dff186f7a4
+/home/moubarik/Desktop/QOA/qoaproject/config/qoaproject_config.gpr
+20240410124307 829ee2f4666d5aabc8d7a1fffca34b0f
+[BOUND OBJECT FILES]
+/home/moubarik/Desktop/QOA/qoaproject/obj/development/qoaconv.o
+/home/moubarik/Desktop/QOA/qoaproject/obj/development/qoaproject.o
+[GENERATED SOURCE FILES]
+b__qoaproject.ads
+b__qoaproject.adb
+b__qoaproject.ali
+[RESULTING OPTIONS]
+-L/home/moubarik/Desktop/QOA/qoaproject/obj/development/
+-L/home/moubarik/Desktop/QOA/qoaproject/obj/development/
+-L/home/moubarik/.local/share/alire/toolchains/gnat_native_13.2.1_788a01f9/lib/gcc/x86_64-pc-linux-gnu/13.2.0/adalib/
+-static
+-static-libgcc
+/home/moubarik/.local/share/alire/toolchains/gnat_native_13.2.1_788a01f9/lib/gcc/x86_64-pc-linux-gnu/13.2.0/adalib/libgnat.a
+-ldl

@@ -1,0 +1,538 @@
+module Standard__integer [@GNAT-comment:Module for axiomatizing type "integer", created in Gnat2Why.Types.Translate_Type]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  type integer = <range -2147483648 2147483647>
+  
+  val function first : int
+    ensures { result = ((- 2147483648) : int) }
+  
+  val function last : int
+    ensures { result = (2147483647 : int) }
+  
+  predicate in_range [@GP_Inline] (x: int) =
+    (([@GP_Pretty_Ada:-1] (first <= x)) /\ ([@GP_Pretty_Ada:-2] (x <= last)))
+  
+  val in_range [@GP_Inline] (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = integer,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type integer__ref = { mutable integer__content : integer }
+  
+  function integer__ref_integer__content__projection (a: integer__ref) : integer =
+    a.integer__content
+  
+  meta "model_projection" function integer__ref_integer__content__projection
+  
+  meta "inline:no" function integer__ref_integer__content__projection
+  
+  val integer__havoc (x: integer__ref) : unit
+    writes { x }
+end
+
+module Standard__integer___axiom [@GNAT-comment:Module giving axioms for type "integer", created in Gnat2Why.Types.Generate_Type_Completion]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Standard__integer as Standard__integer
+  
+  predicate dynamic_invariant (temp___expr_18: int) (temp___is_init_14: bool) (temp___skip_constant_15: bool) (temp___do_toplevel_16: bool) (temp___do_typ_inv_17: bool) =
+    [@rac:call_id:1]
+    (Standard__integer.dynamic_property
+       Standard__integer.first
+       Standard__integer.last
+       temp___expr_18)
+  
+  val dynamic_invariant (temp___expr_18: int) (temp___is_init_14: bool) (temp___skip_constant_15: bool) (temp___do_toplevel_16: bool) (temp___do_typ_inv_17: bool) : 
+    bool
+    ensures { result
+                <->
+                (dynamic_invariant
+                   (temp___expr_18 : int)
+                   (temp___is_init_14 : bool)
+                   (temp___skip_constant_15 : bool)
+                   (temp___do_toplevel_16 : bool)
+                   (temp___do_typ_inv_17 : bool)) }
+end
+
+module Standard__integer___dic [@GNAT-comment:Module giving a predicate for the default initial assumption of type "integer", created in Gnat2Why.Types.Generate_Type_Completion]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  predicate default_initial_assumption (temp___expr_19: int) (temp___skip_top_level_20: bool) =
+    true
+  
+  val default_initial_assumption (temp___expr_19: int) (temp___skip_top_level_20: bool) : 
+    bool
+    ensures { result
+                <->
+                (default_initial_assumption
+                   (temp___expr_19 : int)
+                   (temp___skip_top_level_20 : bool)) }
+end
+
+module Standard__integer__rep [@GNAT-comment:Module defining to_rep/of_rep for type "integer", created in Gnat2Why.Types.Translate_Type]
+  use Standard__integer as Standard__integer
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  function to_rep (x: Standard__integer.integer) : int =
+    [@rac:call_id:2] (Standard__integer.integer'int x)
+  
+  clone export ada__model.Rep_Proj_Int with
+    axiom .,
+    type t = Standard__integer.integer,
+    predicate in_range = Standard__integer.in_range,
+    function to_rep = to_rep
+  
+  meta "model_projection" function to_rep
+  
+  meta "inline:no" function to_rep
+end
+
+module Array__Int__Standard__integer [@GNAT-comment:Module for axiomatizing the array theory associated to type "Tmy_int_arrayB" defined at qoaconv.ads:39, created in Why.Gen.Arrays.Create_Rep_Array_Theory]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Standard__integer as Standard__integer
+  use Standard__integer__rep as Standard__integer__rep
+  
+  function index_I1_one : int = 1 : int
+  
+  type component_type = Standard__integer.integer
+  
+  clone export _gnatprove_standard.Array__1 with
+    axiom .,
+    type I1.t = int,
+    predicate I1.le = Int.( <= ),
+    predicate I1.lt = Int.( < ),
+    predicate I1.gt = Int.( > ),
+    function I1.add = Int.( + ),
+    function I1.sub = Int.( - ),
+    function I1.one = index_I1_one,
+    type component_type = component_type
+  
+  function bool_eq (a: map) (a__first: int) (a__last: int) (b: map) (b__first: int) (b__last: int) : bool =
+    ((if (a__first <= a__last) then
+        ((b__first <= b__last) /\
+           (([@rac:call_id:3] (a__last - a__first))
+              = ([@rac:call_id:4] (b__last - b__first))))
+      else (b__first > b__last)) /\
+       (forall temp___idx_171 : int.
+          if ((a__first <= temp___idx_171) /\ (temp___idx_171 <= a__last)) then
+            (([@rac:call_id:6]
+              (Standard__integer__rep.to_rep
+                 ([@rac:call_id:5] (get a temp___idx_171))))
+               = ([@rac:call_id:10]
+                  (Standard__integer__rep.to_rep
+                     ([@rac:call_id:9]
+                      (get
+                         b
+                         ([@rac:call_id:8]
+                          (([@rac:call_id:7] (b__first - a__first))
+                             + temp___idx_171)))))))
+          else true))
+  
+  val bool_eq (a: map) (a__first: int) (a__last: int) (b: map) (b__first: int) (b__last: int) : 
+    bool
+    ensures { result
+      =
+      (bool_eq
+         (a : map)
+         (a__first : int)
+         (a__last : int)
+         (b : map)
+         (b__first : int)
+         (b__last : int)) }
+  
+  axiom bool_eq_rev:
+    forall a : map, b : map.
+      forall a__first : int, a__last : int, b__first : int, b__last : int.
+        ((([@rac:call_id:11] (bool_eq b b__first b__last a a__first a__last))
+            = True) ->
+           ((if (a__first <= a__last) then
+               ((b__first <= b__last) /\
+                  (([@rac:call_id:12] (a__last - a__first))
+                     = ([@rac:call_id:13] (b__last - b__first))))
+             else (b__first > b__last)) /\
+              (forall temp___idx_171 : int.
+                 if ((a__first <= temp___idx_171) /\
+                       (temp___idx_171 <= a__last)) then
+                   (([@rac:call_id:15]
+                     (Standard__integer__rep.to_rep
+                        ([@rac:call_id:14] (get a temp___idx_171))))
+                      = ([@rac:call_id:19]
+                         (Standard__integer__rep.to_rep
+                            ([@rac:call_id:18]
+                             (get
+                                b
+                                ([@rac:call_id:17]
+                                 (([@rac:call_id:16] (b__first - a__first))
+                                    + temp___idx_171)))))))
+                 else true)))
+  
+  meta "remove_unused:dependency" axiom bool_eq_rev [@useraxiom], function bool_eq
+end
+
+module Qoaconv__qoa_reciprocal_tab [@GNAT-comment:Module for defining a ref holding the value of variable "qoa_reciprocal_tab" defined at qoaconv.ads:48, created in Gnat2Why.Decls.Translate_Variable]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Array__Int__Standard__integer as Array__Int__Standard__integer
+  
+  val qoa_reciprocal_tab [@model_trace:3334] [@model_projected] [@name:Qoa_Reciprocal_Tab] [#"qoaconv.ads" 48 0 48 0] : 
+    Array__Int__Standard__integer.map__ref
+end
+
+module Qoaconv__qoa_div__v [@GNAT-comment:Module for defining the constant "v" defined at qoaconv.ads:120, created in Gnat2Why.Decls.Translate_Constant]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val function v [@name:V] [@model_trace:3771] [#"qoaconv.ads" 120 0 120 0] : 
+    int
+end
+
+module Qoaconv__qoa_div__scalefactor [@GNAT-comment:Module for defining the constant "scalefactor" defined at qoaconv.ads:120, created in Gnat2Why.Decls.Translate_Constant]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val function scalefactor [@name:ScaleFactor] [@model_trace:3774] [#"qoaconv.ads" 120 0 120 0] : 
+    int
+end
+
+module Qoaconv__qoa_div__reciprocal [@GNAT-comment:Module for defining the constant "reciprocal" defined at qoaconv.adb:72, created in Gnat2Why.Decls.Translate_Constant]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val function reciprocal [@model_trace:1163] [@name:Reciprocal] [#"qoaconv.adb" 72 0 72 0] : 
+    int
+end
+
+module Qoaconv__qoa_div__n [@GNAT-comment:Module for defining a ref holding the value of variable "n" defined at qoaconv.adb:73, created in Gnat2Why.Decls.Translate_Variable]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val n [@model_projected] [@model_trace:1170] [@name:N] [#"qoaconv.adb" 73 0 73 0] : 
+    int__ref
+end
+
+module Qoaconv__qoa_div__tmp [@GNAT-comment:Module for defining a ref holding the value of variable "tmp" defined at qoaconv.adb:74, created in Gnat2Why.Decls.Translate_Variable]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val tmp [@name:Tmp] [@model_projected] [@model_trace:1173] [#"qoaconv.adb" 74 0 74 0] : 
+    int__ref
+end
+
+module Qoaconv__Tmy_int_array_16D1 [@GNAT-comment:Module for axiomatizing type "Tmy_int_array_16D1" defined at qoaconv.ads:43, created in Gnat2Why.Types.Translate_Type]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  type tmy_int_array_16D1 = <range 0 15>
+  
+  val function first : int
+    ensures { result = (0 : int) }
+  
+  val function last : int
+    ensures { result = (15 : int) }
+  
+  predicate in_range [@GP_Inline] (x: int) =
+    (([@GP_Pretty_Ada:-1] (first <= x)) /\ ([@GP_Pretty_Ada:-2] (x <= last)))
+  
+  val in_range [@GP_Inline] (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = tmy_int_array_16D1,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type tmy_int_array_16D1__ref = {
+                                mutable tmy_int_array_16D1__content :
+                                  tmy_int_array_16D1
+                                }
+  
+  function tmy_int_array_16D1__ref_tmy_int_array_16D1__content__projection (a: tmy_int_array_16D1__ref) : tmy_int_array_16D1 =
+    a.tmy_int_array_16D1__content
+  
+  meta "model_projection" function tmy_int_array_16D1__ref_tmy_int_array_16D1__content__projection
+  
+  meta "inline:no" function tmy_int_array_16D1__ref_tmy_int_array_16D1__content__projection
+  
+  val tmy_int_array_16D1__havoc (x: tmy_int_array_16D1__ref) : unit
+    writes { x }
+end
+
+module Qoaconv__my_int_array_16___axiom [@GNAT-comment:Module giving axioms for type "my_int_array_16" defined at qoaconv.ads:43, created in Gnat2Why.Types.Generate_Type_Completion]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Array__Int__Standard__integer as Array__Int__Standard__integer
+  
+  predicate dynamic_invariant (temp___expr_334: Array__Int__Standard__integer.map) (temp___is_init_330: bool) (temp___skip_constant_331: bool) (temp___do_toplevel_332: bool) (temp___do_typ_inv_333: bool) =
+    true
+  
+  val dynamic_invariant (temp___expr_334: Array__Int__Standard__integer.map) (temp___is_init_330: bool) (temp___skip_constant_331: bool) (temp___do_toplevel_332: bool) (temp___do_typ_inv_333: bool) : 
+    bool
+    ensures { result
+                <->
+                (dynamic_invariant
+                   (temp___expr_334 : Array__Int__Standard__integer.map)
+                   (temp___is_init_330 : bool)
+                   (temp___skip_constant_331 : bool)
+                   (temp___do_toplevel_332 : bool)
+                   (temp___do_typ_inv_333 : bool)) }
+end
+
+module Qoaconv__Tmy_int_array_16D1___axiom [@GNAT-comment:Module giving axioms for type "Tmy_int_array_16D1" defined at qoaconv.ads:43, created in Gnat2Why.Types.Generate_Type_Completion]
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Qoaconv__qoa_div__reciprocal___axiom [@GNAT-comment:Module for defining the value of constant "reciprocal" defined at qoaconv.adb:72, created in Gnat2Why.Decls.Translate_Constant_Value]
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Qoaconv__qoa_div__subprogram_def [@GNAT-comment:Module for checking contracts and absence of run-time errors in subprogram "qoa_div" defined at qoaconv.ads:120, created in Gnat2Why.Subprograms.Generate_VCs_For_Subprogram]
+  use _gnatprove_standard.Main
+  use int.Int
+  use _gnatprove_standard.Int_Shift as Int_Shift
+  use Standard__integer as Standard__integer
+  use Standard__integer___axiom as Standard__integer___axiom
+  use Standard__integer___dic as Standard__integer___dic
+  use Standard__integer__rep as Standard__integer__rep
+  use Array__Int__Standard__integer as Array__Int__Standard__integer
+  use Qoaconv__qoa_reciprocal_tab as Qoaconv__qoa_reciprocal_tab
+  use Qoaconv__qoa_div__v as Qoaconv__qoa_div__v
+  use Qoaconv__qoa_div__scalefactor as Qoaconv__qoa_div__scalefactor
+  use Qoaconv__qoa_div__reciprocal as Qoaconv__qoa_div__reciprocal
+  use Qoaconv__qoa_div__n as Qoaconv__qoa_div__n
+  use Qoaconv__qoa_div__tmp as Qoaconv__qoa_div__tmp
+  use Qoaconv__Tmy_int_array_16D1 as Qoaconv__Tmy_int_array_16D1
+  use Qoaconv__my_int_array_16___axiom as Qoaconv__my_int_array_16___axiom
+  use Qoaconv__Tmy_int_array_16D1___axiom as Qoaconv__Tmy_int_array_16D1___axiom
+  use Qoaconv__qoa_div__reciprocal___axiom as Qoaconv__qoa_div__reciprocal___axiom
+  
+  val qoaconv__qoa_div__result [@name:Qoa_Div] [@model_projected] [@model_trace:3770@result] : 
+    int__ref
+  
+  let def [#"qoaconv.ads" 120 0 120 0] (__void_param : unit)
+    requires { [#"qoaconv.ads" 120 0 120 0] true }
+  = [@vc:divergent]
+    (([@GNAT-comment:Assume dynamic invariants of inputs of the subprogram qoaconv.ads:120]
+      ());
+     ([#"qoaconv.ads" 120 0 120 0]
+      assume {
+        [#"qoaconv.ads" 120 0 120 0]
+        [@rac:call_id:20]
+        (Qoaconv__my_int_array_16___axiom.dynamic_invariant
+           (Qoaconv__qoa_reciprocal_tab.qoa_reciprocal_tab.Array__Int__Standard__integer.map__content)
+           True
+           False
+           True
+           True) });
+     ([#"qoaconv.ads" 120 0 120 0]
+      assume {
+        [#"qoaconv.ads" 120 0 120 0]
+        [@rac:call_id:21]
+        (Standard__integer___axiom.dynamic_invariant
+           Qoaconv__qoa_div__v.v
+           True
+           False
+           True
+           True) });
+     ([#"qoaconv.ads" 120 0 120 0]
+      assume {
+        [#"qoaconv.ads" 120 0 120 0]
+        [@rac:call_id:22]
+        (Standard__integer___axiom.dynamic_invariant
+           Qoaconv__qoa_div__scalefactor.scalefactor
+           True
+           False
+           True
+           True) });
+     ([@GNAT-comment:Assume moved pointers in outputs of the subprogram qoaconv.ads:120]
+      ());
+     ([@GNAT-comment:Check for RTE in the Pre of the subprogram qoaconv.ads:120]
+      ());
+     ([#"qoaconv.ads" 120 0 120 0] ());
+     ([@GNAT-comment:Assume Pre of the subprogram qoaconv.ads:120] ());
+     ([#"qoaconv.ads" 120 0 120 0]
+      (try
+         ([#"qoaconv.adb" 72 0 72 0] ());
+         ([#"qoaconv.adb" 72 0 72 0]
+          ((let qoaconv__qoa_div__reciprocal__assume =
+              [@rac:call_id:24]
+              (Standard__integer__rep.to_rep
+                 ([@rac:call_id:23]
+                  (Array__Int__Standard__integer.get
+                     (Qoaconv__qoa_reciprocal_tab.qoa_reciprocal_tab.
+                        Array__Int__Standard__integer.map__content)
+                     (([#"qoaconv.adb" 72 0 72 0]
+                       assert {
+                         [#"qoaconv.adb" 72 0 72 0]
+                         [#"qoaconv.adb" 72 0 72 0]
+                         [@vc:annotation]
+                         [@GP_Check:74:VC_INDEX_CHECK:qoaconv.adb:72:60]
+                         [@GP_Shape:reciprocal_decl__ixdcomp]
+                         ((Qoaconv__Tmy_int_array_16D1.first
+                             <= Qoaconv__qoa_div__scalefactor.scalefactor) /\
+                            (Qoaconv__qoa_div__scalefactor.scalefactor
+                               <= Qoaconv__Tmy_int_array_16D1.last)) });
+                      Qoaconv__qoa_div__scalefactor.scalefactor)))) in
+            assume {
+              (qoaconv__qoa_div__reciprocal__assume
+                 = Qoaconv__qoa_div__reciprocal.reciprocal) });
+           assume {
+             [@rac:call_id:25]
+             (Standard__integer___axiom.dynamic_invariant
+                Qoaconv__qoa_div__reciprocal.reciprocal
+                True
+                False
+                True
+                True) }));
+         ([#"qoaconv.adb" 73 0 73 0]
+          (([#"qoaconv.adb" 73 0 73 0]
+            assume {
+              [#"qoaconv.adb" 73 0 73 0]
+              [@rac:call_id:26]
+              (Standard__integer___dic.default_initial_assumption
+                 (Qoaconv__qoa_div__n.n.int__content)
+                 False) });
+           ([#"qoaconv.adb" 73 0 73 0]
+            assume {
+              [#"qoaconv.adb" 73 0 73 0]
+              [@rac:call_id:27]
+              (Standard__integer___axiom.dynamic_invariant
+                 (Qoaconv__qoa_div__n.n.int__content)
+                 False
+                 False
+                 True
+                 True) })));
+         ([#"qoaconv.adb" 74 0 74 0]
+          (([#"qoaconv.adb" 74 0 74 0]
+            assume {
+              [#"qoaconv.adb" 74 0 74 0]
+              [@rac:call_id:28]
+              (Standard__integer___dic.default_initial_assumption
+                 (Qoaconv__qoa_div__tmp.tmp.int__content)
+                 False) });
+           ([#"qoaconv.adb" 74 0 74 0]
+            assume {
+              [#"qoaconv.adb" 74 0 74 0]
+              [@rac:call_id:29]
+              (Standard__integer___axiom.dynamic_invariant
+                 (Qoaconv__qoa_div__tmp.tmp.int__content)
+                 False
+                 False
+                 True
+                 True) })));
+         ([#"qoaconv.adb" 76 0 76 0] ());
+         ([#"qoaconv.adb" 76 0 76 0] ());
+         ([#"qoaconv.adb" 76 0 76 0]
+          [#"qoaconv.adb" 76 0 76 0]
+          (Qoaconv__qoa_div__tmp.tmp.int__content <-
+             ([#"qoaconv.adb" 76 0 76 0]
+              [@vc:annotation]
+              [@GP_Shape:tmp_assign__add]
+              [@GP_Check:76:VC_OVERFLOW_CHECK:qoaconv.adb:76:29]
+              [@rac:call_id:33]
+              (Standard__integer.range_check_
+                 ([@rac:call_id:32]
+                  (([#"qoaconv.adb" 76 0 76 0]
+                    [@GP_Check:75:VC_OVERFLOW_CHECK:qoaconv.adb:76:16]
+                    [@vc:annotation]
+                    [@GP_Shape:tmp_assign__add__mult]
+                    [@rac:call_id:31]
+                    (Standard__integer.range_check_
+                       ([@rac:call_id:30]
+                        (Qoaconv__qoa_div__v.v
+                           * Qoaconv__qoa_div__reciprocal.reciprocal))))
+                     + (32768 : int)))))));
+         ([#"qoaconv.adb" 77 0 77 0] ());
+         ([#"qoaconv.adb" 77 0 77 0] ());
+         ([#"qoaconv.adb" 77 0 77 0] ());
+         ([#"qoaconv.adb" 77 0 77 0]
+          [#"qoaconv.adb" 77 0 77 0]
+          (Qoaconv__qoa_div__n.n.int__content <-
+             ([@rac:call_id:34]
+              (Int_Shift.shift_right
+                 (Qoaconv__qoa_div__tmp.tmp.int__content)
+                 (16 : int)
+                 (32 : int)))));
+         ([#"qoaconv.adb" 78 0 78 0] ());
+         ([#"qoaconv.adb" 79 0 79 0] ());
+         ([#"qoaconv.adb" 79 0 79 0] ());
+         ([#"qoaconv.adb" 79 0 79 0] ());
+         ([#"qoaconv.adb" 80 0 80 0] ());
+         ([#"qoaconv.adb" 80 0 80 0] ());
+         ([#"qoaconv.adb" 80 0 80 0] ());
+         ([#"qoaconv.adb" 80 0 80 0] ());
+         ([#"qoaconv.adb" 78 0 78 0]
+          [#"qoaconv.adb" 78 0 78 0]
+          (Qoaconv__qoa_div__n.n.int__content <-
+             ([#"qoaconv.adb" 79 0 79 0]
+              [@GP_Check:80:VC_OVERFLOW_CHECK:qoaconv.adb:79:54]
+              [@vc:annotation]
+              [@GP_Shape:n_assign__sub]
+              [@rac:call_id:46]
+              (Standard__integer.range_check_
+                 ([@rac:call_id:45]
+                  (([#"qoaconv.adb" 79 0 79 0]
+                    [@GP_Shape:n_assign__sub__add]
+                    [@vc:annotation]
+                    [@GP_Check:78:VC_OVERFLOW_CHECK:qoaconv.adb:79:11]
+                    [@rac:call_id:40]
+                    (Standard__integer.range_check_
+                       ([@rac:call_id:39]
+                        ((Qoaconv__qoa_div__n.n.int__content)
+                           + ([#"qoaconv.adb" 79 0 79 0]
+                              [@vc:annotation]
+                              [@GP_Check:77:VC_OVERFLOW_CHECK:qoaconv.adb:79:33]
+                              [@GP_Shape:n_assign__sub__add__sub]
+                              [@rac:call_id:38]
+                              (Standard__integer.range_check_
+                                 ([@rac:call_id:37]
+                                  (([@rac:call_id:35]
+                                    (Int_Shift.shift_right
+                                       Qoaconv__qoa_div__v.v
+                                       (0 : int)
+                                       (32 : int)))
+                                     - ([@rac:call_id:36]
+                                        (Int_Shift.shift_left
+                                           Qoaconv__qoa_div__v.v
+                                           (0 : int)
+                                           (32 : int)))))))))))
+                     - ([#"qoaconv.adb" 80 0 80 0]
+                        [@GP_Check:79:VC_OVERFLOW_CHECK:qoaconv.adb:80:29]
+                        [@vc:annotation]
+                        [@GP_Shape:n_assign__sub__sub]
+                        [@rac:call_id:44]
+                        (Standard__integer.range_check_
+                           ([@rac:call_id:43]
+                            (([@rac:call_id:41]
+                              (Int_Shift.shift_right
+                                 (Qoaconv__qoa_div__n.n.int__content)
+                                 (0 : int)
+                                 (32 : int)))
+                               - ([@rac:call_id:42]
+                                  (Int_Shift.shift_left
+                                     (Qoaconv__qoa_div__n.n.int__content)
+                                     (0 : int)
+                                     (32 : int)))))))))))));
+         ([#"qoaconv.adb" 81 0 81 0] ());
+         ([#"qoaconv.adb" 81 0 81 0]
+          (([#"qoaconv.adb" 81 0 81 0]
+            (qoaconv__qoa_div__result.int__content <-
+               (Qoaconv__qoa_div__n.n.int__content)));
+           ([#"qoaconv.adb" 81 0 81 0] ((raise Return__exc) : unit))));
+         (raise Return__exc)
+       with Return__exc -> ()
+       end));
+     (qoaconv__qoa_div__result.int__content))
+end

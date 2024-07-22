@@ -1,0 +1,155 @@
+(* Module for axiomatizing type "integer", created in Gnat2Why.Types.Translate_Type *)
+module Standard__integer
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  
+  type integer  = <range -2147483648 2147483647>
+  
+  function   first () requires { True } ensures  { True } returns
+    int = -2147483648
+  
+  function   last () requires { True } ensures  { True } returns
+    int = 2147483647
+  
+  function [GP_Inline]  in_range (x : int) requires { True } ensures 
+    { True } returns
+     = (([GP_Pretty_Ada:-1] (first <= x)) /\ ([GP_Pretty_Ada:-2] (x <= last)))
+  
+  clone export ada__model.Static_Discrete with axiom . type t = integer,
+    function first = first, function last = last,
+    predicate in_range = in_range
+  
+  type integer__ref  = { mutable integer__content : integer }
+  
+  function   integer__ref_integer__content__projection (a : integer__ref)
+    requires {  } ensures  {  } returns integer = a.integer__content
+  
+  meta model_projection function integer__ref_integer__content__projection
+  
+  meta inline:no function integer__ref_integer__content__projection
+  
+  function   integer__havoc (x : integer__ref) requires {  } ensures  {  }
+    returns unit
+
+end
+
+(* Module giving axioms for type "integer", created in Gnat2Why.Types.Generate_Type_Completion *)
+module Standard__integer___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        Standard__integer
+  
+  function   dynamic_invariant
+    (([mlw:proxy_symbol] [introduced] temp___expr_18) : int
+    ([mlw:proxy_symbol] [introduced] temp___is_init_14) : bool
+    ([mlw:proxy_symbol] [introduced] temp___skip_constant_15) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_toplevel_16) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_typ_inv_17) : bool) requires
+    { True } ensures  { True } returns
+     = (Standard__integer.dynamic_property Standard__integer.first
+          Standard__integer.last ([mlw:proxy_symbol]
+          [introduced] temp___expr_18))
+
+end
+
+(* Module for defining the constant "v" defined at qoaconv.ads:82, created in Gnat2Why.Decls.Translate_Constant *)
+module Qoaconv__qoa_clamp_s16__v
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  
+  function [model_trace:3632] [name:V] [sloc:qoaconv.ads:82] v () requires
+    {  } ensures  {  } returns int
+
+end
+
+(* Module for checking contracts and absence of run-time errors in subprogram "qoa_clamp_s16" defined at qoaconv.ads:82, created in Gnat2Why.Subprograms.Generate_VCs_For_Subprogram *)
+module Qoaconv__qoa_clamp_s16__subprogram_def
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  use        _gnatprove_standard.Main
+  use        Standard__integer
+  use        Standard__integer___axiom
+  use        Qoaconv__qoa_clamp_s16__v
+  use import int.Int
+  use        _gnatprove_standard.Main
+  use        Standard__integer
+  use        Standard__integer
+  use        Standard__integer___axiom
+  use        Qoaconv__qoa_clamp_s16__v
+  
+  val qoaconv__qoa_clamp_s16__result [name:Qoa_Clamp_s16]
+  [model_trace:3631@result]
+  [model_projected] : int
+  
+  function  [sloc:qoaconv.ads:82] def (__void_param : unit) requires { True }
+    ensures  {  } returns
+     = (* Assume dynamic invariants of inputs of the subprogram qoaconv.ads:82 *);
+        assume
+        { (Standard__integer___axiom.dynamic_invariant
+             Qoaconv__qoa_clamp_s16__v.v True False True True) };
+        (* Assume moved pointers in outputs of the subprogram qoaconv.ads:82 *);
+        (* Check for RTE in the Pre of the subprogram qoaconv.ads:82 *);
+        abstract ensures
+        { True } begin  (let _ = True in ())  end;
+        (* Assume Pre of the subprogram qoaconv.ads:82 *);
+        (try
+        ();
+          ([sloc:qoaconv.adb:32] (if
+                                 ([sloc:qoaconv.adb:32] ([branch_id=989]
+                                 _gnatprove_standard.Main.spark__branch :=
+                                 (([sloc:qoaconv.adb:32] ([vc:annotation]
+                                                         [GP_Shape:if__cmp__add]
+                                                         [GP_Check:15:VC_OVERFLOW_CHECK:qoaconv.adb:32:12] (
+                                                         Standard__integer.range_check_
+                                                           (Qoaconv__qoa_clamp_s16__v.v
+                                                              + 32768))))
+                                    > 65535)));
+                                 ([branch_id=989] _gnatprove_standard.Main.spark__branch).bool__content
+                                 then
+                                 ();
+                                 ([sloc:qoaconv.adb:33] (if
+                                                        ([sloc:qoaconv.adb:33] ([branch_id=995]
+                                                        _gnatprove_standard.Main.spark__branch
+                                                        :=
+                                                        (Qoaconv__qoa_clamp_s16__v.v
+                                                           < -32768)));
+                                                        ([branch_id=995] _gnatprove_standard.Main.spark__branch).bool__content
+                                                        then
+                                                        ();
+                                                        ([sloc:qoaconv.adb:34] (
+                                                        qoaconv__qoa_clamp_s16__result
+                                                        :=
+                                                        ( -32768));
+                                                        raise Return__exc) 
+                                                        else ()));
+                                 ([sloc:qoaconv.adb:36] (if
+                                                        ([sloc:qoaconv.adb:36] ([branch_id=1003]
+                                                        _gnatprove_standard.Main.spark__branch
+                                                        :=
+                                                        (Qoaconv__qoa_clamp_s16__v.v
+                                                           > 32767)));
+                                                        ([branch_id=1003] _gnatprove_standard.Main.spark__branch).bool__content
+                                                        then
+                                                        ();
+                                                        ([sloc:qoaconv.adb:37] (
+                                                        qoaconv__qoa_clamp_s16__result
+                                                        :=
+                                                        ( 32767));
+                                                        raise Return__exc) 
+                                                        else ()))
+                                  else ()));
+          ([sloc:qoaconv.adb:40] ( qoaconv__qoa_clamp_s16__result :=
+          Qoaconv__qoa_clamp_s16__v.v);
+          raise Return__exc);
+          raise Return__exc with | Return__exc  -> ());
+        abstract ensures
+        { True } begin  (let _ = True in ())  end;
+        !qoaconv__qoa_clamp_s16__result
+
+end

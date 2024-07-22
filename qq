@@ -1,0 +1,6 @@
+Note: Building qoaproject=0.1.0-dev/qoaproject.gpr...
+Compile
+   [Ada]          qoaconv.adb
+
+   compilation of qoaconv.adb failed
+

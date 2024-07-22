@@ -1,0 +1,35 @@
+{
+  "spark": [
+    {
+      "name": "Qoaproject",
+      "sloc": [
+        {
+          "file": "qoaproject.adb",
+          "line": 3
+        }
+      ],
+      "spark": "no"
+    }
+  ],
+  "progress": "PROGRESS_PROOF",
+  "stop_reason": "STOP_REASON_NONE",
+  "flow": [
+  ],
+  "pragma_assume": [
+  ],
+  "session_map": {
+  },
+  "proof": [
+  ],
+  "assumptions": [
+  ],
+  "timings": {
+    "init_why_sections": 5.47999981790781E-04,
+    "globals (advanced)": 5.73500012978911E-03,
+    "flow analysis": 1.40000001920271E-05,
+    "marking": 2.70000000455184E-05,
+    "translation of standard": 2.71099992096424E-03,
+    "properties (advanced)": 1.59999999596039E-05,
+    "globals (basic)": 8.41300003230572E-03
+  }
+}

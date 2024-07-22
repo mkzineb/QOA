@@ -1,0 +1,9 @@
+test.adb:1:09: warning: no entities of "Ada.Text_IO" are referenced [-gnatwu]
+test.adb:1:19: warning: use clause for package "Text_IO" has no effect [-gnatwu]
+test.adb:3:06: warning: redundant with clause in body [-gnatwr]
+test.adb:3:19: warning: "Qoaconv" is already use-visible through previous use_clause at test.ads:1 [-gnatwr]
+test.adb:3:19: warning: use clause for package "Qoaconv" has no effect [-gnatwu]
+test.adb:7:07: warning: variable "Weights" is assigned but never read [-gnatwm]
+test.adb:9:07: warning: "Channel" is not modified, could be declared constant [-gnatwk]
+test.adb:10:07: warning: variable "Index" is not referenced [-gnatwu]
+test.adb:17:58: (style) space required

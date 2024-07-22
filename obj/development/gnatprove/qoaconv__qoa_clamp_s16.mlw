@@ -1,0 +1,153 @@
+module Standard__integer [@GNAT-comment:Module for axiomatizing type "integer", created in Gnat2Why.Types.Translate_Type]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  type integer = <range -2147483648 2147483647>
+  
+  val function first : int
+    ensures { result = ((- 2147483648) : int) }
+  
+  val function last : int
+    ensures { result = (2147483647 : int) }
+  
+  predicate in_range [@GP_Inline] (x: int) =
+    (([@GP_Pretty_Ada:-1] (first <= x)) /\ ([@GP_Pretty_Ada:-2] (x <= last)))
+  
+  val in_range [@GP_Inline] (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = integer,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type integer__ref = { mutable integer__content : integer }
+  
+  function integer__ref_integer__content__projection (a: integer__ref) : integer =
+    a.integer__content
+  
+  meta "model_projection" function integer__ref_integer__content__projection
+  
+  meta "inline:no" function integer__ref_integer__content__projection
+  
+  val integer__havoc (x: integer__ref) : unit
+    writes { x }
+end
+
+module Standard__integer___axiom [@GNAT-comment:Module giving axioms for type "integer", created in Gnat2Why.Types.Generate_Type_Completion]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Standard__integer as Standard__integer
+  
+  predicate dynamic_invariant (temp___expr_18: int) (temp___is_init_14: bool) (temp___skip_constant_15: bool) (temp___do_toplevel_16: bool) (temp___do_typ_inv_17: bool) =
+    [@rac:call_id:1]
+    (Standard__integer.dynamic_property
+       Standard__integer.first
+       Standard__integer.last
+       temp___expr_18)
+  
+  val dynamic_invariant (temp___expr_18: int) (temp___is_init_14: bool) (temp___skip_constant_15: bool) (temp___do_toplevel_16: bool) (temp___do_typ_inv_17: bool) : 
+    bool
+    ensures { result
+                <->
+                (dynamic_invariant
+                   (temp___expr_18 : int)
+                   (temp___is_init_14 : bool)
+                   (temp___skip_constant_15 : bool)
+                   (temp___do_toplevel_16 : bool)
+                   (temp___do_typ_inv_17 : bool)) }
+end
+
+module Qoaconv__qoa_clamp_s16__v [@GNAT-comment:Module for defining the constant "v" defined at qoaconv.ads:82, created in Gnat2Why.Decls.Translate_Constant]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val function v [@model_trace:3632] [@name:V] [#"qoaconv.ads" 82 0 82 0] : 
+    int
+end
+
+module Qoaconv__qoa_clamp_s16__subprogram_def [@GNAT-comment:Module for checking contracts and absence of run-time errors in subprogram "qoa_clamp_s16" defined at qoaconv.ads:82, created in Gnat2Why.Subprograms.Generate_VCs_For_Subprogram]
+  use _gnatprove_standard.Main
+  use int.Int
+  use _gnatprove_standard.Main as Main
+  use Standard__integer as Standard__integer
+  use Standard__integer___axiom as Standard__integer___axiom
+  use Qoaconv__qoa_clamp_s16__v as Qoaconv__qoa_clamp_s16__v
+  
+  val qoaconv__qoa_clamp_s16__result [@name:Qoa_Clamp_s16] [@model_trace:3631@result] [@model_projected] : 
+    int__ref
+  
+  let def [#"qoaconv.ads" 82 0 82 0] (__void_param : unit)
+    requires { [#"qoaconv.ads" 82 0 82 0] true }
+  = [@vc:divergent]
+    (([@GNAT-comment:Assume dynamic invariants of inputs of the subprogram qoaconv.ads:82]
+      ());
+     ([#"qoaconv.ads" 82 0 82 0]
+      assume {
+        [#"qoaconv.ads" 82 0 82 0]
+        [@rac:call_id:2]
+        (Standard__integer___axiom.dynamic_invariant
+           Qoaconv__qoa_clamp_s16__v.v
+           True
+           False
+           True
+           True) });
+     ([@GNAT-comment:Assume moved pointers in outputs of the subprogram qoaconv.ads:82]
+      ());
+     ([@GNAT-comment:Check for RTE in the Pre of the subprogram qoaconv.ads:82]
+      ());
+     ([#"qoaconv.ads" 82 0 82 0] ());
+     ([@GNAT-comment:Assume Pre of the subprogram qoaconv.ads:82] ());
+     ([#"qoaconv.ads" 82 0 82 0]
+      (try
+         ([#"qoaconv.adb" 32 0 32 0]
+          (if (([#"qoaconv.adb" 32 0 32 0]
+                [#"qoaconv.adb" 32 0 32 0]
+                (([@branch_id=989] Main.spark__branch).bool__content <-
+                   (([#"qoaconv.adb" 32 0 32 0]
+                     [@vc:annotation]
+                     [@GP_Shape:if__cmp__add]
+                     [@GP_Check:15:VC_OVERFLOW_CHECK:qoaconv.adb:32:12]
+                     [@rac:call_id:4]
+                     (Standard__integer.range_check_
+                        ([@rac:call_id:3]
+                         (Qoaconv__qoa_clamp_s16__v.v + (32768 : int)))))
+                      > (65535 : int))));
+               (([@branch_id=989] Main.spark__branch).bool__content)) then
+             (([#"qoaconv.adb" 33 0 33 0]
+               (if (([#"qoaconv.adb" 33 0 33 0]
+                     [#"qoaconv.adb" 33 0 33 0]
+                     (([@branch_id=995] Main.spark__branch).bool__content <-
+                        (Qoaconv__qoa_clamp_s16__v.v < ((- 32768) : int))));
+                    (([@branch_id=995] Main.spark__branch).bool__content)) then
+                  ([#"qoaconv.adb" 34 0 34 0]
+                   (([#"qoaconv.adb" 34 0 34 0]
+                     (qoaconv__qoa_clamp_s16__result.int__content <-
+                        ((- 32768) : int)));
+                    ([#"qoaconv.adb" 34 0 34 0] ((raise Return__exc) : unit))))
+                else ()));
+              ([#"qoaconv.adb" 36 0 36 0]
+               (if (([#"qoaconv.adb" 36 0 36 0]
+                     [#"qoaconv.adb" 36 0 36 0]
+                     (([@branch_id=1003] Main.spark__branch).bool__content <-
+                        (Qoaconv__qoa_clamp_s16__v.v > (32767 : int))));
+                    (([@branch_id=1003] Main.spark__branch).bool__content)) then
+                  ([#"qoaconv.adb" 37 0 37 0]
+                   (([#"qoaconv.adb" 37 0 37 0]
+                     (qoaconv__qoa_clamp_s16__result.int__content <-
+                        (32767 : int)));
+                    ([#"qoaconv.adb" 37 0 37 0] ((raise Return__exc) : unit))))
+                else ())))
+           else ()));
+         ([#"qoaconv.adb" 40 0 40 0]
+          (([#"qoaconv.adb" 40 0 40 0]
+            (qoaconv__qoa_clamp_s16__result.int__content <-
+               Qoaconv__qoa_clamp_s16__v.v));
+           ([#"qoaconv.adb" 40 0 40 0] ((raise Return__exc) : unit))));
+         (raise Return__exc)
+       with Return__exc -> ()
+       end));
+     (qoaconv__qoa_clamp_s16__result.int__content))
+end

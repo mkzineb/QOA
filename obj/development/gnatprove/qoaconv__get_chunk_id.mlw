@@ -1,0 +1,650 @@
+module Standard__character [@GNAT-comment:Module for axiomatizing type "character", created in Gnat2Why.Types.Translate_Type]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  type character
+  
+  val function first : int
+    ensures { result = (0 : int) }
+  
+  val function last : int
+    ensures { result = (255 : int) }
+  
+  predicate in_range [@GP_Inline] (x: int) =
+    (([@GP_Pretty_Ada:-1] (first <= x)) /\ ([@GP_Pretty_Ada:-2] (x <= last)))
+  
+  val in_range [@GP_Inline] (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = character,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type character__ref = { mutable character__content : character }
+  
+  function character__ref_character__content__projection (a: character__ref) : character =
+    a.character__content
+  
+  meta "model_projection" function character__ref_character__content__projection
+  
+  meta "inline:no" function character__ref_character__content__projection
+  
+  val character__havoc (x: character__ref) : unit
+    writes { x }
+end
+
+module Standard__character__rep [@GNAT-comment:Module defining to_rep/of_rep for type "character", created in Gnat2Why.Types.Translate_Type]
+  use Standard__character as Standard__character
+  use _gnatprove_standard.Main
+  use int.Int
+  clone export ada__model.Rep_Proj_Int with
+    axiom .,
+    type t = Standard__character.character,
+    predicate in_range = Standard__character.in_range
+  
+  meta "model_projection" function to_rep
+  
+  meta "inline:no" function to_rep
+end
+
+module Array__Int__Standard__character [@GNAT-comment:Module for axiomatizing the array theory associated to type "string", created in Why.Gen.Arrays.Create_Rep_Array_Theory]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Standard__character as Standard__character
+  use Standard__character__rep as Standard__character__rep
+  
+  function index_I1_one : int = 1 : int
+  
+  type component_type = Standard__character.character
+  
+  clone export _gnatprove_standard.Array__1 with
+    axiom .,
+    type I1.t = int,
+    predicate I1.le = Int.( <= ),
+    predicate I1.lt = Int.( < ),
+    predicate I1.gt = Int.( > ),
+    function I1.add = Int.( + ),
+    function I1.sub = Int.( - ),
+    function I1.one = index_I1_one,
+    type component_type = component_type
+  
+  function bool_eq (a: map) (a__first: int) (a__last: int) (b: map) (b__first: int) (b__last: int) : bool =
+    ((if (a__first <= a__last) then
+        ((b__first <= b__last) /\
+           (([@rac:call_id:1] (a__last - a__first))
+              = ([@rac:call_id:2] (b__last - b__first))))
+      else (b__first > b__last)) /\
+       (forall temp___idx_105 : int.
+          if ((a__first <= temp___idx_105) /\ (temp___idx_105 <= a__last)) then
+            (([@rac:call_id:4]
+              (Standard__character__rep.to_rep
+                 ([@rac:call_id:3] (get a temp___idx_105))))
+               = ([@rac:call_id:8]
+                  (Standard__character__rep.to_rep
+                     ([@rac:call_id:7]
+                      (get
+                         b
+                         ([@rac:call_id:6]
+                          (([@rac:call_id:5] (b__first - a__first))
+                             + temp___idx_105)))))))
+          else true))
+  
+  val bool_eq (a: map) (a__first: int) (a__last: int) (b: map) (b__first: int) (b__last: int) : 
+    bool
+    ensures { result
+      =
+      (bool_eq
+         (a : map)
+         (a__first : int)
+         (a__last : int)
+         (b : map)
+         (b__first : int)
+         (b__last : int)) }
+  
+  axiom bool_eq_rev:
+    forall a : map, b : map.
+      forall a__first : int, a__last : int, b__first : int, b__last : int.
+        ((([@rac:call_id:9] (bool_eq b b__first b__last a a__first a__last))
+            = True) ->
+           ((if (a__first <= a__last) then
+               ((b__first <= b__last) /\
+                  (([@rac:call_id:10] (a__last - a__first))
+                     = ([@rac:call_id:11] (b__last - b__first))))
+             else (b__first > b__last)) /\
+              (forall temp___idx_105 : int.
+                 if ((a__first <= temp___idx_105) /\
+                       (temp___idx_105 <= a__last)) then
+                   (([@rac:call_id:13]
+                     (Standard__character__rep.to_rep
+                        ([@rac:call_id:12] (get a temp___idx_105))))
+                      = ([@rac:call_id:17]
+                         (Standard__character__rep.to_rep
+                            ([@rac:call_id:16]
+                             (get
+                                b
+                                ([@rac:call_id:15]
+                                 (([@rac:call_id:14] (b__first - a__first))
+                                    + temp___idx_105)))))))
+                 else true)))
+  
+  meta "remove_unused:dependency" axiom bool_eq_rev [@useraxiom], function bool_eq
+end
+
+module Standard__integer [@GNAT-comment:Module for axiomatizing type "integer", created in Gnat2Why.Types.Translate_Type]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  type integer = <range -2147483648 2147483647>
+  
+  val function first : int
+    ensures { result = ((- 2147483648) : int) }
+  
+  val function last : int
+    ensures { result = (2147483647 : int) }
+  
+  predicate in_range [@GP_Inline] (x: int) =
+    (([@GP_Pretty_Ada:-1] (first <= x)) /\ ([@GP_Pretty_Ada:-2] (x <= last)))
+  
+  val in_range [@GP_Inline] (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = integer,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type integer__ref = { mutable integer__content : integer }
+  
+  function integer__ref_integer__content__projection (a: integer__ref) : integer =
+    a.integer__content
+  
+  meta "model_projection" function integer__ref_integer__content__projection
+  
+  meta "inline:no" function integer__ref_integer__content__projection
+  
+  val integer__havoc (x: integer__ref) : unit
+    writes { x }
+end
+
+module Standard__positive [@GNAT-comment:Module for axiomatizing type "positive", created in Gnat2Why.Types.Translate_Type]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  type positive = <range 1 2147483647>
+  
+  val function first : int
+    ensures { result = (1 : int) }
+  
+  val function last : int
+    ensures { result = (2147483647 : int) }
+  
+  predicate in_range [@GP_Inline] (x: int) =
+    (([@GP_Pretty_Ada:-1] (first <= x)) /\ ([@GP_Pretty_Ada:-2] (x <= last)))
+  
+  val in_range [@GP_Inline] (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = positive,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type positive__ref = { mutable positive__content : positive }
+  
+  function positive__ref_positive__content__projection (a: positive__ref) : positive =
+    a.positive__content
+  
+  meta "model_projection" function positive__ref_positive__content__projection
+  
+  meta "inline:no" function positive__ref_positive__content__projection
+  
+  val positive__havoc (x: positive__ref) : unit
+    writes { x }
+end
+
+module Standard__integer__rep [@GNAT-comment:Module defining to_rep/of_rep for type "integer", created in Gnat2Why.Types.Translate_Type]
+  use Standard__integer as Standard__integer
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  function to_rep (x: Standard__integer.integer) : int =
+    [@rac:call_id:18] (Standard__integer.integer'int x)
+  
+  clone export ada__model.Rep_Proj_Int with
+    axiom .,
+    type t = Standard__integer.integer,
+    predicate in_range = Standard__integer.in_range,
+    function to_rep = to_rep
+  
+  meta "model_projection" function to_rep
+  
+  meta "inline:no" function to_rep
+end
+
+module Standard__string [@GNAT-comment:Module for axiomatizing type "string", created in Gnat2Why.Types.Translate_Type]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Standard__integer as Standard__integer
+  use Standard__positive as Standard__positive
+  use Standard__character as Standard__character
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Standard__integer__rep as Standard__integer__rep
+  
+  type component_type = Standard__character.character
+  
+  function index_1_id (x: int) : int = x
+  
+  clone export ada__model.Unconstr_Array with
+    axiom .,
+    type map = Array__Int__Standard__character.map,
+    function array_bool_eq = Array__Int__Standard__character.bool_eq,
+    type index_base_type = Standard__integer.integer,
+    type index_rep_type = int,
+    function to_rep = Standard__integer__rep.to_rep,
+    function rep_to_int = index_1_id,
+    predicate in_range_base = Standard__integer.in_range,
+    predicate index_dynamic_property = Standard__positive.dynamic_property,
+    predicate index_rep_le = Int.( <= )
+  
+  type string__ = __t
+  
+  meta "model_projection" function to_array
+  
+  meta "inline:no" function to_array
+  
+  meta "model_projection" function first
+  
+  meta "inline:no" function first
+  
+  meta "model_projection" function last
+  
+  meta "inline:no" function last
+  
+  type string____ref = { mutable string____content : string__ }
+  
+  function string____ref_string____content__projection (a: string____ref) : string__ =
+    a.string____content
+  
+  meta "model_projection" function string____ref_string____content__projection
+  
+  meta "inline:no" function string____ref_string____content__projection
+  
+  val string____havoc (x: string____ref) : unit
+    writes { x }
+end
+
+module Standard__string___axiom [@GNAT-comment:Module giving axioms for type "string", created in Gnat2Why.Types.Generate_Type_Completion]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Standard__positive as Standard__positive
+  use Standard__string as Standard__string
+  
+  predicate dynamic_invariant (temp___expr_110: Standard__string.string__) (temp___is_init_106: bool) (temp___skip_constant_107: bool) (temp___do_toplevel_108: bool) (temp___do_typ_inv_109: bool) =
+    if (temp___skip_constant_107 = True) then true
+    else
+      ([@rac:call_id:21]
+       (Standard__string.dynamic_property
+          Standard__positive.first
+          Standard__positive.last
+          ([@rac:call_id:19] (Standard__string.first temp___expr_110))
+          ([@rac:call_id:20] (Standard__string.last temp___expr_110))))
+  
+  val dynamic_invariant (temp___expr_110: Standard__string.string__) (temp___is_init_106: bool) (temp___skip_constant_107: bool) (temp___do_toplevel_108: bool) (temp___do_typ_inv_109: bool) : 
+    bool
+    ensures { result
+                <->
+                (dynamic_invariant
+                   (temp___expr_110 : Standard__string.string__)
+                   (temp___is_init_106 : bool)
+                   (temp___skip_constant_107 : bool)
+                   (temp___do_toplevel_108 : bool)
+                   (temp___do_typ_inv_109 : bool)) }
+end
+
+module Qoaconv__get_chunk_id__s [@GNAT-comment:Module for defining the constant "s" defined at qoaconv.ads:103, created in Gnat2Why.Decls.Translate_Constant]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Standard__string as Standard__string
+  
+  val function s [@model_projected] [@model_trace:3714] [@name:S] [#"qoaconv.ads" 103 0 103 0] : 
+    Standard__string.string__
+end
+
+module Qoaconv__get_chunk_id__chunk_id [@GNAT-comment:Module for defining a ref holding the value of variable "chunk_id" defined at qoaconv.adb:454, created in Gnat2Why.Decls.Translate_Variable]
+  use _gnatprove_standard.Main
+  use int.Int
+  use _gnatprove_standard.BV32 as BV32
+  
+  val chunk_id [@model_projected] [@model_trace:2682] [@name:Chunk_ID] [#"qoaconv.adb" 454 0 454 0] : 
+    BV32.t__ref
+end
+
+module Interfaces__unsigned_32 [@GNAT-comment:Module for axiomatizing type "unsigned_32" defined at interfac.ads:80, created in Gnat2Why.Types.Translate_Type]
+  use _gnatprove_standard.Main
+  use int.Int
+  use _gnatprove_standard.BV32 as BV32
+  
+  type unsigned_32
+  
+  val function attr__ATTRIBUTE_MODULUS : BV32.t
+  
+  val function first : BV32.t
+    ensures { result = (0 : BV32.t) }
+  
+  val function last : BV32.t
+    ensures { result = (4294967295 : BV32.t) }
+  
+  function first_int : int = 0 : int
+  
+  function last_int : int = 4294967295 : int
+  
+  predicate in_range (x: BV32.t) = true
+  
+  val in_range (x: BV32.t) : bool
+    ensures { result <-> (in_range (x : BV32.t)) }
+  
+  predicate in_range_int (x: int) = BV32.uint_in_range x
+  
+  val in_range_int (x: int) : bool
+    ensures { result <-> (in_range_int (x : int)) }
+  
+  clone export ada__model.Static_Modular_32 with
+    axiom .,
+    type t = unsigned_32,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range,
+    predicate in_range_int = in_range_int
+  
+  type unsigned_32__ref = { mutable unsigned_32__content : unsigned_32 }
+  
+  function unsigned_32__ref_unsigned_32__content__projection (a: unsigned_32__ref) : unsigned_32 =
+    a.unsigned_32__content
+  
+  meta "model_projection" function unsigned_32__ref_unsigned_32__content__projection
+  
+  meta "inline:no" function unsigned_32__ref_unsigned_32__content__projection
+  
+  val unsigned_32__havoc (x: unsigned_32__ref) : unit
+    writes { x }
+end
+
+module Interfaces__unsigned_32___axiom [@GNAT-comment:Module giving axioms for type "unsigned_32" defined at interfac.ads:80, created in Gnat2Why.Types.Generate_Type_Completion]
+  use _gnatprove_standard.Main
+  use int.Int
+  use _gnatprove_standard.BV32 as BV32
+  use Interfaces__unsigned_32 as Interfaces__unsigned_32
+  
+  predicate dynamic_invariant (temp___expr_276: BV32.t) (temp___is_init_272: bool) (temp___skip_constant_273: bool) (temp___do_toplevel_274: bool) (temp___do_typ_inv_275: bool) =
+    [@rac:call_id:22]
+    (Interfaces__unsigned_32.dynamic_property
+       Interfaces__unsigned_32.first
+       Interfaces__unsigned_32.last
+       temp___expr_276)
+  
+  val dynamic_invariant (temp___expr_276: BV32.t) (temp___is_init_272: bool) (temp___skip_constant_273: bool) (temp___do_toplevel_274: bool) (temp___do_typ_inv_275: bool) : 
+    bool
+    ensures { result
+                <->
+                (dynamic_invariant
+                   (temp___expr_276 : BV32.t)
+                   (temp___is_init_272 : bool)
+                   (temp___skip_constant_273 : bool)
+                   (temp___do_toplevel_274 : bool)
+                   (temp___do_typ_inv_275 : bool)) }
+end
+
+module Standard__positive___axiom [@GNAT-comment:Module giving axioms for type "positive", created in Gnat2Why.Types.Generate_Type_Completion]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Standard__positive as Standard__positive
+  
+  predicate dynamic_invariant (temp___expr_53: int) (temp___is_init_49: bool) (temp___skip_constant_50: bool) (temp___do_toplevel_51: bool) (temp___do_typ_inv_52: bool) =
+    [@rac:call_id:23]
+    (Standard__positive.dynamic_property
+       Standard__positive.first
+       Standard__positive.last
+       temp___expr_53)
+  
+  val dynamic_invariant (temp___expr_53: int) (temp___is_init_49: bool) (temp___skip_constant_50: bool) (temp___do_toplevel_51: bool) (temp___do_typ_inv_52: bool) : 
+    bool
+    ensures { result
+                <->
+                (dynamic_invariant
+                   (temp___expr_53 : int)
+                   (temp___is_init_49 : bool)
+                   (temp___skip_constant_50 : bool)
+                   (temp___do_toplevel_51 : bool)
+                   (temp___do_typ_inv_52 : bool)) }
+end
+
+module Standard__character___axiom [@GNAT-comment:Module giving axioms for type "character", created in Gnat2Why.Types.Generate_Type_Completion]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Standard__character as Standard__character
+  
+  predicate dynamic_invariant (temp___expr_88: int) (temp___is_init_84: bool) (temp___skip_constant_85: bool) (temp___do_toplevel_86: bool) (temp___do_typ_inv_87: bool) =
+    [@rac:call_id:24]
+    (Standard__character.dynamic_property
+       Standard__character.first
+       Standard__character.last
+       temp___expr_88)
+  
+  val dynamic_invariant (temp___expr_88: int) (temp___is_init_84: bool) (temp___skip_constant_85: bool) (temp___do_toplevel_86: bool) (temp___do_typ_inv_87: bool) : 
+    bool
+    ensures { result
+                <->
+                (dynamic_invariant
+                   (temp___expr_88 : int)
+                   (temp___is_init_84 : bool)
+                   (temp___skip_constant_85 : bool)
+                   (temp___do_toplevel_86 : bool)
+                   (temp___do_typ_inv_87 : bool)) }
+end
+
+module Qoaconv__get_chunk_id__subprogram_def [@GNAT-comment:Module for checking contracts and absence of run-time errors in subprogram "get_chunk_id" defined at qoaconv.ads:103, created in Gnat2Why.Subprograms.Generate_VCs_For_Subprogram]
+  use _gnatprove_standard.Main
+  use int.Int
+  use _gnatprove_standard.BV32 as BV32
+  use Standard__character as Standard__character
+  use Standard__character__rep as Standard__character__rep
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Standard__string as Standard__string
+  use Standard__string___axiom as Standard__string___axiom
+  use Qoaconv__get_chunk_id__s as Qoaconv__get_chunk_id__s
+  use Qoaconv__get_chunk_id__chunk_id as Qoaconv__get_chunk_id__chunk_id
+  use Interfaces__unsigned_32___axiom as Interfaces__unsigned_32___axiom
+  use Standard__integer as Standard__integer
+  use Standard__positive as Standard__positive
+  use Standard__positive___axiom as Standard__positive___axiom
+  use Standard__character___axiom as Standard__character___axiom
+  use Standard__integer__rep as Standard__integer__rep
+  use Interfaces__unsigned_32 as Interfaces__unsigned_32
+  
+  val qoaconv__get_chunk_id__result [@model_trace:3713@result] [@model_projected] [@name:Get_Chunk_Id] : 
+    BV32.t__ref
+  
+  let def [#"qoaconv.ads" 103 0 103 0] (__void_param : unit)
+    requires { [#"qoaconv.ads" 103 0 103 0] true }
+  = [@vc:divergent]
+    (([@GNAT-comment:Assume dynamic invariants of inputs of the subprogram qoaconv.ads:103]
+      ());
+     ([#"qoaconv.ads" 103 0 103 0]
+      assume {
+        [#"qoaconv.ads" 103 0 103 0]
+        [@rac:call_id:25]
+        (Standard__string___axiom.dynamic_invariant
+           Qoaconv__get_chunk_id__s.s
+           True
+           False
+           True
+           True) });
+     ([@GNAT-comment:Assume moved pointers in outputs of the subprogram qoaconv.ads:103]
+      ());
+     ([@GNAT-comment:Check for RTE in the Pre of the subprogram qoaconv.ads:103]
+      ());
+     ([#"qoaconv.ads" 103 0 103 0] ());
+     ([@GNAT-comment:Assume Pre of the subprogram qoaconv.ads:103] ());
+     ([#"qoaconv.ads" 103 0 103 0]
+      (try
+         ([#"qoaconv.adb" 453 0 453 0] ());
+         ([#"qoaconv.adb" 454 0 454 0]
+          (([#"qoaconv.adb" 454 0 454 0]
+            (Qoaconv__get_chunk_id__chunk_id.chunk_id.BV32.t__content <-
+               (0 : BV32.t)));
+           ([#"qoaconv.adb" 454 0 454 0]
+            assume {
+              [#"qoaconv.adb" 454 0 454 0]
+              [@rac:call_id:26]
+              (Interfaces__unsigned_32___axiom.dynamic_invariant
+                 (Qoaconv__get_chunk_id__chunk_id.chunk_id.BV32.t__content)
+                 True
+                 False
+                 True
+                 True) })));
+         ([#"qoaconv.adb" 456 0 456 0] ());
+         ([#"qoaconv.adb" 457 0 457 0] ());
+         ([#"qoaconv.adb" 458 0 458 0] ());
+         ([#"qoaconv.adb" 459 0 459 0] ());
+         ([#"qoaconv.adb" 460 0 460 0] ());
+         ([#"qoaconv.adb" 456 0 456 0]
+          [#"qoaconv.adb" 456 0 456 0]
+          (Qoaconv__get_chunk_id__chunk_id.chunk_id.BV32.t__content <-
+             ([@rac:call_id:61]
+              (BV32.bw_or
+                 ([@rac:call_id:52]
+                  (BV32.bw_or
+                     ([@rac:call_id:43]
+                      (BV32.bw_or
+                         ([@rac:call_id:34]
+                          (BV32.lsl_bv
+                             ([@rac:call_id:32]
+                              (BV32.of_int
+                                 ([@rac:call_id:31]
+                                  (Standard__character__rep.to_rep
+                                     ([@rac:call_id:30]
+                                      (Array__Int__Standard__character.get
+                                         ([@rac:call_id:27]
+                                          (Standard__string.to_array
+                                             Qoaconv__get_chunk_id__s.s))
+                                         (let temp___806 [@mlw:proxy_symbol] [@introduced] =
+                                            1 : int in
+                                          ([#"qoaconv.adb" 456 0 456 0]
+                                           assert {
+                                             [#"qoaconv.adb" 456 0 456 0]
+                                             [#"qoaconv.adb" 457 0 457 0]
+                                             [@GP_Shape:chunk_id_assign__or__or__or__call_shift_left__typeconv__pos_ref__ixdcomp]
+                                             [@vc:annotation]
+                                             [@GP_Check:21:VC_INDEX_CHECK:qoaconv.adb:457:40]
+                                             ((([@rac:call_id:28]
+                                                (Standard__string.first
+                                                   Qoaconv__get_chunk_id__s.s))
+                                                 <= temp___806) /\
+                                                (temp___806
+                                                   <= ([@rac:call_id:29]
+                                                       (Standard__string.last
+                                                          Qoaconv__get_chunk_id__s.s)))) });
+                                          temp___806)))))))
+                             ([@rac:call_id:33] (BV32.of_int (0 : int)))))
+                         ([@rac:call_id:42]
+                          (BV32.lsl_bv
+                             ([@rac:call_id:40]
+                              (BV32.of_int
+                                 ([@rac:call_id:39]
+                                  (Standard__character__rep.to_rep
+                                     ([@rac:call_id:38]
+                                      (Array__Int__Standard__character.get
+                                         ([@rac:call_id:35]
+                                          (Standard__string.to_array
+                                             Qoaconv__get_chunk_id__s.s))
+                                         (let temp___807 [@mlw:proxy_symbol] [@introduced] =
+                                            2 : int in
+                                          assert {
+                                            [#"qoaconv.adb" 458 0 458 0]
+                                            [@GP_Shape:chunk_id_assign__or__or__or__call_shift_left__typeconv__pos_ref__ixdcomp]
+                                            [@vc:annotation]
+                                            [@GP_Check:22:VC_INDEX_CHECK:qoaconv.adb:458:40]
+                                            ((([@rac:call_id:36]
+                                               (Standard__string.first
+                                                  Qoaconv__get_chunk_id__s.s))
+                                                <= temp___807) /\
+                                               (temp___807
+                                                  <= ([@rac:call_id:37]
+                                                      (Standard__string.last
+                                                         Qoaconv__get_chunk_id__s.s)))) };
+                                          temp___807)))))))
+                             ([@rac:call_id:41] (BV32.of_int (8 : int)))))))
+                     ([@rac:call_id:51]
+                      (BV32.lsl_bv
+                         ([@rac:call_id:49]
+                          (BV32.of_int
+                             ([@rac:call_id:48]
+                              (Standard__character__rep.to_rep
+                                 ([@rac:call_id:47]
+                                  (Array__Int__Standard__character.get
+                                     ([@rac:call_id:44]
+                                      (Standard__string.to_array
+                                         Qoaconv__get_chunk_id__s.s))
+                                     (let temp___808 [@mlw:proxy_symbol] [@introduced] =
+                                        3 : int in
+                                      assert {
+                                        [#"qoaconv.adb" 459 0 459 0]
+                                        [@GP_Shape:chunk_id_assign__or__or__call_shift_left__typeconv__pos_ref__ixdcomp]
+                                        [@vc:annotation]
+                                        [@GP_Check:23:VC_INDEX_CHECK:qoaconv.adb:459:40]
+                                        ((([@rac:call_id:45]
+                                           (Standard__string.first
+                                              Qoaconv__get_chunk_id__s.s))
+                                            <= temp___808) /\
+                                           (temp___808
+                                              <= ([@rac:call_id:46]
+                                                  (Standard__string.last
+                                                     Qoaconv__get_chunk_id__s.s)))) };
+                                      temp___808)))))))
+                         ([@rac:call_id:50] (BV32.of_int (16 : int)))))))
+                 ([@rac:call_id:60]
+                  (BV32.lsl_bv
+                     ([@rac:call_id:58]
+                      (BV32.of_int
+                         ([@rac:call_id:57]
+                          (Standard__character__rep.to_rep
+                             ([@rac:call_id:56]
+                              (Array__Int__Standard__character.get
+                                 ([@rac:call_id:53]
+                                  (Standard__string.to_array
+                                     Qoaconv__get_chunk_id__s.s))
+                                 (let temp___809 [@mlw:proxy_symbol] [@introduced] =
+                                    4 : int in
+                                  assert {
+                                    [#"qoaconv.adb" 460 0 460 0]
+                                    [@vc:annotation]
+                                    [@GP_Check:24:VC_INDEX_CHECK:qoaconv.adb:460:40]
+                                    [@GP_Shape:chunk_id_assign__or__call_shift_left__typeconv__pos_ref__ixdcomp]
+                                    ((([@rac:call_id:54]
+                                       (Standard__string.first
+                                          Qoaconv__get_chunk_id__s.s))
+                                        <= temp___809) /\
+                                       (temp___809
+                                          <= ([@rac:call_id:55]
+                                              (Standard__string.last
+                                                 Qoaconv__get_chunk_id__s.s)))) };
+                                  temp___809)))))))
+                     ([@rac:call_id:59] (BV32.of_int (24 : int)))))))));
+         ([#"qoaconv.adb" 461 0 461 0] ());
+         ([#"qoaconv.adb" 461 0 461 0]
+          (([#"qoaconv.adb" 461 0 461 0]
+            (qoaconv__get_chunk_id__result.BV32.t__content <-
+               (Qoaconv__get_chunk_id__chunk_id.chunk_id.BV32.t__content)));
+           ([#"qoaconv.adb" 461 0 461 0] ((raise Return__exc) : unit))));
+         (raise Return__exc)
+       with Return__exc -> ()
+       end));
+     (qoaconv__get_chunk_id__result.BV32.t__content))
+end

@@ -1,0 +1,894 @@
+module Standard__integer [@GNAT-comment:Module for axiomatizing type "integer", created in Gnat2Why.Types.Translate_Type]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  type integer = <range -2147483648 2147483647>
+  
+  val function first : int
+    ensures { result = ((- 2147483648) : int) }
+  
+  val function last : int
+    ensures { result = (2147483647 : int) }
+  
+  predicate in_range [@GP_Inline] (x: int) =
+    (([@GP_Pretty_Ada:-1] (first <= x)) /\ ([@GP_Pretty_Ada:-2] (x <= last)))
+  
+  val in_range [@GP_Inline] (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = integer,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type integer__ref = { mutable integer__content : integer }
+  
+  function integer__ref_integer__content__projection (a: integer__ref) : integer =
+    a.integer__content
+  
+  meta "model_projection" function integer__ref_integer__content__projection
+  
+  meta "inline:no" function integer__ref_integer__content__projection
+  
+  val integer__havoc (x: integer__ref) : unit
+    writes { x }
+end
+
+module Interfaces__integer_16 [@GNAT-comment:Module for axiomatizing type "integer_16" defined at interfac.ads:50, created in Gnat2Why.Types.Translate_Type]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  type integer_16 = <range -32768 32767>
+  
+  val function first : int
+    ensures { result = ((- 32768) : int) }
+  
+  val function last : int
+    ensures { result = (32767 : int) }
+  
+  predicate in_range [@GP_Inline] (x: int) =
+    (([@GP_Pretty_Ada:-1] (first <= x)) /\ ([@GP_Pretty_Ada:-2] (x <= last)))
+  
+  val in_range [@GP_Inline] (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = integer_16,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type integer_16__ref = { mutable integer_16__content : integer_16 }
+  
+  function integer_16__ref_integer_16__content__2__projection (a: integer_16__ref) : integer_16 =
+    a.integer_16__content
+  
+  meta "model_projection" function integer_16__ref_integer_16__content__2__projection
+  
+  meta "inline:no" function integer_16__ref_integer_16__content__2__projection
+  
+  val integer_16__havoc (x: integer_16__ref) : unit
+    writes { x }
+end
+
+module Interfaces__integer_16__rep [@GNAT-comment:Module defining to_rep/of_rep for type "integer_16" defined at interfac.ads:50, created in Gnat2Why.Types.Translate_Type]
+  use Interfaces__integer_16 as Interfaces__integer_16
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  function to_rep (x: Interfaces__integer_16.integer_16) : int =
+    [@rac:call_id:1] (Interfaces__integer_16.integer_16'int x)
+  
+  clone export ada__model.Rep_Proj_Int with
+    axiom .,
+    type t = Interfaces__integer_16.integer_16,
+    predicate in_range = Interfaces__integer_16.in_range,
+    function to_rep = to_rep
+  
+  meta "model_projection" function to_rep
+  
+  meta "inline:no" function to_rep
+end
+
+module Array__Int__Interfaces__integer_16 [@GNAT-comment:Module for axiomatizing the array theory associated to type "Thistory_tB" defined at qoaconv.ads:14, created in Why.Gen.Arrays.Create_Rep_Array_Theory]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Interfaces__integer_16 as Interfaces__integer_16
+  use Interfaces__integer_16__rep as Interfaces__integer_16__rep
+  
+  function index_I1_one : int = 1 : int
+  
+  type component_type = Interfaces__integer_16.integer_16
+  
+  clone export _gnatprove_standard.Array__1 with
+    axiom .,
+    type I1.t = int,
+    predicate I1.le = Int.( <= ),
+    predicate I1.lt = Int.( < ),
+    predicate I1.gt = Int.( > ),
+    function I1.add = Int.( + ),
+    function I1.sub = Int.( - ),
+    function I1.one = index_I1_one,
+    type component_type = component_type
+  
+  function bool_eq (a: map) (a__first: int) (a__last: int) (b: map) (b__first: int) (b__last: int) : bool =
+    ((if (a__first <= a__last) then
+        ((b__first <= b__last) /\
+           (([@rac:call_id:2] (a__last - a__first))
+              = ([@rac:call_id:3] (b__last - b__first))))
+      else (b__first > b__last)) /\
+       (forall temp___idx_168 : int.
+          if ((a__first <= temp___idx_168) /\ (temp___idx_168 <= a__last)) then
+            (([@rac:call_id:5]
+              (Interfaces__integer_16__rep.to_rep
+                 ([@rac:call_id:4] (get a temp___idx_168))))
+               = ([@rac:call_id:9]
+                  (Interfaces__integer_16__rep.to_rep
+                     ([@rac:call_id:8]
+                      (get
+                         b
+                         ([@rac:call_id:7]
+                          (([@rac:call_id:6] (b__first - a__first))
+                             + temp___idx_168)))))))
+          else true))
+  
+  val bool_eq (a: map) (a__first: int) (a__last: int) (b: map) (b__first: int) (b__last: int) : 
+    bool
+    ensures { result
+      =
+      (bool_eq
+         (a : map)
+         (a__first : int)
+         (a__last : int)
+         (b : map)
+         (b__first : int)
+         (b__last : int)) }
+  
+  axiom bool_eq_rev:
+    forall a : map, b : map.
+      forall a__first : int, a__last : int, b__first : int, b__last : int.
+        ((([@rac:call_id:10] (bool_eq b b__first b__last a a__first a__last))
+            = True) ->
+           ((if (a__first <= a__last) then
+               ((b__first <= b__last) /\
+                  (([@rac:call_id:11] (a__last - a__first))
+                     = ([@rac:call_id:12] (b__last - b__first))))
+             else (b__first > b__last)) /\
+              (forall temp___idx_168 : int.
+                 if ((a__first <= temp___idx_168) /\
+                       (temp___idx_168 <= a__last)) then
+                   (([@rac:call_id:14]
+                     (Interfaces__integer_16__rep.to_rep
+                        ([@rac:call_id:13] (get a temp___idx_168))))
+                      = ([@rac:call_id:18]
+                         (Interfaces__integer_16__rep.to_rep
+                            ([@rac:call_id:17]
+                             (get
+                                b
+                                ([@rac:call_id:16]
+                                 (([@rac:call_id:15] (b__first - a__first))
+                                    + temp___idx_168)))))))
+                 else true)))
+  
+  meta "remove_unused:dependency" axiom bool_eq_rev [@useraxiom], function bool_eq
+end
+
+module Qoaconv__history_t [@GNAT-comment:Module for axiomatizing type "history_t" defined at qoaconv.ads:14, created in Gnat2Why.Types.Translate_Type]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Interfaces__integer_16 as Interfaces__integer_16
+  use Array__Int__Interfaces__integer_16 as Array__Int__Interfaces__integer_16
+  
+  type component_type = Interfaces__integer_16.integer_16
+  
+  val function first : int
+    ensures { result = (0 : int) }
+  
+  val function last : int
+    ensures { result = (3 : int) }
+  
+  clone export ada__model.Constr_Array with
+    axiom .,
+    type map = Array__Int__Interfaces__integer_16.map,
+    function array_bool_eq = Array__Int__Interfaces__integer_16.bool_eq,
+    function first = first,
+    function last = last,
+    type index_rep_type = int
+end
+
+module Qoaconv__weights_t [@GNAT-comment:Module for axiomatizing type "weights_t" defined at qoaconv.ads:15, created in Gnat2Why.Types.Translate_Type]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Interfaces__integer_16 as Interfaces__integer_16
+  use Array__Int__Interfaces__integer_16 as Array__Int__Interfaces__integer_16
+  
+  type component_type = Interfaces__integer_16.integer_16
+  
+  val function first : int
+    ensures { result = (0 : int) }
+  
+  val function last : int
+    ensures { result = (3 : int) }
+  
+  clone export ada__model.Constr_Array with
+    axiom .,
+    type map = Array__Int__Interfaces__integer_16.map,
+    function array_bool_eq = Array__Int__Interfaces__integer_16.bool_eq,
+    function first = first,
+    function last = last,
+    type index_rep_type = int
+end
+
+module Qoaconv__qoa_lms_t__rep [@GNAT-comment:Module for axiomatizing the record theory associated to type "qoa_lms_t" defined at qoaconv.ads:21, created in Why.Gen.Records.Create_Rep_Record_Theory_If_Needed]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Qoaconv__history_t as Qoaconv__history_t
+  use Qoaconv__weights_t as Qoaconv__weights_t
+  use Array__Int__Interfaces__integer_16 as Array__Int__Interfaces__integer_16
+  
+  type __split_fields = {
+                       rec__qoaconv__qoa_lms_t__history [@model_trace:.3213] [@name:History] :
+                         Array__Int__Interfaces__integer_16.map;
+                       rec__qoaconv__qoa_lms_t__weight [@model_trace:.3222] [@name:Weight] :
+                         Array__Int__Interfaces__integer_16.map
+                       }
+  
+  function __split_fields_rec__qoaconv__qoa_lms_t__history__projection [@model_trace:.3213] [@name:History] (a: __split_fields) : 
+    Array__Int__Interfaces__integer_16.map =
+    a.rec__qoaconv__qoa_lms_t__history
+  
+  meta "model_projection" function __split_fields_rec__qoaconv__qoa_lms_t__history__projection
+  
+  meta "inline:no" function __split_fields_rec__qoaconv__qoa_lms_t__history__projection
+  
+  function __split_fields_rec__qoaconv__qoa_lms_t__weight__projection [@model_trace:.3222] [@name:Weight] (a: __split_fields) : 
+    Array__Int__Interfaces__integer_16.map =
+    a.rec__qoaconv__qoa_lms_t__weight
+  
+  meta "model_projection" function __split_fields_rec__qoaconv__qoa_lms_t__weight__projection
+  
+  meta "inline:no" function __split_fields_rec__qoaconv__qoa_lms_t__weight__projection
+  
+  type __split_fields__ref = {
+                            mutable __split_fields__content : __split_fields
+                            }
+  
+  function __split_fields__ref___split_fields__content__projection (a: __split_fields__ref) : __split_fields =
+    __split_fields__content a
+  
+  meta "model_projection" function __split_fields__ref___split_fields__content__projection
+  
+  meta "inline:no" function __split_fields__ref___split_fields__content__projection
+  
+  val __split_fields__havoc (x: __split_fields__ref) : unit
+    writes { x }
+  
+  type __rep = { __split_fields : __split_fields }
+  
+  function __rep___split_fields__projection (a: __rep) : __split_fields =
+    __split_fields a
+  
+  meta "model_projection" function __rep___split_fields__projection
+  
+  meta "inline:no" function __rep___split_fields__projection
+  
+  function to_base (a: __rep) : __rep = a
+  
+  val to_base (a: __rep) : __rep
+    ensures { result = (to_base (a : __rep)) }
+  
+  function of_base (a: __rep) : __rep = a
+  
+  val of_base (a: __rep) : __rep
+    ensures { result = (of_base (a : __rep)) }
+  
+  predicate qoaconv__qoa_lms_t__history__pred (a: __rep) = true
+  
+  val qoaconv__qoa_lms_t__history__pred (a: __rep) : bool
+    ensures { result <-> (qoaconv__qoa_lms_t__history__pred (a : __rep)) }
+  
+  val rec__qoaconv__qoa_lms_t__history_ (a: __rep) : Array__Int__Interfaces__integer_16.map
+    requires { [@rac:call_id:19] (qoaconv__qoa_lms_t__history__pred a) }
+    ensures { (result
+                 = ((__split_fields a).rec__qoaconv__qoa_lms_t__history)) }
+  
+  predicate qoaconv__qoa_lms_t__weight__pred (a: __rep) = true
+  
+  val qoaconv__qoa_lms_t__weight__pred (a: __rep) : bool
+    ensures { result <-> (qoaconv__qoa_lms_t__weight__pred (a : __rep)) }
+  
+  val rec__qoaconv__qoa_lms_t__weight_ (a: __rep) : Array__Int__Interfaces__integer_16.map
+    requires { [@rac:call_id:20] (qoaconv__qoa_lms_t__weight__pred a) }
+    ensures { (result = ((__split_fields a).rec__qoaconv__qoa_lms_t__weight)) }
+  
+  function bool_eq (a: __rep) (b: __rep) : bool =
+    if ((true /\
+           ([@rac:call_id:21]
+            (Qoaconv__history_t.bool_eq
+               ((__split_fields a).rec__qoaconv__qoa_lms_t__history)
+               ((__split_fields b).rec__qoaconv__qoa_lms_t__history)))) /\
+          ([@rac:call_id:22]
+           (Qoaconv__weights_t.bool_eq
+              ((__split_fields a).rec__qoaconv__qoa_lms_t__weight)
+              ((__split_fields b).rec__qoaconv__qoa_lms_t__weight)))) then
+      True
+    else False
+  
+  val bool_eq (a: __rep) (b: __rep) : bool
+    ensures { result = (bool_eq (a : __rep) (b : __rep)) }
+end
+
+module Qoaconv__qoa_lms_t [@GNAT-comment:Module for axiomatizing type "qoa_lms_t" defined at qoaconv.ads:21, created in Gnat2Why.Types.Translate_Type]
+  use export Qoaconv__qoa_lms_t__rep
+  use _gnatprove_standard.Main
+  use int.Int
+  use Qoaconv__qoa_lms_t__rep as Qoaconv__qoa_lms_t__rep
+  
+  type qoa_lms_t = __rep
+  
+  val function value__size : int
+  
+  val function object__size : int
+  
+  val function alignment : int
+  
+  axiom value__size_axiom: (([@rac:call_id:23] value__size) >= (0 : int))
+  
+  meta "remove_unused:dependency" axiom value__size_axiom [@useraxiom], function value__size
+  
+  axiom object__size_axiom: (([@rac:call_id:24] object__size) >= (0 : int))
+  
+  meta "remove_unused:dependency" axiom object__size_axiom [@useraxiom], function object__size
+  
+  axiom alignment_axiom: (([@rac:call_id:25] alignment) >= (0 : int))
+  
+  meta "remove_unused:dependency" axiom alignment_axiom [@useraxiom], function alignment
+  
+  val function qoaconv__qoa_lms_t__history__first__bit : int
+  
+  val function qoaconv__qoa_lms_t__history__last__bit : int
+  
+  val function qoaconv__qoa_lms_t__history__position : int
+  
+  axiom qoaconv__qoa_lms_t__history__first__bit_axiom:
+    (([@rac:call_id:26] qoaconv__qoa_lms_t__history__first__bit)
+       >= (0 : int))
+  
+  meta "remove_unused:dependency" axiom qoaconv__qoa_lms_t__history__first__bit_axiom [@useraxiom], function qoaconv__qoa_lms_t__history__first__bit
+  
+  axiom qoaconv__qoa_lms_t__history__last__bit_axiom:
+    (([@rac:call_id:27] qoaconv__qoa_lms_t__history__last__bit)
+       > ([@rac:call_id:28] qoaconv__qoa_lms_t__history__first__bit))
+  
+  meta "remove_unused:dependency" axiom qoaconv__qoa_lms_t__history__last__bit_axiom [@useraxiom], function qoaconv__qoa_lms_t__history__last__bit
+  
+  axiom qoaconv__qoa_lms_t__history__position_axiom:
+    (([@rac:call_id:29] qoaconv__qoa_lms_t__history__position) >= (0 : int))
+  
+  meta "remove_unused:dependency" axiom qoaconv__qoa_lms_t__history__position_axiom [@useraxiom], function qoaconv__qoa_lms_t__history__position
+  
+  val function qoaconv__qoa_lms_t__weight__first__bit : int
+  
+  val function qoaconv__qoa_lms_t__weight__last__bit : int
+  
+  val function qoaconv__qoa_lms_t__weight__position : int
+  
+  axiom qoaconv__qoa_lms_t__weight__first__bit_axiom:
+    (([@rac:call_id:30] qoaconv__qoa_lms_t__weight__first__bit) >= (0 : int))
+  
+  meta "remove_unused:dependency" axiom qoaconv__qoa_lms_t__weight__first__bit_axiom [@useraxiom], function qoaconv__qoa_lms_t__weight__first__bit
+  
+  axiom qoaconv__qoa_lms_t__weight__last__bit_axiom:
+    (([@rac:call_id:31] qoaconv__qoa_lms_t__weight__last__bit)
+       > ([@rac:call_id:32] qoaconv__qoa_lms_t__weight__first__bit))
+  
+  meta "remove_unused:dependency" axiom qoaconv__qoa_lms_t__weight__last__bit_axiom [@useraxiom], function qoaconv__qoa_lms_t__weight__last__bit
+  
+  axiom qoaconv__qoa_lms_t__weight__position_axiom:
+    (([@rac:call_id:33] qoaconv__qoa_lms_t__weight__position) >= (0 : int))
+  
+  meta "remove_unused:dependency" axiom qoaconv__qoa_lms_t__weight__position_axiom [@useraxiom], function qoaconv__qoa_lms_t__weight__position
+  
+  val function dummy : qoa_lms_t
+  
+  type qoa_lms_t__ref = { mutable qoa_lms_t__content : qoa_lms_t }
+  
+  function qoa_lms_t__ref_qoa_lms_t__content__projection (a: qoa_lms_t__ref) : qoa_lms_t =
+    a.qoa_lms_t__content
+  
+  meta "model_projection" function qoa_lms_t__ref_qoa_lms_t__content__projection
+  
+  meta "inline:no" function qoa_lms_t__ref_qoa_lms_t__content__projection
+  
+  val qoa_lms_t__havoc (x: qoa_lms_t__ref) : unit
+    writes { x }
+end
+
+module Qoaconv__qoa_lms_predict__lms [@GNAT-comment:Module for defining the constant "lms" defined at qoaconv.ads:84, created in Gnat2Why.Decls.Translate_Constant]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Qoaconv__qoa_lms_t as Qoaconv__qoa_lms_t
+  
+  val function lms [@model_projected] [@model_trace:3639] [@name:lms] [#"qoaconv.ads" 84 0 84 0] : 
+    Qoaconv__qoa_lms_t.qoa_lms_t
+end
+
+module Qoaconv__qoa_lms_t___axiom [@GNAT-comment:Module giving axioms for type "qoa_lms_t" defined at qoaconv.ads:21, created in Gnat2Why.Types.Generate_Type_Completion]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Qoaconv__qoa_lms_t as Qoaconv__qoa_lms_t
+  
+  predicate dynamic_invariant (temp___expr_239: Qoaconv__qoa_lms_t.qoa_lms_t) (temp___is_init_235: bool) (temp___skip_constant_236: bool) (temp___do_toplevel_237: bool) (temp___do_typ_inv_238: bool) =
+    true
+  
+  val dynamic_invariant (temp___expr_239: Qoaconv__qoa_lms_t.qoa_lms_t) (temp___is_init_235: bool) (temp___skip_constant_236: bool) (temp___do_toplevel_237: bool) (temp___do_typ_inv_238: bool) : 
+    bool
+    ensures { result
+                <->
+                (dynamic_invariant
+                   (temp___expr_239 : Qoaconv__qoa_lms_t.qoa_lms_t)
+                   (temp___is_init_235 : bool)
+                   (temp___skip_constant_236 : bool)
+                   (temp___do_toplevel_237 : bool)
+                   (temp___do_typ_inv_238 : bool)) }
+end
+
+module Qoaconv__qoa_lms_predict__prediction [@GNAT-comment:Module for defining a ref holding the value of variable "prediction" defined at qoaconv.adb:44, created in Gnat2Why.Decls.Translate_Variable]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val prediction [@name:Prediction] [@model_projected] [@model_trace:1019] [#"qoaconv.adb" 44 0 44 0] : 
+    int__ref
+end
+
+module Qoaconv__qoa_lms_predict__L_2__i [@GNAT-comment:Module for defining a ref holding the value of variable "i" defined at qoaconv.adb:46, created in Gnat2Why.Decls.Translate_Variable]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val i [@name:i] [@model_projected] [@model_trace:1026] [#"qoaconv.adb" 46 0 46 0] : 
+    int__ref
+end
+
+module Interfaces__Tinteger_64B [@GNAT-comment:Module for axiomatizing type "Tinteger_64B" defined at interfac.ads:56, created in Gnat2Why.Types.Translate_Type]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  type tinteger_64B = <range -9223372036854775808 9223372036854775807>
+  
+  val function first : int
+    ensures { result = ((- 9223372036854775808) : int) }
+  
+  val function last : int
+    ensures { result = (9223372036854775807 : int) }
+  
+  predicate in_range [@GP_Inline] (x: int) =
+    (([@GP_Pretty_Ada:-1] (first <= x)) /\ ([@GP_Pretty_Ada:-2] (x <= last)))
+  
+  val in_range [@GP_Inline] (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = tinteger_64B,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type tinteger_64B__ref = { mutable tinteger_64B__content : tinteger_64B }
+  
+  function tinteger_64B__ref_tinteger_64B__content__projection (a: tinteger_64B__ref) : tinteger_64B =
+    a.tinteger_64B__content
+  
+  meta "model_projection" function tinteger_64B__ref_tinteger_64B__content__projection
+  
+  meta "inline:no" function tinteger_64B__ref_tinteger_64B__content__projection
+  
+  val tinteger_64B__havoc (x: tinteger_64B__ref) : unit
+    writes { x }
+end
+
+module Interfaces__integer_64 [@GNAT-comment:Module for axiomatizing type "integer_64" defined at interfac.ads:56, created in Gnat2Why.Types.Translate_Type]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  type integer_64 = <range -9223372036854775808 9223372036854775807>
+  
+  val function first : int
+    ensures { result = ((- 9223372036854775808) : int) }
+  
+  val function last : int
+    ensures { result = (9223372036854775807 : int) }
+  
+  predicate in_range [@GP_Inline] (x: int) =
+    (([@GP_Pretty_Ada:-1] (first <= x)) /\ ([@GP_Pretty_Ada:-2] (x <= last)))
+  
+  val in_range [@GP_Inline] (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = integer_64,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type integer_64__ref = { mutable integer_64__content : integer_64 }
+  
+  function integer_64__ref_integer_64__content__2__projection (a: integer_64__ref) : integer_64 =
+    a.integer_64__content
+  
+  meta "model_projection" function integer_64__ref_integer_64__content__2__projection
+  
+  meta "inline:no" function integer_64__ref_integer_64__content__2__projection
+  
+  val integer_64__havoc (x: integer_64__ref) : unit
+    writes { x }
+end
+
+module Interfaces__integer_64___axiom [@GNAT-comment:Module giving axioms for type "integer_64" defined at interfac.ads:56, created in Gnat2Why.Types.Generate_Type_Completion]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Interfaces__integer_64 as Interfaces__integer_64
+  
+  predicate dynamic_invariant (temp___expr_451: int) (temp___is_init_447: bool) (temp___skip_constant_448: bool) (temp___do_toplevel_449: bool) (temp___do_typ_inv_450: bool) =
+    [@rac:call_id:34]
+    (Interfaces__integer_64.dynamic_property
+       Interfaces__integer_64.first
+       Interfaces__integer_64.last
+       temp___expr_451)
+  
+  val dynamic_invariant (temp___expr_451: int) (temp___is_init_447: bool) (temp___skip_constant_448: bool) (temp___do_toplevel_449: bool) (temp___do_typ_inv_450: bool) : 
+    bool
+    ensures { result
+                <->
+                (dynamic_invariant
+                   (temp___expr_451 : int)
+                   (temp___is_init_447 : bool)
+                   (temp___skip_constant_448 : bool)
+                   (temp___do_toplevel_449 : bool)
+                   (temp___do_typ_inv_450 : bool)) }
+end
+
+module Qoaconv__qoa_lms_predict__L_2 [@GNAT-comment:Module for defining the loop exit exception for the loop "L_2" defined at qoaconv.adb:46, created in Gnat2Why.Decls.Translate_Loop_Entity]
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  exception L_2
+end
+
+module Standard__integer___axiom [@GNAT-comment:Module giving axioms for type "integer", created in Gnat2Why.Types.Generate_Type_Completion]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Standard__integer as Standard__integer
+  
+  predicate dynamic_invariant (temp___expr_18: int) (temp___is_init_14: bool) (temp___skip_constant_15: bool) (temp___do_toplevel_16: bool) (temp___do_typ_inv_17: bool) =
+    [@rac:call_id:35]
+    (Standard__integer.dynamic_property
+       Standard__integer.first
+       Standard__integer.last
+       temp___expr_18)
+  
+  val dynamic_invariant (temp___expr_18: int) (temp___is_init_14: bool) (temp___skip_constant_15: bool) (temp___do_toplevel_16: bool) (temp___do_typ_inv_17: bool) : 
+    bool
+    ensures { result
+                <->
+                (dynamic_invariant
+                   (temp___expr_18 : int)
+                   (temp___is_init_14 : bool)
+                   (temp___skip_constant_15 : bool)
+                   (temp___do_toplevel_16 : bool)
+                   (temp___do_typ_inv_17 : bool)) }
+end
+
+module Interfaces__integer_16___axiom [@GNAT-comment:Module giving axioms for type "integer_16" defined at interfac.ads:50, created in Gnat2Why.Types.Generate_Type_Completion]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Interfaces__integer_16 as Interfaces__integer_16
+  
+  predicate dynamic_invariant (temp___expr_191: int) (temp___is_init_187: bool) (temp___skip_constant_188: bool) (temp___do_toplevel_189: bool) (temp___do_typ_inv_190: bool) =
+    [@rac:call_id:36]
+    (Interfaces__integer_16.dynamic_property
+       Interfaces__integer_16.first
+       Interfaces__integer_16.last
+       temp___expr_191)
+  
+  val dynamic_invariant (temp___expr_191: int) (temp___is_init_187: bool) (temp___skip_constant_188: bool) (temp___do_toplevel_189: bool) (temp___do_typ_inv_190: bool) : 
+    bool
+    ensures { result
+                <->
+                (dynamic_invariant
+                   (temp___expr_191 : int)
+                   (temp___is_init_187 : bool)
+                   (temp___skip_constant_188 : bool)
+                   (temp___do_toplevel_189 : bool)
+                   (temp___do_typ_inv_190 : bool)) }
+end
+
+module Qoaconv__history_t___axiom [@GNAT-comment:Module giving axioms for type "history_t" defined at qoaconv.ads:14, created in Gnat2Why.Types.Generate_Type_Completion]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Array__Int__Interfaces__integer_16 as Array__Int__Interfaces__integer_16
+  
+  predicate dynamic_invariant (temp___expr_198: Array__Int__Interfaces__integer_16.map) (temp___is_init_194: bool) (temp___skip_constant_195: bool) (temp___do_toplevel_196: bool) (temp___do_typ_inv_197: bool) =
+    true
+  
+  val dynamic_invariant (temp___expr_198: Array__Int__Interfaces__integer_16.map) (temp___is_init_194: bool) (temp___skip_constant_195: bool) (temp___do_toplevel_196: bool) (temp___do_typ_inv_197: bool) : 
+    bool
+    ensures { result
+                <->
+                (dynamic_invariant
+                   (temp___expr_198 : Array__Int__Interfaces__integer_16.map)
+                   (temp___is_init_194 : bool)
+                   (temp___skip_constant_195 : bool)
+                   (temp___do_toplevel_196 : bool)
+                   (temp___do_typ_inv_197 : bool)) }
+end
+
+module Qoaconv__weights_t___axiom [@GNAT-comment:Module giving axioms for type "weights_t" defined at qoaconv.ads:15, created in Gnat2Why.Types.Generate_Type_Completion]
+  use _gnatprove_standard.Main
+  use int.Int
+  use Array__Int__Interfaces__integer_16 as Array__Int__Interfaces__integer_16
+  
+  predicate dynamic_invariant (temp___expr_208: Array__Int__Interfaces__integer_16.map) (temp___is_init_204: bool) (temp___skip_constant_205: bool) (temp___do_toplevel_206: bool) (temp___do_typ_inv_207: bool) =
+    true
+  
+  val dynamic_invariant (temp___expr_208: Array__Int__Interfaces__integer_16.map) (temp___is_init_204: bool) (temp___skip_constant_205: bool) (temp___do_toplevel_206: bool) (temp___do_typ_inv_207: bool) : 
+    bool
+    ensures { result
+                <->
+                (dynamic_invariant
+                   (temp___expr_208 : Array__Int__Interfaces__integer_16.map)
+                   (temp___is_init_204 : bool)
+                   (temp___skip_constant_205 : bool)
+                   (temp___do_toplevel_206 : bool)
+                   (temp___do_typ_inv_207 : bool)) }
+end
+
+module Interfaces__Tinteger_64B___axiom [@GNAT-comment:Module giving axioms for type "Tinteger_64B" defined at interfac.ads:56, created in Gnat2Why.Types.Generate_Type_Completion]
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Qoaconv__qoa_lms_predict__subprogram_def [@GNAT-comment:Module for checking contracts and absence of run-time errors in subprogram "qoa_lms_predict" defined at qoaconv.ads:84, created in Gnat2Why.Subprograms.Generate_VCs_For_Subprogram]
+  use _gnatprove_standard.Main
+  use int.Int
+  use _gnatprove_standard.Int_Shift as Int_Shift
+  use Standard__integer as Standard__integer
+  use Qoaconv__qoa_lms_t as Qoaconv__qoa_lms_t
+  use Qoaconv__qoa_lms_predict__lms as Qoaconv__qoa_lms_predict__lms
+  use Qoaconv__qoa_lms_t___axiom as Qoaconv__qoa_lms_t___axiom
+  use Qoaconv__qoa_lms_predict__prediction as Qoaconv__qoa_lms_predict__prediction
+  use Qoaconv__qoa_lms_predict__L_2__i as Qoaconv__qoa_lms_predict__L_2__i
+  use Interfaces__integer_16 as Interfaces__integer_16
+  use Interfaces__integer_16__rep as Interfaces__integer_16__rep
+  use Array__Int__Interfaces__integer_16 as Array__Int__Interfaces__integer_16
+  use Interfaces__Tinteger_64B as Interfaces__Tinteger_64B
+  use Interfaces__integer_64___axiom as Interfaces__integer_64___axiom
+  use Qoaconv__qoa_lms_predict__L_2 as Qoaconv__qoa_lms_predict__L_2
+  use Standard__integer___axiom as Standard__integer___axiom
+  use Interfaces__integer_16___axiom as Interfaces__integer_16___axiom
+  use Qoaconv__history_t as Qoaconv__history_t
+  use Qoaconv__history_t___axiom as Qoaconv__history_t___axiom
+  use Qoaconv__weights_t as Qoaconv__weights_t
+  use Qoaconv__weights_t___axiom as Qoaconv__weights_t___axiom
+  use Qoaconv__qoa_lms_t__rep as Qoaconv__qoa_lms_t__rep
+  use Interfaces__Tinteger_64B___axiom as Interfaces__Tinteger_64B___axiom
+  use Interfaces__integer_64 as Interfaces__integer_64
+  
+  val qoaconv__qoa_lms_predict__result [@name:Qoa_Lms_Predict] [@model_projected] [@model_trace:3638@result] : 
+    int__ref
+  
+  let def [#"qoaconv.ads" 84 0 84 0] (__void_param : unit)
+    requires { [#"qoaconv.ads" 84 0 84 0] true }
+  = [@vc:divergent]
+    (([@GNAT-comment:Assume dynamic invariants of inputs of the subprogram qoaconv.ads:84]
+      ());
+     ([#"qoaconv.ads" 84 0 84 0]
+      assume {
+        [#"qoaconv.ads" 84 0 84 0]
+        [@rac:call_id:37]
+        (Qoaconv__qoa_lms_t___axiom.dynamic_invariant
+           Qoaconv__qoa_lms_predict__lms.lms
+           True
+           False
+           True
+           True) });
+     ([@GNAT-comment:Assume moved pointers in outputs of the subprogram qoaconv.ads:84]
+      ());
+     ([@GNAT-comment:Check for RTE in the Pre of the subprogram qoaconv.ads:84]
+      ());
+     ([#"qoaconv.ads" 84 0 84 0] ());
+     ([@GNAT-comment:Assume Pre of the subprogram qoaconv.ads:84] ());
+     ([#"qoaconv.ads" 84 0 84 0]
+      (try
+         ([#"qoaconv.adb" 44 0 44 0]
+          (([#"qoaconv.adb" 44 0 44 0]
+            (Qoaconv__qoa_lms_predict__prediction.prediction.int__content <-
+               (0 : int)));
+           ([#"qoaconv.adb" 44 0 44 0]
+            assume {
+              [#"qoaconv.adb" 44 0 44 0]
+              [@rac:call_id:38]
+              (Interfaces__integer_64___axiom.dynamic_invariant
+                 (Qoaconv__qoa_lms_predict__prediction.prediction.int__content)
+                 True
+                 False
+                 True
+                 True) })));
+         ([#"qoaconv.adb" 46 0 46 0] ());
+         ([#"qoaconv.adb" 46 0 46 0]
+          (let temp___767 [@mlw:proxy_symbol] [@introduced] = 0 : int in
+           let temp___768 [@mlw:proxy_symbol] [@introduced] = 3 : int in
+           ([@GNAT-comment:Translation of an unrolled Ada loop from qoaconv.adb:46]
+            ());
+           ([#"qoaconv.adb" 46 0 46 0]
+            (try
+               ([@GNAT-comment:Unrolling of the loop statements of loop qoaconv.adb:46]
+                ());
+               ([#"qoaconv.adb" 46 0 46 0]
+                (Qoaconv__qoa_lms_predict__L_2__i.i.int__content <- (0 : int)));
+               ([#"qoaconv.adb" 47 0 47 0] ());
+               ([#"qoaconv.adb" 48 0 48 0] ());
+               ([#"qoaconv.adb" 47 0 47 0]
+                [#"qoaconv.adb" 47 0 47 0]
+                (Qoaconv__qoa_lms_predict__prediction.prediction.int__content <-
+                   ([#"qoaconv.adb" 48 0 48 0]
+                    [@vc:annotation]
+                    [@GP_Check:16:VC_OVERFLOW_CHECK:qoaconv.adb:48:23]
+                    [@GP_Shape:L_2_while__prediction_assign__add]
+                    [@rac:call_id:45]
+                    (Interfaces__Tinteger_64B.range_check_
+                       ([@rac:call_id:44]
+                        ((Qoaconv__qoa_lms_predict__prediction.prediction.int__content)
+                           + ([@rac:call_id:43]
+                              (([@rac:call_id:40]
+                                (Interfaces__integer_16__rep.to_rep
+                                   (let temp___770 [@mlw:proxy_symbol] [@introduced] =
+                                      (Qoaconv__qoa_lms_t.__split_fields
+                                          Qoaconv__qoa_lms_predict__lms.lms).
+                                        Qoaconv__qoa_lms_t.rec__qoaconv__qoa_lms_t__weight in
+                                    [@rac:call_id:39]
+                                    (Array__Int__Interfaces__integer_16.get
+                                       temp___770
+                                       (Qoaconv__qoa_lms_predict__L_2__i.i.int__content)))))
+                                 * ([@rac:call_id:42]
+                                    (Interfaces__integer_16__rep.to_rep
+                                       (let temp___771 [@mlw:proxy_symbol] [@introduced] =
+                                          (Qoaconv__qoa_lms_t.__split_fields
+                                              Qoaconv__qoa_lms_predict__lms.lms).
+                                            Qoaconv__qoa_lms_t.rec__qoaconv__qoa_lms_t__history in
+                                        [@rac:call_id:41]
+                                        (Array__Int__Interfaces__integer_16.get
+                                           temp___771
+                                           (Qoaconv__qoa_lms_predict__L_2__i.i.int__content)))))))))))));
+               (Qoaconv__qoa_lms_predict__L_2__i.i.int__content <- (1 : int));
+               ([#"qoaconv.adb" 47 0 47 0] ());
+               ([#"qoaconv.adb" 48 0 48 0] ());
+               ([#"qoaconv.adb" 47 0 47 0]
+                [#"qoaconv.adb" 47 0 47 0]
+                (Qoaconv__qoa_lms_predict__prediction.prediction.int__content <-
+                   ([#"qoaconv.adb" 48 0 48 0]
+                    [@vc:annotation]
+                    [@GP_Check:16:VC_OVERFLOW_CHECK:qoaconv.adb:48:23]
+                    [@GP_Shape:L_2_while__prediction_assign__add]
+                    [@rac:call_id:52]
+                    (Interfaces__Tinteger_64B.range_check_
+                       ([@rac:call_id:51]
+                        ((Qoaconv__qoa_lms_predict__prediction.prediction.int__content)
+                           + ([@rac:call_id:50]
+                              (([@rac:call_id:47]
+                                (Interfaces__integer_16__rep.to_rep
+                                   (let temp___770 [@mlw:proxy_symbol] [@introduced] =
+                                      (Qoaconv__qoa_lms_t.__split_fields
+                                          Qoaconv__qoa_lms_predict__lms.lms).
+                                        Qoaconv__qoa_lms_t.rec__qoaconv__qoa_lms_t__weight in
+                                    [@rac:call_id:46]
+                                    (Array__Int__Interfaces__integer_16.get
+                                       temp___770
+                                       (Qoaconv__qoa_lms_predict__L_2__i.i.int__content)))))
+                                 * ([@rac:call_id:49]
+                                    (Interfaces__integer_16__rep.to_rep
+                                       (let temp___771 [@mlw:proxy_symbol] [@introduced] =
+                                          (Qoaconv__qoa_lms_t.__split_fields
+                                              Qoaconv__qoa_lms_predict__lms.lms).
+                                            Qoaconv__qoa_lms_t.rec__qoaconv__qoa_lms_t__history in
+                                        [@rac:call_id:48]
+                                        (Array__Int__Interfaces__integer_16.get
+                                           temp___771
+                                           (Qoaconv__qoa_lms_predict__L_2__i.i.int__content)))))))))))));
+               (Qoaconv__qoa_lms_predict__L_2__i.i.int__content <- (2 : int));
+               ([#"qoaconv.adb" 47 0 47 0] ());
+               ([#"qoaconv.adb" 48 0 48 0] ());
+               ([#"qoaconv.adb" 47 0 47 0]
+                [#"qoaconv.adb" 47 0 47 0]
+                (Qoaconv__qoa_lms_predict__prediction.prediction.int__content <-
+                   ([#"qoaconv.adb" 48 0 48 0]
+                    [@vc:annotation]
+                    [@GP_Check:16:VC_OVERFLOW_CHECK:qoaconv.adb:48:23]
+                    [@GP_Shape:L_2_while__prediction_assign__add]
+                    [@rac:call_id:59]
+                    (Interfaces__Tinteger_64B.range_check_
+                       ([@rac:call_id:58]
+                        ((Qoaconv__qoa_lms_predict__prediction.prediction.int__content)
+                           + ([@rac:call_id:57]
+                              (([@rac:call_id:54]
+                                (Interfaces__integer_16__rep.to_rep
+                                   (let temp___770 [@mlw:proxy_symbol] [@introduced] =
+                                      (Qoaconv__qoa_lms_t.__split_fields
+                                          Qoaconv__qoa_lms_predict__lms.lms).
+                                        Qoaconv__qoa_lms_t.rec__qoaconv__qoa_lms_t__weight in
+                                    [@rac:call_id:53]
+                                    (Array__Int__Interfaces__integer_16.get
+                                       temp___770
+                                       (Qoaconv__qoa_lms_predict__L_2__i.i.int__content)))))
+                                 * ([@rac:call_id:56]
+                                    (Interfaces__integer_16__rep.to_rep
+                                       (let temp___771 [@mlw:proxy_symbol] [@introduced] =
+                                          (Qoaconv__qoa_lms_t.__split_fields
+                                              Qoaconv__qoa_lms_predict__lms.lms).
+                                            Qoaconv__qoa_lms_t.rec__qoaconv__qoa_lms_t__history in
+                                        [@rac:call_id:55]
+                                        (Array__Int__Interfaces__integer_16.get
+                                           temp___771
+                                           (Qoaconv__qoa_lms_predict__L_2__i.i.int__content)))))))))))));
+               (Qoaconv__qoa_lms_predict__L_2__i.i.int__content <- (3 : int));
+               ([#"qoaconv.adb" 47 0 47 0] ());
+               ([#"qoaconv.adb" 48 0 48 0] ());
+               ([#"qoaconv.adb" 47 0 47 0]
+                [#"qoaconv.adb" 47 0 47 0]
+                (Qoaconv__qoa_lms_predict__prediction.prediction.int__content <-
+                   ([#"qoaconv.adb" 48 0 48 0]
+                    [@vc:annotation]
+                    [@GP_Check:16:VC_OVERFLOW_CHECK:qoaconv.adb:48:23]
+                    [@GP_Shape:L_2_while__prediction_assign__add]
+                    [@rac:call_id:66]
+                    (Interfaces__Tinteger_64B.range_check_
+                       ([@rac:call_id:65]
+                        ((Qoaconv__qoa_lms_predict__prediction.prediction.int__content)
+                           + ([@rac:call_id:64]
+                              (([@rac:call_id:61]
+                                (Interfaces__integer_16__rep.to_rep
+                                   (let temp___770 [@mlw:proxy_symbol] [@introduced] =
+                                      (Qoaconv__qoa_lms_t.__split_fields
+                                          Qoaconv__qoa_lms_predict__lms.lms).
+                                        Qoaconv__qoa_lms_t.rec__qoaconv__qoa_lms_t__weight in
+                                    [@rac:call_id:60]
+                                    (Array__Int__Interfaces__integer_16.get
+                                       temp___770
+                                       (Qoaconv__qoa_lms_predict__L_2__i.i.int__content)))))
+                                 * ([@rac:call_id:63]
+                                    (Interfaces__integer_16__rep.to_rep
+                                       (let temp___771 [@mlw:proxy_symbol] [@introduced] =
+                                          (Qoaconv__qoa_lms_t.__split_fields
+                                              Qoaconv__qoa_lms_predict__lms.lms).
+                                            Qoaconv__qoa_lms_t.rec__qoaconv__qoa_lms_t__history in
+                                        [@rac:call_id:62]
+                                        (Array__Int__Interfaces__integer_16.get
+                                           temp___771
+                                           (Qoaconv__qoa_lms_predict__L_2__i.i.int__content)))))))))))))
+             with Qoaconv__qoa_lms_predict__L_2.L_2 -> ()
+             end))));
+         ([#"qoaconv.adb" 51 0 51 0] ());
+         ([#"qoaconv.adb" 51 0 51 0]
+          (([#"qoaconv.adb" 51 0 51 0]
+            (qoaconv__qoa_lms_predict__result.int__content <-
+               ([@rac:call_id:68]
+                (Int_Shift.shift_right
+                   ([#"qoaconv.adb" 51 0 51 0]
+                    [@vc:annotation]
+                    [@GP_Shape:return__call_shift_right__typeconv]
+                    [@GP_Check:17:VC_RANGE_CHECK:qoaconv.adb:51:36]
+                    [@rac:call_id:67]
+                    (Standard__integer.range_check_
+                       (Qoaconv__qoa_lms_predict__prediction.prediction.int__content)))
+                   (13 : int)
+                   (32 : int)))));
+           ((raise Return__exc) : unit)));
+         (raise Return__exc)
+       with Return__exc -> ()
+       end));
+     (qoaconv__qoa_lms_predict__result.int__content))
+end

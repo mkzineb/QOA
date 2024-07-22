@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="CVC5" version="0.0.7-gnatprove" timelimit="0" steplimit="18500" memlimit="0"/>
+<prover id="1" name="Trivial" version="1.0" alternative="trivial" timelimit="1" steplimit="1" memlimit="1000"/>
+<file format="gnat-json">
+<path name=".."/><path name="qoaconv__qoa_lms_update.gnat-json"/>
+<theory name="Qoaconv__qoa_lms_update__subprogram_def">
+ <goal name="def&#39;vc">
+ <transf name="split_goal_wp_conj" >
+  <goal name="def&#39;vc.0">
+  <proof prover="0"><result status="steplimitexceeded" steps="18512"/></proof>
+  </goal>
+  <goal name="def&#39;vc.1">
+  </goal>
+  <goal name="def&#39;vc.2" proved="true">
+  <proof prover="1"><result status="valid" steps="1"/></proof>
+  </goal>
+  <goal name="def&#39;vc.3">
+  <proof prover="0"><result status="steplimitexceeded" steps="18536"/></proof>
+  </goal>
+  <goal name="def&#39;vc.4">
+  </goal>
+  <goal name="def&#39;vc.5" proved="true">
+  <proof prover="0"><result status="valid" steps="3640"/></proof>
+  </goal>
+  <goal name="def&#39;vc.6">
+  <proof prover="0"><result status="steplimitexceeded" steps="18509"/></proof>
+  </goal>
+  <goal name="def&#39;vc.7" proved="true">
+  <proof prover="1"><result status="valid" steps="1"/></proof>
+  </goal>
+  <goal name="def&#39;vc.8">
+  </goal>
+  <goal name="def&#39;vc.9">
+  </goal>
+  <goal name="def&#39;vc.10">
+  </goal>
+  <goal name="def&#39;vc.11">
+  </goal>
+  <goal name="def&#39;vc.12" proved="true">
+  <proof prover="1"><result status="valid" steps="1"/></proof>
+  </goal>
+  <goal name="def&#39;vc.13">
+  </goal>
+  <goal name="def&#39;vc.14">
+  </goal>
+  <goal name="def&#39;vc.15">
+  </goal>
+  <goal name="def&#39;vc.16">
+  </goal>
+  <goal name="def&#39;vc.17" proved="true">
+  <proof prover="1"><result status="valid" steps="1"/></proof>
+  </goal>
+  <goal name="def&#39;vc.18">
+  </goal>
+  <goal name="def&#39;vc.19">
+  </goal>
+  <goal name="def&#39;vc.20">
+  </goal>
+  <goal name="def&#39;vc.21">
+  </goal>
+  <goal name="def&#39;vc.22" proved="true">
+  <proof prover="1"><result status="valid" steps="1"/></proof>
+  </goal>
+  <goal name="def&#39;vc.23" proved="true">
+  <proof prover="1"><result status="valid" steps="1"/></proof>
+  </goal>
+  <goal name="def&#39;vc.24" proved="true">
+  <proof prover="1"><result status="valid" steps="1"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

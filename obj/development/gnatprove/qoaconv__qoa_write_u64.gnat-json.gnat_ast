@@ -1,0 +1,1322 @@
+(* Module for axiomatizing type "integer", created in Gnat2Why.Types.Translate_Type *)
+module Standard__integer
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  
+  type integer  = <range -2147483648 2147483647>
+  
+  function   first () requires { True } ensures  { True } returns
+    int = -2147483648
+  
+  function   last () requires { True } ensures  { True } returns
+    int = 2147483647
+  
+  function [GP_Inline]  in_range (x : int) requires { True } ensures 
+    { True } returns
+     = (([GP_Pretty_Ada:-1] (first <= x)) /\ ([GP_Pretty_Ada:-2] (x <= last)))
+  
+  clone export ada__model.Static_Discrete with axiom . type t = integer,
+    function first = first, function last = last,
+    predicate in_range = in_range
+  
+  type integer__ref  = { mutable integer__content : integer }
+  
+  function   integer__ref_integer__content__projection (a : integer__ref)
+    requires {  } ensures  {  } returns integer = a.integer__content
+  
+  meta model_projection function integer__ref_integer__content__projection
+  
+  meta inline:no function integer__ref_integer__content__projection
+  
+  function   integer__havoc (x : integer__ref) requires {  } ensures  {  }
+    returns unit
+
+end
+
+(* Module giving axioms for type "integer", created in Gnat2Why.Types.Generate_Type_Completion *)
+module Standard__integer___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        Standard__integer
+  
+  function   dynamic_invariant
+    (([mlw:proxy_symbol] [introduced] temp___expr_18) : int
+    ([mlw:proxy_symbol] [introduced] temp___is_init_14) : bool
+    ([mlw:proxy_symbol] [introduced] temp___skip_constant_15) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_toplevel_16) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_typ_inv_17) : bool) requires
+    { True } ensures  { True } returns
+     = (Standard__integer.dynamic_property Standard__integer.first
+          Standard__integer.last ([mlw:proxy_symbol]
+          [introduced] temp___expr_18))
+
+end
+
+(* Module for axiomatizing type "natural", created in Gnat2Why.Types.Translate_Type *)
+module Standard__natural
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  
+  type natural  = <range 0 2147483647>
+  
+  function   first () requires { True } ensures  { True } returns int = 0
+  
+  function   last () requires { True } ensures  { True } returns
+    int = 2147483647
+  
+  function [GP_Inline]  in_range (x : int) requires { True } ensures 
+    { True } returns
+     = (([GP_Pretty_Ada:-1] (first <= x)) /\ ([GP_Pretty_Ada:-2] (x <= last)))
+  
+  clone export ada__model.Static_Discrete with axiom . type t = natural,
+    function first = first, function last = last,
+    predicate in_range = in_range
+  
+  type natural__ref  = { mutable natural__content : natural }
+  
+  function   natural__ref_natural__content__projection (a : natural__ref)
+    requires {  } ensures  {  } returns natural = a.natural__content
+  
+  meta model_projection function natural__ref_natural__content__projection
+  
+  meta inline:no function natural__ref_natural__content__projection
+  
+  function   natural__havoc (x : natural__ref) requires {  } ensures  {  }
+    returns unit
+
+end
+
+(* Module defining to_rep/of_rep for type "integer", created in Gnat2Why.Types.Translate_Type *)
+module Standard__integer__rep
+  
+  use        Standard__integer
+  use import _gnatprove_standard.Main
+  use import int.Int
+  
+  function   to_rep (x : Standard__integer.integer) requires { True }
+    ensures  { True } returns int = (Standard__integer.integer'int x)
+  
+  clone export ada__model.Rep_Proj_Int with axiom . type t = Standard__integer.integer,
+    predicate in_range = Standard__integer.in_range, function to_rep = to_rep
+  
+  meta model_projection function to_rep
+  
+  meta inline:no function to_rep
+
+end
+
+(* Module for axiomatizing type "unsigned_char" defined at qoaconv.ads:35, created in Gnat2Why.Types.Translate_Type *)
+module Qoaconv__unsigned_char
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  use        _gnatprove_standard.BV8
+  
+  type unsigned_char  
+  
+  function   attr__ATTRIBUTE_MODULUS () requires {  } ensures  {  } returns
+    _gnatprove_standard.BV8.t
+  
+  function   first () requires { True } ensures  { True } returns
+    _gnatprove_standard.BV8.t = 0
+  
+  function   last () requires { True } ensures  { True } returns
+    _gnatprove_standard.BV8.t = 255
+  
+  function   first_int () requires {  } ensures  {  } returns int = 0
+  
+  function   last_int () requires {  } ensures  {  } returns int = 255
+  
+  function   in_range (x : _gnatprove_standard.BV8.t) requires { True }
+    ensures  { True } returns  = True
+  
+  function   in_range_int (x : int) requires { True } ensures  { True }
+    returns  = _gnatprove_standard.BV8.uint_in_range x
+  
+  clone export ada__model.Static_Modular_8 with axiom . type t = unsigned_char,
+    function first = first, function last = last,
+    predicate in_range = in_range, predicate in_range_int = in_range_int
+  
+  type unsigned_char__ref  = { mutable unsigned_char__content : unsigned_char }
+  
+  function   unsigned_char__ref_unsigned_char__content__projection
+    (a : unsigned_char__ref) requires {  } ensures  {  } returns
+    unsigned_char = a.unsigned_char__content
+  
+  meta model_projection function unsigned_char__ref_unsigned_char__content__projection
+  
+  meta inline:no function unsigned_char__ref_unsigned_char__content__projection
+  
+  function   unsigned_char__havoc (x : unsigned_char__ref) requires {  }
+    ensures  {  } returns unit
+
+end
+
+(* Module defining to_rep/of_rep for type "unsigned_char" defined at qoaconv.ads:35, created in Gnat2Why.Types.Translate_Type *)
+module Qoaconv__unsigned_char__rep
+  
+  use        Qoaconv__unsigned_char
+  use        _gnatprove_standard.BV8
+  use import _gnatprove_standard.Main
+  use import int.Int
+  
+  clone export ada__model.Rep_Proj_BV8 with axiom . type t = Qoaconv__unsigned_char.unsigned_char,
+    predicate in_range = Qoaconv__unsigned_char.in_range,
+    predicate in_range_int = Qoaconv__unsigned_char.in_range_int
+  
+  meta model_projection function to_rep
+  
+  meta inline:no function to_rep
+
+end
+
+(* Module for axiomatizing the array theory associated to type "bytes_char" defined at qoaconv.ads:36, created in Why.Gen.Arrays.Create_Rep_Array_Theory *)
+module Array__Int__Qoaconv__unsigned_char
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  use        _gnatprove_standard.BV8
+  use        Qoaconv__unsigned_char
+  use        Qoaconv__unsigned_char__rep
+  
+  function   index_I1_one () requires { True } ensures  { True } returns
+    int = 1
+  
+  type component_type  = Qoaconv__unsigned_char.unsigned_char
+  
+  clone export _gnatprove_standard.Array__1 with axiom . type I1.t = int,
+    predicate I1.le = <=, predicate I1.lt = <, predicate I1.gt = >,
+    function I1.add = +, function I1.sub = -, function I1.one = index_I1_one,
+    type component_type = component_type
+  
+  function   bool_eq
+    (a : map a__first : int a__last : int b : map b__first : int
+    b__last : int) requires { True } ensures  { True } returns
+    bool = ((if (a__first <= a__last) then
+            ((b__first <= b__last) /\
+               ((a__last - a__first) = (b__last - b__first)))
+             else (b__first > b__last)) /\
+              ( forall ([mlw:proxy_symbol] [introduced] temp___idx_170) : int
+              [].(if
+                 ((a__first <= ([mlw:proxy_symbol]
+                     [introduced] temp___idx_170)) /\
+                    (([mlw:proxy_symbol] [introduced] temp___idx_170)
+                       <= a__last))
+                 then
+                 ((Qoaconv__unsigned_char__rep.to_rep
+                     (get a ([mlw:proxy_symbol] [introduced] temp___idx_170)))
+                    = (Qoaconv__unsigned_char__rep.to_rep
+                         (get b
+                            ((b__first - a__first) + ([mlw:proxy_symbol]
+                               [introduced] temp___idx_170)))))
+                 )))
+  
+  axiom bool_eq_rev (function bool_eq) : ( forall a b : map
+                                         [].( forall a__first a__last
+                                            b__first b__last : int
+                                            [].(((bool_eq b b__first b__last
+                                                    a a__first a__last)
+                                                   = True) ->
+                                                  ((if (a__first <= a__last)
+                                                   then
+                                                   ((b__first <= b__last) /\
+                                                      ((a__last - a__first)
+                                                         = (b__last
+                                                              - b__first)))
+                                                    else (b__first > b__last))
+                                                     /\
+                                                     ( forall
+                                                     ([mlw:proxy_symbol]
+                                                     [introduced] temp___idx_170)
+                                                     : int
+                                                     [].(if
+                                                        ((a__first
+                                                            <= ([mlw:proxy_symbol]
+                                                            [introduced] temp___idx_170))
+                                                           /\
+                                                           (([mlw:proxy_symbol]
+                                                              [introduced] temp___idx_170)
+                                                              <= a__last))
+                                                        then
+                                                        ((Qoaconv__unsigned_char__rep.to_rep
+                                                            (get a
+                                                               ([mlw:proxy_symbol]
+                                                               [introduced] temp___idx_170)))
+                                                           = (Qoaconv__unsigned_char__rep.to_rep
+                                                                (get b
+                                                                   ((b__first
+                                                                    - a__first)
+                                                                    + ([mlw:proxy_symbol]
+                                                                    [introduced] temp___idx_170)))))
+                                                        ))))))
+
+end
+
+(* Module for axiomatizing type "bytes_char" defined at qoaconv.ads:36, created in Gnat2Why.Types.Translate_Type *)
+module Qoaconv__bytes_char
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  use        Standard__integer
+  use        Standard__natural
+  use        Standard__integer__rep
+  use        Qoaconv__unsigned_char
+  use        Array__Int__Qoaconv__unsigned_char
+  
+  type component_type  = Qoaconv__unsigned_char.unsigned_char
+  
+  function   index_1_id (x : int) requires { True } ensures  { True } returns
+    int = x
+  
+  clone export ada__model.Unconstr_Array with axiom . type map = Array__Int__Qoaconv__unsigned_char.map,
+    function array_bool_eq = Array__Int__Qoaconv__unsigned_char.bool_eq,
+    type index_base_type = Standard__integer.integer,
+    type index_rep_type = int,
+    function to_rep = Standard__integer__rep.to_rep,
+    function rep_to_int = index_1_id,
+    predicate in_range_base = Standard__integer.in_range,
+    predicate index_dynamic_property = Standard__natural.dynamic_property,
+    predicate index_rep_le = <=
+  
+  type bytes_char  = __t
+  
+  meta model_projection function to_array
+  
+  meta inline:no function to_array
+  
+  meta model_projection function first
+  
+  meta inline:no function first
+  
+  meta model_projection function last
+  
+  meta inline:no function last
+  
+  type bytes_char__ref  = { mutable bytes_char__content : bytes_char }
+  
+  function   bytes_char__ref_bytes_char__content__projection
+    (a : bytes_char__ref) requires {  } ensures  {  } returns
+    bytes_char = a.bytes_char__content
+  
+  meta model_projection function bytes_char__ref_bytes_char__content__projection
+  
+  meta inline:no function bytes_char__ref_bytes_char__content__projection
+  
+  function   bytes_char__havoc (x : bytes_char__ref) requires {  } ensures 
+    {  } returns unit
+
+end
+
+(* Module for defining the constant "v" defined at qoaconv.ads:75, created in Gnat2Why.Decls.Translate_Constant *)
+module Qoaconv__qoa_write_u64__v
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        _gnatprove_standard.BV64
+  
+  function [model_trace:3593] [name:V] [sloc:qoaconv.ads:75] v () requires
+    {  } ensures  {  } returns _gnatprove_standard.BV64.t
+
+end
+
+(* Module for defining a ref holding the value of variable "bytes" defined at qoaconv.ads:75, created in Gnat2Why.Decls.Translate_Variable *)
+module Qoaconv__qoa_write_u64__bytes
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        Qoaconv__bytes_char
+  
+  val bytes__pointer_value [model_projected] [name:Bytes]
+  [model_trace:3596'All] [sloc:qoaconv.ads:75]: Qoaconv__bytes_char.bytes_char
+  
+  val bytes__is_null_pointer [model_trace:3596'Is_Null] [model_projected]
+  [name:Bytes] [sloc:qoaconv.ads:75]: bool
+  
+  val bytes__rec__is_moved__  [sloc:qoaconv.ads:75]: bool
+
+end
+
+(* Module for defining a ref holding the value of variable "p" defined at qoaconv.ads:76, created in Gnat2Why.Decls.Translate_Variable *)
+module Qoaconv__qoa_write_u64__p
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        _gnatprove_standard.BV32
+  
+  val p [model_projected] [model_trace:3599]
+  [name:P] [sloc:qoaconv.ads:76]: _gnatprove_standard.BV32.t
+
+end
+
+(* Module for defining the constant "index" defined at qoaconv.adb:15, created in Gnat2Why.Decls.Translate_Constant *)
+module Qoaconv__qoa_write_u64__index
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  
+  function [model_trace:900] [name:Index] [sloc:qoaconv.adb:15] index 
+    () requires {  } ensures  {  } returns int
+
+end
+
+(* Module for defining a ref holding the value of variable "i" defined at qoaconv.adb:17, created in Gnat2Why.Decls.Translate_Variable *)
+module Qoaconv__qoa_write_u64__L_1__i
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  
+  val i [model_trace:907] [name:i]
+  [model_projected] [sloc:qoaconv.adb:17]: int
+
+end
+
+(* Module for axiomatizing type "unsigned_32" defined at interfac.ads:80, created in Gnat2Why.Types.Translate_Type *)
+module Interfaces__unsigned_32
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  use        _gnatprove_standard.BV32
+  
+  type unsigned_32  
+  
+  function   attr__ATTRIBUTE_MODULUS () requires {  } ensures  {  } returns
+    _gnatprove_standard.BV32.t
+  
+  function   first () requires { True } ensures  { True } returns
+    _gnatprove_standard.BV32.t = 0
+  
+  function   last () requires { True } ensures  { True } returns
+    _gnatprove_standard.BV32.t = 4294967295
+  
+  function   first_int () requires {  } ensures  {  } returns int = 0
+  
+  function   last_int () requires {  } ensures  {  } returns int = 4294967295
+  
+  function   in_range (x : _gnatprove_standard.BV32.t) requires { True }
+    ensures  { True } returns  = True
+  
+  function   in_range_int (x : int) requires { True } ensures  { True }
+    returns  = _gnatprove_standard.BV32.uint_in_range x
+  
+  clone export ada__model.Static_Modular_32 with axiom . type t = unsigned_32,
+    function first = first, function last = last,
+    predicate in_range = in_range, predicate in_range_int = in_range_int
+  
+  type unsigned_32__ref  = { mutable unsigned_32__content : unsigned_32 }
+  
+  function   unsigned_32__ref_unsigned_32__content__projection
+    (a : unsigned_32__ref) requires {  } ensures  {  } returns
+    unsigned_32 = a.unsigned_32__content
+  
+  meta model_projection function unsigned_32__ref_unsigned_32__content__projection
+  
+  meta inline:no function unsigned_32__ref_unsigned_32__content__projection
+  
+  function   unsigned_32__havoc (x : unsigned_32__ref) requires {  } ensures 
+    {  } returns unit
+
+end
+
+(* Module giving axioms for type "unsigned_32" defined at interfac.ads:80, created in Gnat2Why.Types.Generate_Type_Completion *)
+module Interfaces__unsigned_32___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        _gnatprove_standard.BV32
+  use        Interfaces__unsigned_32
+  
+  function   dynamic_invariant
+    (([mlw:proxy_symbol]
+    [introduced] temp___expr_276) : _gnatprove_standard.BV32.t
+    ([mlw:proxy_symbol] [introduced] temp___is_init_272) : bool
+    ([mlw:proxy_symbol] [introduced] temp___skip_constant_273) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_toplevel_274) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_typ_inv_275) : bool) requires
+    { True } ensures  { True } returns
+     = (Interfaces__unsigned_32.dynamic_property
+          Interfaces__unsigned_32.first Interfaces__unsigned_32.last
+          ([mlw:proxy_symbol] [introduced] temp___expr_276))
+
+end
+
+(* Module for axiomatizing the pointer theory associated to type "bytes_char_acc" defined at qoaconv.ads:37, created in Why.Gen.Pointers.Create_Rep_Pointer_Theory_If_Needed *)
+module Qoaconv__bytes_char_acc__rep
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        Qoaconv__bytes_char
+  
+  type __rep  = { [model_trace:'Is_Null]rec__qoaconv__bytes_char_acc__is_null_pointer : bool;
+                  rec__qoaconv__bytes_char_acc__is_moved : bool;
+                  [model_trace:'All]rec__qoaconv__bytes_char_acc__pointer_value : Qoaconv__bytes_char.bytes_char }
+  
+  function [model_trace:'Is_Null] 
+    __rep_rec__qoaconv__bytes_char_acc__is_null_pointer__projection
+    (a : __rep) requires {  } ensures  {  } returns
+    bool = a.rec__qoaconv__bytes_char_acc__is_null_pointer
+  
+  meta model_projection function __rep_rec__qoaconv__bytes_char_acc__is_null_pointer__projection
+  
+  meta inline:no function __rep_rec__qoaconv__bytes_char_acc__is_null_pointer__projection
+  
+  function   __rep_rec__qoaconv__bytes_char_acc__is_moved__projection
+    (a : __rep) requires {  } ensures  {  } returns
+    bool = a.rec__qoaconv__bytes_char_acc__is_moved
+  
+  meta model_projection function __rep_rec__qoaconv__bytes_char_acc__is_moved__projection
+  
+  meta inline:no function __rep_rec__qoaconv__bytes_char_acc__is_moved__projection
+  
+  function [model_trace:'All] 
+    __rep_rec__qoaconv__bytes_char_acc__pointer_value__projection (a : __rep)
+    requires {  } ensures  {  } returns
+    Qoaconv__bytes_char.bytes_char = a.rec__qoaconv__bytes_char_acc__pointer_value
+  
+  meta model_projection function __rep_rec__qoaconv__bytes_char_acc__pointer_value__projection
+  
+  meta inline:no function __rep_rec__qoaconv__bytes_char_acc__pointer_value__projection
+  
+  type __rep__ref  = { mutable __rep__content : __rep }
+  
+  function   __rep__ref___rep__content__projection (a : __rep__ref) requires
+    {  } ensures  {  } returns __rep = a.__rep__content
+  
+  meta model_projection function __rep__ref___rep__content__projection
+  
+  meta inline:no function __rep__ref___rep__content__projection
+  
+  function   __rep__havoc (x : __rep__ref) requires {  } ensures  {  }
+    returns unit
+  
+  function   bool_eq (a : __rep b : __rep) requires { True } ensures 
+    { True } returns
+    bool = ((a.rec__qoaconv__bytes_char_acc__is_null_pointer
+               = b.rec__qoaconv__bytes_char_acc__is_null_pointer) /\
+              (if
+              (not (a.rec__qoaconv__bytes_char_acc__is_null_pointer = True))
+              then
+              (a.rec__qoaconv__bytes_char_acc__pointer_value
+                 = b.rec__qoaconv__bytes_char_acc__pointer_value)
+              ))
+  
+  function   rec__qoaconv__bytes_char_acc__pointer_value__pred (a : __rep)
+    requires { True } ensures  { True } returns
+     = (not a.rec__qoaconv__bytes_char_acc__is_null_pointer)
+  
+  function   __null_pointer () requires {  } ensures  {  } returns __rep
+  
+  axiom __null_pointer__def_axiom (function __null_pointer) : (__null_pointer.rec__qoaconv__bytes_char_acc__is_null_pointer
+                                                                 = True)
+  
+  function   rec__qoaconv__bytes_char_acc__pointer_value_ (a : __rep)
+    requires { (rec__qoaconv__bytes_char_acc__pointer_value__pred a) }
+    ensures  { (result = a.rec__qoaconv__bytes_char_acc__pointer_value) }
+    returns Qoaconv__bytes_char.bytes_char
+  
+  function   assign_null_check_ (a : __rep) requires
+    { (rec__qoaconv__bytes_char_acc__pointer_value__pred a) } ensures 
+    { (result = a) } returns __rep
+  
+  function   to_base (a : __rep) requires { True } ensures  { True } returns
+    __rep = a
+  
+  function   of_base (a : __rep) requires { True } ensures  { True } returns
+    __rep = a
+
+end
+
+(* Module for axiomatizing type "bytes_char_acc" defined at qoaconv.ads:37, created in Gnat2Why.Types.Translate_Type *)
+module Qoaconv__bytes_char_acc
+  
+  use export Qoaconv__bytes_char_acc__rep
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        Qoaconv__bytes_char_acc__rep
+  
+  type bytes_char_acc  = __rep
+  
+  function   dummy () requires {  } ensures  {  } returns bytes_char_acc
+  
+  type bytes_char_acc__ref  = { mutable bytes_char_acc__content : bytes_char_acc }
+  
+  function   bytes_char_acc__ref_bytes_char_acc__content__projection
+    (a : bytes_char_acc__ref) requires {  } ensures  {  } returns
+    bytes_char_acc = a.bytes_char_acc__content
+  
+  meta model_projection function bytes_char_acc__ref_bytes_char_acc__content__projection
+  
+  meta inline:no function bytes_char_acc__ref_bytes_char_acc__content__projection
+  
+  function   bytes_char_acc__havoc (x : bytes_char_acc__ref) requires {  }
+    ensures  {  } returns unit
+
+end
+
+(* Module giving axioms for type "bytes_char_acc" defined at qoaconv.ads:37, created in Gnat2Why.Types.Generate_Type_Completion *)
+module Qoaconv__bytes_char_acc___axiom
+  
+  use export Qoaconv__bytes_char_acc__rep
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        Standard__natural
+  use        Qoaconv__bytes_char
+  use        Qoaconv__bytes_char_acc
+  use        Qoaconv__bytes_char_acc__rep
+  
+  function   dynamic_invariant
+    (([mlw:proxy_symbol]
+    [introduced] temp___expr_316) : Qoaconv__bytes_char_acc.bytes_char_acc
+    ([mlw:proxy_symbol] [introduced] temp___is_init_312) : bool
+    ([mlw:proxy_symbol] [introduced] temp___skip_constant_313) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_toplevel_314) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_typ_inv_315) : bool) requires
+    { True } ensures  { True } returns
+     = ((if (([mlw:proxy_symbol] [introduced] temp___is_init_312) = True)
+        then
+        (not (([mlw:proxy_symbol]
+                [introduced] temp___expr_316).Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer
+                = True))
+        ) /\
+          (if
+          (not (([mlw:proxy_symbol]
+                  [introduced] temp___expr_316).Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer
+                  = True))
+          then
+          (if (False = True) then True  else
+          (Qoaconv__bytes_char.dynamic_property Standard__natural.first
+             Standard__natural.last
+             (Qoaconv__bytes_char.first ([mlw:proxy_symbol]
+                [introduced] temp___expr_316).Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value)
+             (Qoaconv__bytes_char.last ([mlw:proxy_symbol]
+                [introduced] temp___expr_316).Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value)))
+          ))
+
+end
+
+(* Module for axiomatizing type "unsigned_64" defined at interfac.ads:83, created in Gnat2Why.Types.Translate_Type *)
+module Interfaces__unsigned_64
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  use        _gnatprove_standard.BV64
+  
+  type unsigned_64  
+  
+  function   attr__ATTRIBUTE_MODULUS () requires {  } ensures  {  } returns
+    _gnatprove_standard.BV64.t
+  
+  function   first () requires { True } ensures  { True } returns
+    _gnatprove_standard.BV64.t = 0
+  
+  function   last () requires { True } ensures  { True } returns
+    _gnatprove_standard.BV64.t = 18446744073709551615
+  
+  function   first_int () requires {  } ensures  {  } returns int = 0
+  
+  function   last_int () requires {  } ensures  {  } returns
+    int = 18446744073709551615
+  
+  function   in_range (x : _gnatprove_standard.BV64.t) requires { True }
+    ensures  { True } returns  = True
+  
+  function   in_range_int (x : int) requires { True } ensures  { True }
+    returns  = _gnatprove_standard.BV64.uint_in_range x
+  
+  clone export ada__model.Static_Modular_64 with axiom . type t = unsigned_64,
+    function first = first, function last = last,
+    predicate in_range = in_range, predicate in_range_int = in_range_int
+  
+  type unsigned_64__ref  = { mutable unsigned_64__content : unsigned_64 }
+  
+  function   unsigned_64__ref_unsigned_64__content__projection
+    (a : unsigned_64__ref) requires {  } ensures  {  } returns
+    unsigned_64 = a.unsigned_64__content
+  
+  meta model_projection function unsigned_64__ref_unsigned_64__content__projection
+  
+  meta inline:no function unsigned_64__ref_unsigned_64__content__projection
+  
+  function   unsigned_64__havoc (x : unsigned_64__ref) requires {  } ensures 
+    {  } returns unit
+
+end
+
+(* Module giving axioms for type "unsigned_64" defined at interfac.ads:83, created in Gnat2Why.Types.Generate_Type_Completion *)
+module Interfaces__unsigned_64___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        _gnatprove_standard.BV64
+  use        Interfaces__unsigned_64
+  
+  function   dynamic_invariant
+    (([mlw:proxy_symbol]
+    [introduced] temp___expr_372) : _gnatprove_standard.BV64.t
+    ([mlw:proxy_symbol] [introduced] temp___is_init_368) : bool
+    ([mlw:proxy_symbol] [introduced] temp___skip_constant_369) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_toplevel_370) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_typ_inv_371) : bool) requires
+    { True } ensures  { True } returns
+     = (Interfaces__unsigned_64.dynamic_property
+          Interfaces__unsigned_64.first Interfaces__unsigned_64.last
+          ([mlw:proxy_symbol] [introduced] temp___expr_372))
+
+end
+
+(* Module for defining the loop exit exception for the loop "L_1" defined at qoaconv.adb:17, created in Gnat2Why.Decls.Translate_Loop_Entity *)
+module Qoaconv__qoa_write_u64__L_1
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  
+  exception L_1 
+
+end
+
+(* Module for axiomatizing type "T1b" defined at qoaconv.adb:17, created in Gnat2Why.Types.Translate_Type *)
+module Qoaconv__qoa_write_u64__L_1__T1b
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  
+  type t1b  = <range 0 7>
+  
+  function   first () requires { True } ensures  { True } returns int = 0
+  
+  function   last () requires { True } ensures  { True } returns int = 7
+  
+  function [GP_Inline]  in_range (x : int) requires { True } ensures 
+    { True } returns
+     = (([GP_Pretty_Ada:-1] (first <= x)) /\ ([GP_Pretty_Ada:-2] (x <= last)))
+  
+  clone export ada__model.Static_Discrete with axiom . type t = t1b,
+    function first = first, function last = last,
+    predicate in_range = in_range
+  
+  type t1b__ref  = { mutable t1b__content : t1b }
+  
+  function   t1b__ref_t1b__content__projection (a : t1b__ref) requires {  }
+    ensures  {  } returns t1b = a.t1b__content
+  
+  meta model_projection function t1b__ref_t1b__content__projection
+  
+  meta inline:no function t1b__ref_t1b__content__projection
+  
+  function   t1b__havoc (x : t1b__ref) requires {  } ensures  {  } returns
+    unit
+
+end
+
+(* Module giving axioms for type "natural", created in Gnat2Why.Types.Generate_Type_Completion *)
+module Standard__natural___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        Standard__natural
+  
+  function   dynamic_invariant
+    (([mlw:proxy_symbol] [introduced] temp___expr_46) : int
+    ([mlw:proxy_symbol] [introduced] temp___is_init_42) : bool
+    ([mlw:proxy_symbol] [introduced] temp___skip_constant_43) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_toplevel_44) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_typ_inv_45) : bool) requires
+    { True } ensures  { True } returns
+     = (Standard__natural.dynamic_property Standard__natural.first
+          Standard__natural.last ([mlw:proxy_symbol]
+          [introduced] temp___expr_46))
+
+end
+
+(* Module giving axioms for type "unsigned_char" defined at qoaconv.ads:35, created in Gnat2Why.Types.Generate_Type_Completion *)
+module Qoaconv__unsigned_char___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        _gnatprove_standard.BV8
+  use        Qoaconv__unsigned_char
+  
+  function   dynamic_invariant
+    (([mlw:proxy_symbol]
+    [introduced] temp___expr_303) : _gnatprove_standard.BV8.t
+    ([mlw:proxy_symbol] [introduced] temp___is_init_299) : bool
+    ([mlw:proxy_symbol] [introduced] temp___skip_constant_300) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_toplevel_301) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_typ_inv_302) : bool) requires
+    { True } ensures  { True } returns
+     = (Qoaconv__unsigned_char.dynamic_property Qoaconv__unsigned_char.first
+          Qoaconv__unsigned_char.last ([mlw:proxy_symbol]
+          [introduced] temp___expr_303))
+
+end
+
+(* Module giving axioms for type "bytes_char" defined at qoaconv.ads:36, created in Gnat2Why.Types.Generate_Type_Completion *)
+module Qoaconv__bytes_char___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        Standard__natural
+  use        Qoaconv__bytes_char
+  
+  function   dynamic_invariant
+    (([mlw:proxy_symbol]
+    [introduced] temp___expr_310) : Qoaconv__bytes_char.bytes_char
+    ([mlw:proxy_symbol] [introduced] temp___is_init_306) : bool
+    ([mlw:proxy_symbol] [introduced] temp___skip_constant_307) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_toplevel_308) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_typ_inv_309) : bool) requires
+    { True } ensures  { True } returns
+     = (if
+       (([mlw:proxy_symbol] [introduced] temp___skip_constant_307) = True)
+       then True  else
+       (Qoaconv__bytes_char.dynamic_property Standard__natural.first
+          Standard__natural.last
+          (Qoaconv__bytes_char.first ([mlw:proxy_symbol]
+             [introduced] temp___expr_310))
+          (Qoaconv__bytes_char.last ([mlw:proxy_symbol]
+             [introduced] temp___expr_310))))
+
+end
+
+(* Module for defining the value of constant "index" defined at qoaconv.adb:15, created in Gnat2Why.Decls.Translate_Constant_Value *)
+module Qoaconv__qoa_write_u64__index___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  use        Qoaconv__qoa_write_u64__index
+  
+  axiom index__def_axiom (function Qoaconv__qoa_write_u64__index.index) : 
+  ((Qoaconv__qoa_write_u64__index.index ) = ( 8))
+
+end
+
+(* Module giving axioms for type "T1b" defined at qoaconv.adb:17, created in Gnat2Why.Types.Generate_Type_Completion *)
+module Qoaconv__qoa_write_u64__L_1__T1b___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  
+  
+
+end
+
+(* Module for checking contracts and absence of run-time errors in subprogram "qoa_write_u64" defined at qoaconv.ads:74, created in Gnat2Why.Subprograms.Generate_VCs_For_Subprogram *)
+module Qoaconv__qoa_write_u64__subprogram_def
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  use        _gnatprove_standard.BV8
+  use        _gnatprove_standard.BV32
+  use        _gnatprove_standard.BV64
+  use        _gnatprove_standard.BVConv_8_64
+  use        _gnatprove_standard.Boolean
+  use        Standard__integer
+  use        Standard__integer
+  use        Standard__integer___axiom
+  use        Qoaconv__bytes_char
+  use        Qoaconv__qoa_write_u64__v
+  use        Qoaconv__qoa_write_u64__bytes
+  use        Qoaconv__qoa_write_u64__p
+  use        Qoaconv__qoa_write_u64__index
+  use        Qoaconv__qoa_write_u64__L_1__i
+  use        Interfaces__unsigned_32
+  use        Interfaces__unsigned_32___axiom
+  use        Qoaconv__unsigned_char
+  use        Qoaconv__unsigned_char__rep
+  use        Array__Int__Qoaconv__unsigned_char
+  use        Qoaconv__bytes_char_acc
+  use        Qoaconv__bytes_char_acc___axiom
+  use        Interfaces__unsigned_64___axiom
+  use        Qoaconv__qoa_write_u64__L_1
+  use        Qoaconv__qoa_write_u64__L_1__T1b
+  use        Array__Int__Qoaconv__unsigned_char
+  use import int.Int
+  use        _gnatprove_standard.BV8
+  use        _gnatprove_standard.BV32
+  use        _gnatprove_standard.BV64
+  use        _gnatprove_standard.BVConv_8_64
+  use        _gnatprove_standard.Boolean
+  use        Standard__integer
+  use        Standard__integer
+  use        Standard__integer___axiom
+  use        Standard__natural
+  use        Standard__natural___axiom
+  use        Standard__integer__rep
+  use        Qoaconv__bytes_char
+  use        Qoaconv__qoa_write_u64__v
+  use        Qoaconv__qoa_write_u64__bytes
+  use        Qoaconv__qoa_write_u64__p
+  use        Qoaconv__qoa_write_u64__index
+  use        Qoaconv__qoa_write_u64__L_1__i
+  use        Interfaces__unsigned_32
+  use        Interfaces__unsigned_32___axiom
+  use        Qoaconv__unsigned_char
+  use        Qoaconv__unsigned_char___axiom
+  use        Qoaconv__unsigned_char__rep
+  use        Array__Int__Qoaconv__unsigned_char
+  use        Qoaconv__bytes_char___axiom
+  use        Qoaconv__bytes_char_acc
+  use        Qoaconv__bytes_char_acc___axiom
+  use        Qoaconv__bytes_char_acc__rep
+  use        Interfaces__unsigned_64
+  use        Interfaces__unsigned_64___axiom
+  use        Qoaconv__qoa_write_u64__index___axiom
+  use        Qoaconv__qoa_write_u64__L_1
+  use        Qoaconv__qoa_write_u64__L_1__T1b
+  use        Qoaconv__qoa_write_u64__L_1__T1b___axiom
+  use        Qoaconv__bytes_char_acc__rep
+  use        Array__Int__Qoaconv__unsigned_char
+  
+  function  [sloc:qoaconv.ads:74] def (__void_param : unit) requires { True }
+    ensures 
+    { ([sloc:qoaconv.ads:81] ([GP_Shape:pragargs__cmp]
+                             [GP_Check:17:VC_POSTCONDITION:qoaconv.ads:81:14]
+                             [model_vc_post] (!Qoaconv__qoa_write_u64__p.p
+                                                = (_gnatprove_standard.BV32.add
+                                                     (at old !Qoaconv__qoa_write_u64__p.p)
+                                                     8)))) } returns
+     = (* Assume dynamic invariants of inputs of the subprogram qoaconv.ads:74 *);
+        assume
+        { (Interfaces__unsigned_64___axiom.dynamic_invariant
+             Qoaconv__qoa_write_u64__v.v True False True True) };
+        assume
+        { (Qoaconv__bytes_char_acc___axiom.dynamic_invariant
+             {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+             Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+             Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}
+             True False True True) };
+        assume
+        { (Interfaces__unsigned_32___axiom.dynamic_invariant
+             !Qoaconv__qoa_write_u64__p.p True False True True) };
+        (* Assume moved pointers in outputs of the subprogram qoaconv.ads:74 *);
+        (* Check for RTE in the Pre of the subprogram qoaconv.ads:74 *);
+        abstract ensures
+        { True } begin  (let _ =
+                       (((((let ([mlw:proxy_symbol] [introduced] temp___558)
+                             =
+                             ([sloc:qoaconv.ads:78] ([vc:annotation]
+                                                    [GP_Shape:pragargs__andthen__andthen__andthen__cmp__first_ref]
+                                                    [GP_Check:7:VC_NULL_POINTER_DEREFERENCE:qoaconv.ads:78:7] (
+                                                    Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value_
+                                                      ( {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                                        Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                                        Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}))))
+                             in
+                             (Qoaconv__bytes_char.first ([mlw:proxy_symbol]
+                                [introduced] temp___558)))
+                             <= (let ([mlw:proxy_symbol]
+                             [introduced] temp___559) =
+                             ([sloc:qoaconv.ads:78] ([GP_Shape:pragargs__andthen__andthen__andthen__cmp__last_ref]
+                                                    [GP_Check:8:VC_NULL_POINTER_DEREFERENCE:qoaconv.ads:78:22]
+                                                    [vc:annotation] (
+                                                    Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value_
+                                                      ( {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                                        Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                                        Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}))))
+                             in
+                             (Qoaconv__bytes_char.last ([mlw:proxy_symbol]
+                                [introduced] temp___559)))) &&
+                            (_gnatprove_standard.BV32.uge
+                               !Qoaconv__qoa_write_u64__p.p
+                               (_gnatprove_standard.BV32.of_int
+                                  ([sloc:qoaconv.ads:78] ([vc:annotation]
+                                                         [GP_Shape:pragargs__andthen__andthen__andthen__cmp__typeconv__first_ref]
+                                                         [GP_Check:10:VC_RANGE_CHECK:qoaconv.ads:78:65] (
+                                                         Interfaces__unsigned_32.range_check_int_
+                                                           (let ([mlw:proxy_symbol]
+                                                           [introduced] temp___560)
+                                                           =
+                                                           ([sloc:qoaconv.ads:78] 
+                                                           ([vc:annotation]
+                                                           [GP_Shape:pragargs__andthen__andthen__andthen__cmp__typeconv__first_ref]
+                                                           [GP_Check:9:VC_NULL_POINTER_DEREFERENCE:qoaconv.ads:78:60] (
+                                                           Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value_
+                                                             ( {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                                               Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                                               Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}))))
+                                                           in
+                                                           (Qoaconv__bytes_char.first
+                                                              ([mlw:proxy_symbol]
+                                                              [introduced] temp___560)))))))))
+                           &&
+                           (([sloc:qoaconv.ads:79] ([vc:annotation]
+                                                   [GP_Shape:pragargs__andthen__andthen__cmp__sub]
+                                                   [GP_Check:13:VC_OVERFLOW_CHECK:qoaconv.ads:79:27] (
+                                                   Standard__integer.range_check_
+                                                     ((let ([mlw:proxy_symbol]
+                                                        [introduced] temp___561)
+                                                        =
+                                                        ([sloc:qoaconv.ads:79] 
+                                                        ([GP_Check:11:VC_NULL_POINTER_DEREFERENCE:qoaconv.ads:79:16]
+                                                        [GP_Shape:pragargs__andthen__andthen__cmp__sub__last_ref]
+                                                        [vc:annotation] (
+                                                        Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value_
+                                                          ( {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                                            Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                                            Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}))))
+                                                        in
+                                                        (Qoaconv__bytes_char.last
+                                                           ([mlw:proxy_symbol]
+                                                           [introduced] temp___561)))
+                                                        - (let ([mlw:proxy_symbol]
+                                                        [introduced] temp___562)
+                                                        =
+                                                        ([sloc:qoaconv.ads:79] 
+                                                        ([GP_Shape:pragargs__andthen__andthen__cmp__sub__first_ref]
+                                                        [vc:annotation]
+                                                        [GP_Check:12:VC_NULL_POINTER_DEREFERENCE:qoaconv.ads:79:29] (
+                                                        Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value_
+                                                          ( {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                                            Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                                            Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}))))
+                                                        in
+                                                        (Qoaconv__bytes_char.first
+                                                           ([mlw:proxy_symbol]
+                                                           [introduced] temp___562)))))))
+                              >= 7)) &&
+                          (_gnatprove_standard.BV32.ule
+                             !Qoaconv__qoa_write_u64__p.p
+                             (_gnatprove_standard.BV32.of_int
+                                ([sloc:qoaconv.ads:80] ([vc:annotation]
+                                                       [GP_Check:16:VC_RANGE_CHECK:qoaconv.ads:80:45]
+                                                       [GP_Shape:pragargs__andthen__cmp__typeconv__sub] (
+                                                       Interfaces__unsigned_32.range_check_int_
+                                                         ([sloc:qoaconv.ads:80] 
+                                                         ([GP_Check:15:VC_OVERFLOW_CHECK:qoaconv.ads:80:45]
+                                                         [vc:annotation]
+                                                         [GP_Shape:pragargs__andthen__cmp__typeconv__sub] (
+                                                         Standard__integer.range_check_
+                                                           ((let ([mlw:proxy_symbol]
+                                                              [introduced] temp___563)
+                                                              =
+                                                              ([sloc:qoaconv.ads:80] 
+                                                              ([vc:annotation]
+                                                              [GP_Check:14:VC_NULL_POINTER_DEREFERENCE:qoaconv.ads:80:34]
+                                                              [GP_Shape:pragargs__andthen__cmp__typeconv__sub__last_ref] (
+                                                              Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value_
+                                                                ( {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                                                  Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                                                  Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}))))
+                                                              in
+                                                              (Qoaconv__bytes_char.last
+                                                                 ([mlw:proxy_symbol]
+                                                                 [introduced] temp___563)))
+                                                              - 8))))))))))
+                       in ())  end;
+        (* Assume Pre of the subprogram qoaconv.ads:74 *);
+        assume
+        { (((([GP_Pretty_Ada:3612] ((let ([mlw:proxy_symbol]
+                                      [introduced] temp___564) =
+                                      ( {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                        Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                        Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}).Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value
+                                      in
+                                      (Qoaconv__bytes_char.first
+                                         ([mlw:proxy_symbol]
+                                         [introduced] temp___564)))
+                                      <= (let ([mlw:proxy_symbol]
+                                      [introduced] temp___565) =
+                                      ( {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                        Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                        Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}).Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value
+                                      in
+                                      (Qoaconv__bytes_char.last
+                                         ([mlw:proxy_symbol]
+                                         [introduced] temp___565))))) /\
+               ([GP_Pretty_Ada:3618] (_gnatprove_standard.BV32.uge
+                                        !Qoaconv__qoa_write_u64__p.p
+                                        (_gnatprove_standard.BV32.of_int
+                                           (let ([mlw:proxy_symbol]
+                                           [introduced] temp___566) =
+                                           ( {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                             Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                             Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}).Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value
+                                           in
+                                           (Qoaconv__bytes_char.first
+                                              ([mlw:proxy_symbol]
+                                              [introduced] temp___566)))))))
+              /\
+              ([GP_Pretty_Ada:3632] (((let ([mlw:proxy_symbol]
+                                        [introduced] temp___567) =
+                                        ( {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                          Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                          Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}).Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value
+                                        in
+                                        (Qoaconv__bytes_char.last
+                                           ([mlw:proxy_symbol]
+                                           [introduced] temp___567)))
+                                        - (let ([mlw:proxy_symbol]
+                                        [introduced] temp___568) =
+                                        ( {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                          Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                          Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}).Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value
+                                        in
+                                        (Qoaconv__bytes_char.first
+                                           ([mlw:proxy_symbol]
+                                           [introduced] temp___568)))) >= 7)))
+             /\
+             ([GP_Pretty_Ada:3636] (_gnatprove_standard.BV32.ule
+                                      !Qoaconv__qoa_write_u64__p.p
+                                      (_gnatprove_standard.BV32.of_int
+                                         ((let ([mlw:proxy_symbol]
+                                            [introduced] temp___569) =
+                                            ( {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                              Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                              Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}).Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value
+                                            in
+                                            (Qoaconv__bytes_char.last
+                                               ([mlw:proxy_symbol]
+                                               [introduced] temp___569))) - 8))))) };
+        (let ([mlw:proxy_symbol] [introduced] temp___old_556) =
+        !Qoaconv__qoa_write_u64__p.p in (try
+        ();
+          ([sloc:qoaconv.adb:15] abstract ensures
+          { True } begin  (let _ = ( 8) in ())  end;
+          assume
+          { (Standard__integer___axiom.dynamic_invariant
+               Qoaconv__qoa_write_u64__index.index True False True True) });
+          ([sloc:qoaconv.adb:17] ());
+          ();
+          ([sloc:qoaconv.adb:17] (let ([mlw:proxy_symbol]
+          [introduced] temp___540) = 0 in (let ([mlw:proxy_symbol]
+          [introduced] temp___541) = 7 in ( Qoaconv__qoa_write_u64__L_1__i.i
+          :=
+          ([mlw:proxy_symbol] [introduced] temp___540));
+          (* Translation of an Ada loop from qoaconv.adb:17 *);
+          (if
+          (_gnatprove_standard.Boolean.andb
+             (([mlw:proxy_symbol] [introduced] temp___540)
+                <= !Qoaconv__qoa_write_u64__L_1__i.i)
+             (!Qoaconv__qoa_write_u64__L_1__i.i <= ([mlw:proxy_symbol]
+                [introduced] temp___541)))
+          then
+          (try
+          (let temp___loop_entry_551 =
+            {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+            Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+            Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}
+            in (let ([model_trace:3599'Loop_Entry] temp___loop_entry_554) =
+            !Qoaconv__qoa_write_u64__p.p in
+            (* While loop translating the Ada loop from qoaconv.adb:17 *);
+            ([sloc:qoaconv.adb:18] loop
+                                     (* Check for absence of RTE in the loop invariant and variant *);
+                                     (let ([mlw:proxy_symbol]
+                                     [introduced] temp___inv_553) =
+                                     (_gnatprove_standard.BV32.eq
+                                        !Qoaconv__qoa_write_u64__p.p
+                                        (_gnatprove_standard.BV32.add
+                                           ([model_trace:3599'Loop_Entry] temp___loop_entry_554)
+                                           (_gnatprove_standard.BV32.of_int
+                                              !Qoaconv__qoa_write_u64__L_1__i.i)))
+                                     in abstract ensures
+                                     { True } begin  (let _ = () in ())  end)
+                                     invariant
+                                     {([sloc:qoaconv.adb:18] ([GP_Check:6:VC_LOOP_INVARIANT:qoaconv.adb:18:33]
+                                                             [vc:annotation]
+                                                             [GP_Shape:L_1_while__pragargs__cmp] (
+                                                             !Qoaconv__qoa_write_u64__p.p
+                                                               = (_gnatprove_standard.BV32.add
+                                                                    ([model_trace:3599'Loop_Entry] temp___loop_entry_554)
+                                                                    (
+                                                                    _gnatprove_standard.BV32.of_int
+                                                                    !Qoaconv__qoa_write_u64__L_1__i.i)))))}
+                                     
+                                     (* Assume implicit invariants from the loop qoaconv.adb:17 *);
+                                     assume
+                                     { (_gnatprove_standard.Boolean.andb
+                                          (((True /\
+                                               (Qoaconv__qoa_write_u64__L_1__T1b.dynamic_property
+                                                  Qoaconv__qoa_write_u64__L_1__T1b.first
+                                                  Qoaconv__qoa_write_u64__L_1__T1b.last
+                                                  !Qoaconv__qoa_write_u64__L_1__i.i)
+                                               /\ True /\ True) /\
+                                              (Qoaconv__bytes_char_acc___axiom.dynamic_invariant
+                                                 {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                                 Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                                 Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}
+                                                 True True True True) /\ True
+                                              /\
+                                              (({Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                                Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                                Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}.Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer
+                                                  = temp___loop_entry_551.Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer)
+                                                 /\
+                                                 (if
+                                                 ({Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                                  Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                                  Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}.Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer
+                                                    = False)
+                                                 then
+                                                 (True /\
+                                                    ((Qoaconv__bytes_char.first
+                                                        {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                                        Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                                        Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}.Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value)
+                                                       = (Qoaconv__bytes_char.first
+                                                            temp___loop_entry_551.Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value))
+                                                    /\
+                                                    ((Qoaconv__bytes_char.last
+                                                        {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                                        Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                                        Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}.Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value)
+                                                       = (Qoaconv__bytes_char.last
+                                                            temp___loop_entry_551.Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value)))
+                                                 ))) /\
+                                             (Interfaces__unsigned_32___axiom.dynamic_invariant
+                                                !Qoaconv__qoa_write_u64__p.p
+                                                True True True True) /\ True
+                                             /\ True)
+                                          ((0
+                                              <= !Qoaconv__qoa_write_u64__L_1__i.i)
+                                             /\
+                                             (!Qoaconv__qoa_write_u64__L_1__i.i
+                                                <= 7))) };
+                                     (* Continuation of loop after loop invariant and variant *);
+                                     ();
+                                     ([sloc:qoaconv.adb:19] (let ([mlw:proxy_symbol]
+                                     [introduced] temp___549) =
+                                     (let ([mlw:proxy_symbol]
+                                       [introduced] temp___547) =
+                                       ( {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                         Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                         Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__})
+                                       in (let ([mlw:proxy_symbol]
+                                       [introduced] temp___548) =
+                                       ([mlw:proxy_symbol]
+                                         [introduced] temp___547) in abstract
+                                       ensures
+                                       { True } begin  (let _ =
+                                                      ([sloc:qoaconv.adb:19] 
+                                                      ([vc:annotation]
+                                                      [GP_Shape:L_1_while__assign__ixdcomp]
+                                                      [GP_Check:5:VC_NULL_POINTER_DEREFERENCE:qoaconv.adb:19:16] (
+                                                      Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value_
+                                                        ([mlw:proxy_symbol]
+                                                        [introduced] temp___548))))
+                                                      in ())  end;
+                                       {([mlw:proxy_symbol]
+                                       [introduced] temp___548) with Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : (let ([mlw:proxy_symbol]
+                                       [introduced] temp___544) =
+                                       ( {Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value : !Qoaconv__qoa_write_u64__bytes.bytes__pointer_value;
+                                         Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_null_pointer : !Qoaconv__qoa_write_u64__bytes.bytes__is_null_pointer;
+                                         Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__is_moved : !Qoaconv__qoa_write_u64__bytes.bytes__rec__is_moved__}).Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value
+                                       in (let ([mlw:proxy_symbol]
+                                       [introduced] temp___545) =
+                                       ([mlw:proxy_symbol]
+                                         [introduced] temp___544)
+                                       in
+                                       {([mlw:proxy_symbol]
+                                       [introduced] temp___544) with Qoaconv__bytes_char.elts : (
+                                       Array__Int__Qoaconv__unsigned_char.set
+                                         (Qoaconv__bytes_char.to_array
+                                            ([mlw:proxy_symbol]
+                                            [introduced] temp___544))
+                                         (let ([mlw:proxy_symbol]
+                                         [introduced] temp___546) =
+                                         ([sloc:qoaconv.adb:19] ([GP_Shape:L_1_while__assign__ixdcomp__typeconv]
+                                                                [GP_Check:3:VC_RANGE_CHECK:qoaconv.adb:19:30]
+                                                                [vc:annotation] (
+                                                                Standard__integer.range_check_
+                                                                  (_gnatprove_standard.BV32.t_int
+                                                                    !Qoaconv__qoa_write_u64__p.p))))
+                                         in assert
+                                         { ([sloc:qoaconv.adb:19] ([GP_Shape:L_1_while__assign__ixdcomp__typeconv]
+                                                                  [vc:annotation]
+                                                                  [GP_Check:4:VC_INDEX_CHECK:qoaconv.adb:19:21] (
+                                                                  ((Qoaconv__bytes_char.first
+                                                                    ([mlw:proxy_symbol]
+                                                                    [introduced] temp___545))
+                                                                    <= ([mlw:proxy_symbol]
+                                                                    [introduced] temp___546))
+                                                                    /\
+                                                                    (
+                                                                    ([mlw:proxy_symbol]
+                                                                    [introduced] temp___546)
+                                                                    <= (
+                                                                    Qoaconv__bytes_char.last
+                                                                    ([mlw:proxy_symbol]
+                                                                    [introduced] temp___545)))))) };
+                                         ([mlw:proxy_symbol]
+                                         [introduced] temp___546))
+                                         (Qoaconv__unsigned_char__rep.of_rep
+                                            ( (_gnatprove_standard.BVConv_8_64.toSmall
+                                                 ([sloc:qoaconv.adb:20] 
+                                                 ([GP_Check:2:VC_RANGE_CHECK:qoaconv.adb:20:60]
+                                                 [vc:annotation]
+                                                 [GP_Shape:L_1_while__assign__typeconv__mod] (
+                                                 _gnatprove_standard.BVConv_8_64.range_check_
+                                                   (_gnatprove_standard.BVConv_8_64.toBig
+                                                      Qoaconv__unsigned_char.first)
+                                                   (_gnatprove_standard.BVConv_8_64.toBig
+                                                      Qoaconv__unsigned_char.last)
+                                                   ([sloc:qoaconv.adb:20] 
+                                                   ([vc:annotation]
+                                                   [GP_Shape:L_1_while__assign__typeconv__mod]
+                                                   [GP_Check:1:VC_DIVISION_CHECK:qoaconv.adb:20:60] (
+                                                   _gnatprove_standard.BV64.urem_
+                                                     ([sloc:qoaconv.adb:20] 
+                                                     ([GP_Shape:L_1_while__assign__typeconv__mod__div]
+                                                     [vc:annotation]
+                                                     [GP_Check:0:VC_DIVISION_CHECK:qoaconv.adb:20:30] (
+                                                     _gnatprove_standard.BV64.udiv_
+                                                       Qoaconv__qoa_write_u64__v.v
+                                                       (let ([mlw:proxy_symbol]
+                                                       [introduced] temp___543)
+                                                       =
+                                                       (((8
+                                                            - !Qoaconv__qoa_write_u64__L_1__i.i)
+                                                           - 1) * 8) in
+                                                       (if
+                                                       (([mlw:proxy_symbol]
+                                                          [introduced] temp___543)
+                                                          < _gnatprove_standard.BV64._two_power_size)
+                                                       then
+                                                       (_gnatprove_standard.BV64.lsl_bv
+                                                          1
+                                                          (_gnatprove_standard.BV64.of_int
+                                                             ([mlw:proxy_symbol]
+                                                             [introduced] temp___543)))
+                                                        else 0))))) 256))))))))))}))}))
+                                     in (
+                                     Qoaconv__qoa_write_u64__bytes.bytes__pointer_value
+                                     :=
+                                     ([mlw:proxy_symbol]
+                                       [introduced] temp___549).Qoaconv__bytes_char_acc.rec__qoaconv__bytes_char_acc__pointer_value)));
+                                     ([sloc:qoaconv.adb:21] (
+                                     Qoaconv__qoa_write_u64__p.p :=
+                                     ( (_gnatprove_standard.BV32.add
+                                          !Qoaconv__qoa_write_u64__p.p 1))));
+                                     (* Check for the exit condition and loop statements appearing before the loop invariant of loop qoaconv.adb:17 *);
+                                     (if
+                                     (!Qoaconv__qoa_write_u64__L_1__i.i
+                                        = ([mlw:proxy_symbol]
+                                        [introduced] temp___541))
+                                     then
+                                     raise Qoaconv__qoa_write_u64__L_1.L_1 );
+                                     ([sloc:qoaconv.adb:17] (
+                                     Qoaconv__qoa_write_u64__L_1__i.i :=
+                                     (!Qoaconv__qoa_write_u64__L_1__i.i + 1)))
+                                      end loop))) with
+          | Qoaconv__qoa_write_u64__L_1.L_1  -> ()) ))));
+          raise Return__exc with | Return__exc  -> ());
+        abstract ensures
+        { True } begin  (let _ =
+                       (_gnatprove_standard.BV32.eq
+                          !Qoaconv__qoa_write_u64__p.p
+                          (_gnatprove_standard.BV32.add ([mlw:proxy_symbol]
+                             [introduced] temp___old_556) 8))
+                       in ())  end)
+
+end

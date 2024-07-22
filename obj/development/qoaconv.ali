@@ -1,0 +1,449 @@
+V "GNAT Lib v13"
+A -Og
+A -gnatA
+A -ffunction-sections
+A -fdata-sections
+A -g
+A -gnatwa
+A -gnatw.X
+A -gnatVa
+A -gnata
+A -gnaty3
+A -gnatya
+A -gnatyA
+A -gnatyB
+A -gnatyb
+A -gnatyc
+A -gnaty-
+A -gnatyd
+A -gnatye
+A -gnatyf
+A -gnatyh
+A -gnatyi
+A -gnatyI
+A -gnatyk
+A -gnatyl
+A -gnatym
+A -gnatyn
+A -gnatyO
+A -gnatyp
+A -gnatyr
+A -gnatyS
+A -gnatyt
+A -gnatyu
+A -gnatyx
+A -gnatW8
+A -mtune=generic
+A -march=x86-64
+P SS ZX
+
+RN
+RV NO_ALLOCATORS
+RV NO_DIRECT_BOOLEAN_OPERATORS
+RV NO_EXCEPTIONS
+RV NO_IO
+RV NO_IMPLICIT_CONDITIONALS
+RV NO_LOCAL_ALLOCATORS
+RV NO_LONG_LONG_INTEGERS
+RV NO_SECONDARY_STACK
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_UNCHECKED_CONVERSION
+RV NO_DEFAULT_INITIALIZATION
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_ATTRIBUTES
+RV NO_IMPLEMENTATION_PRAGMAS
+RV NO_IMPLICIT_LOOPS
+
+U qoaconv%b		qoaconv.adb		5586b728 NE OO PK
+W ada%s			ada.ads			ada.ali
+Z ada.exceptions%s	a-except.adb		a-except.ali
+Z ada.strings.text_buffers%s  a-sttebu.adb	a-sttebu.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+W ada.unchecked_conversion%s
+W gnat%s		gnat.ads		gnat.ali
+W gnat.os_lib%s		g-os_lib.ads		g-os_lib.ali
+Z system%s		system.ads		system.ali
+Z system.assertions%s	s-assert.adb		s-assert.ali
+Z system.img_int%s	s-imgint.ads		s-imgint.ali
+Z system.img_llu%s	s-imgllu.ads		s-imgllu.ali
+Z system.img_uns%s	s-imguns.ads		s-imguns.ali
+Z system.secondary_stack%s  s-secsta.adb	s-secsta.ali
+Z system.unsigned_types%s  s-unstyp.ads		s-unstyp.ali
+
+U qoaconv%s		qoaconv.ads		98ab5539 EE NE OO PK
+Z ada.strings.text_buffers%s  a-sttebu.adb	a-sttebu.ali
+W gnat%s		gnat.ads		gnat.ali
+W gnat.os_lib%s		g-os_lib.ads		g-os_lib.ali
+W interfaces%s		interfac.ads		interfac.ali
+
+D ada.ads		20230727081304 76789da1 ada%s
+D a-assert.ads		20230727081303 ba465f5c ada.assertions%s
+D a-except.ads		20230727081304 2a7d8d70 ada.exceptions%s
+D a-ioexce.ads		20230727081304 40018c65 ada.io_exceptions%s
+D a-numeri.ads		20230727081304 84bea7a3 ada.numerics%s
+D a-nubinu.ads		20230727081304 93f1f3d1 ada.numerics.big_numbers%s
+D a-nbnbig.ads		20230727081304 711e0174 ada.numerics.big_numbers.big_integers_ghost%s
+D a-stream.ads		20230727081304 119b8fb3 ada.streams%s
+D a-string.ads		20230727081304 90ac6797 ada.strings%s
+D a-sttebu.ads		20230727081304 f1ad67a2 ada.strings.text_buffers%s
+D a-stuten.ads		20230727081304 c6ced0ae ada.strings.utf_encoding%s
+D a-tags.ads		20230727081304 9eaa38c6 ada.tags%s
+D a-textio.ads		20230727081304 5c2c6153 ada.text_io%s
+D a-unccon.ads		20230727081304 0e9b276f ada.unchecked_conversion%s
+D a-uncdea.ads		20230727081304 c3a8ac65 ada.unchecked_deallocation%s
+D gnat.ads		20230727081304 b5988c27 gnat%s
+D g-os_lib.ads		20230727081304 0db74523 gnat.os_lib%s
+D interfac.ads		20230727081304 15f799c2 interfaces%s
+D i-cstrea.ads		20230727081304 e53d8b8e interfaces.c_streams%s
+D qoaconv.ads		20240423200205 80eb89d8 qoaconv%s
+D qoaconv.adb		20240503074859 8a6d3def qoaconv%b
+D system.ads		20230727081304 426dafb8 system%s
+D s-assert.ads		20230727081304 9c4520c7 system.assertions%s
+D s-casuti.ads		20230727081304 cf13d755 system.case_util%s
+D s-crtl.ads		20230727081304 8a0692f8 system.crtl%s
+D s-exctab.ads		20230727081304 91bef6ef system.exception_table%s
+D s-ficobl.ads		20230727081304 dc5161d4 system.file_control_block%s
+D s-imagei.ads		20230727081304 c707dfd0 system.image_i%s
+D s-imageu.ads		20230727081304 631c6ed0 system.image_u%s
+D s-imgint.ads		20230727081304 d4a52a9b system.img_int%s
+D s-imgllu.ads		20230727081304 ef081208 system.img_llu%s
+D s-imguns.ads		20230727081304 7867236f system.img_uns%s
+D s-os_lib.ads		20230727081304 a2467c22 system.os_lib%s
+D s-parame.ads		20230727081304 d494a4a6 system.parameters%s
+D s-putima.ads		20230727081304 17291fe4 system.put_images%s
+D s-secsta.ads		20230727081304 578279f5 system.secondary_stack%s
+D s-soflin.ads		20230727081304 df77073e system.soft_links%s
+D s-stache.ads		20230727081304 0b81c1fe system.stack_checking%s
+D s-stalib.ads		20230727081304 1c9580f6 system.standard_library%s
+D s-stoele.ads		20230727081304 ab5468e4 system.storage_elements%s
+D s-stoele.adb		20230727081304 8f5a9db6 system.storage_elements%b
+D s-string.ads		20230727081304 582aac7d system.strings%s
+D s-traent.ads		20230727081304 c81cbf8c system.traceback_entries%s
+D s-unstyp.ads		20230727081304 fa2a7f59 system.unsigned_types%s
+D s-valint.ads		20230727081304 1f610d7a system.val_int%s
+D s-valllu.ads		20230727081304 ca6e26ce system.val_llu%s
+D s-valuns.ads		20230727081304 e8a1f424 system.val_uns%s
+D s-valuti.ads		20230727081304 fcd603d8 system.val_util%s
+D s-valuei.ads		20230727081304 11081e09 system.value_i%s
+D s-vaispe.ads		20230727081304 44130d39 system.value_i_spec%s
+D s-valueu.ads		20230727081304 18770347 system.value_u%s
+D s-vauspe.ads		20230727081304 a67b2f28 system.value_u_spec%s
+D s-wchcon.ads		20230727081304 d9032363 system.wch_con%s
+D s-widllu.ads		20230727081304 a6620b19 system.wid_llu%s
+D s-widuns.ads		20230727081304 866a5800 system.wid_uns%s
+D s-widthu.ads		20230727081304 b32f15e2 system.width_u%s
+G a e
+G c Z s s [Tmy_int_arrayBIP qoaconv 39 4 none]
+G c Z s s [Tmy_int_array_16BIP qoaconv 43 4 none]
+G c Z s s [Tqoa_dequant_tab_typeBIP qoaconv 55 4 none]
+G c Z s b [qoa_encode_header qoaconv 70 14 none]
+G c Z s b [qoa_write_u64 qoaconv 74 14 none]
+G c Z s b [qoa_clamp_s16 qoaconv 83 13 none]
+G c Z s b [qoa_lms_predict qoaconv 85 13 none]
+G c Z s b [qoa_lms_update qoaconv 87 14 none]
+G c Z s b [qoaconv_fwrite_u32_le qoaconv 90 14 none]
+G c Z s b [qoaconv_fwrite_u16_le qoaconv 92 14 none]
+G c Z s b [qoa_frame_size qoaconv 94 13 none]
+G c Z s b [qoa_clamp qoaconv 97 13 none]
+G c Z s b [qoa_write qoaconv 100 14 none]
+G c Z s b [get_chunk_id qoaconv 104 13 none]
+G c Z s b [qoaconv_fread_u16_le qoaconv 107 13 none]
+G c Z s b [qoaconv_fread_u32_le qoaconv 109 13 none]
+G c Z s b [qoaconv_wav_read qoaconv 111 14 none]
+G c Z s b [qoa_encode_frame qoaconv 115 14 none]
+G c Z s b [qoa_div qoaconv 120 13 none]
+G c Z s b [qoa_encode qoaconv 122 14 none]
+G c Z s s [Thistory_tBIP qoaconv 14 4 none]
+G c Z s s [Tweights_tBIP qoaconv 15 4 none]
+G c Z s s [qoa_lms_tIP qoaconv 21 9 none]
+G c Z s s [Tlms_tBIP qoaconv 26 4 none]
+G c Z s s [qoa_descriptionIP qoaconv 28 9 none]
+G c Z s s [bytes_charIP qoaconv 36 9 none]
+G c Z s s [audio_bufferIP qoaconv 52 9 none]
+G c Z b b [u_64 qoaconv 7 13 none]
+G c Z b b [i_64 qoaconv 8 13 none]
+G c Z b b [shift_left qoaconv 23 13 none]
+G c Z b b [shift_right qoaconv 26 13 none]
+G c Z b b [print_lms qoaconv 40 14 none]
+X 1 ada.ads
+16K9*Ada 20e8 21|1r6 1r23 2r6 7r25 8r25
+X 13 a-textio.ads
+58K13*Text_IO 787e16 21|1w10 1r27
+566U14*Put_Line 21|42s7 44s10 140s13 389s13 594s7 595s7 596s7 597s7
+X 14 a-unccon.ads
+20v14*Unchecked_Conversion 21|2w10 7r29 8r29
+X 16 gnat.ads
+37K9*GNAT 60e9 20|1r6 1r23 21|3r6
+X 17 g-os_lib.ads
+51K14*OS_Lib=51:36 20|1w11 1r28 21|3w11
+X 18 interfac.ads
+38K9*Interfaces 232e15 20|2w6 2r23
+50I9*Integer_16<short_integer> 20|14r54 15r54 52r53 21|34r37 35r21 45r21
+. 46r13 65r17 66r9 85r40
+53I9*Integer_32<integer> 21|426r16
+56I9*Integer_64<long_long_integer> 21|7r51 8r64 51r20 57r12 57r42 271r25
+. 276r25
+69M9*Unsigned_8 21|159r42 163r21 164r21 165r21 166r21 173r42 177r21 178r21
+72M9*Unsigned_16 20|92r41 107r64 21|170r41 481r64 492r21 492r53 532r25 533r25
+. 535r25 536r25 539r25
+80M9*Unsigned_32 20|29r20 30r20 31r20 72r25 75r66 90r41 95r18 95r40 95r60
+. 104r46 109r64 117r57 118r55 124r25 21|11r66 117r22 118r22 122r22 125r29
+. 126r9 128r29 129r9 132r22 142r45 156r41 197r18 197r40 197r60 201r13 206r57
+. 207r55 209r29 210r29 211r22 212r9 213r29 400r25 416r25 418r23 419r23 420r23
+. 423r23 430r29 437r29 438r9 440r29 441r9 444r22 471r54 495r64 506r21 507r21
+. 508r21 508r53 511r46 512r18 529r25 530r25 531r25 534r25 537r25 538r25 541r25
+. 542r25 543r25 545r26 546r26 547r26 548r26 569r32 593r34 594r36 595r36 596r36
+. 599r10
+83M9*Unsigned_64 20|75r11 21|7r63 8r51 11r11 222r26 223r26 224r26 229r26
+. 230r26 231r26 245r25 248r23 249r23 250r23 251r12 264r23 265r23 300r33 354r31
+. 360r21 371r55 404r22 405r10
+115V13*Shift_Left{72M9} 21|492s9
+125V13*Shift_Right_Arithmetic{72M9} 21|178s34
+140V13*Shift_Left{80M9} 21|506s9 507s9 508s9 515s10 516s10 517s10 518s10
+150V13*Shift_Right_Arithmetic{80M9} 21|164s34 165s34 166s34
+165V13*Shift_Left{83M9} 21|248s11 249s11 250s11 270s18 275s18 371s29 388s15
+. 404s10
+X 20 qoaconv.ads
+3K9*Qoaconv 126l5 126e12 21|4b14 611l5 611t12
+6i4*Qoa_Min_FileSize{integer}
+7i4*Qoa_Max_Channels{integer} 26r30 21|215r37 430r42
+8i4*Qoa_Slice_Len{integer} 11r63 21|128r42 129r22 211r35 212r22 292r26 388r40
+. 393r41 440r42 441r22
+9i4*Qoa_Slice_Per_Frame{integer} 11r41
+10i4*Qoa_LMS_Len{integer} 14r34 15r34 21|43r21 54r21 74r21 82r21 85r20 132r35
+. 201r26 267r27 444r35 457r27
+11i4*Qoa_Frame_Len{integer} 21|125r42 126r22 437r42 438r22 462r23 466r18
+12i4*Qoa_Magic{integer} 21|404r35
+14A9*History_T(18|50I9)<integer> 22r17
+15A9*Weights_T(18|50I9)<integer> 23r17
+17M9*Channel
+18M9*Rate
+19M9*Sample
+21R9*Qoa_Lms_T 24e14 26r55 85r36 88r17 21|40r31 50r36 63r17 225r26 228r26
+22a7*History{14A9} 21|46r35 57r58 75r17 83m14 83r33 85m11 271r54 458m33
+23a7*Weight{15A9} 21|45r43 57r28 76m17 76r35 78m17 78r35 276r54 339r38 340r38
+. 341r38 342r38 453m30 454m30 455m30 456m30
+26A9*Lms_T(21R9)<integer> 32r20
+28R9*Qoa_Description 33e14 71r25 102r23 112r53 117r28 123r64 21|114r23 206r28
+. 399r25 415r64 523r53
+29m7*Channels{18|80M9} 21|132r63 133r35 209r53 248r45 429r55 430r18 444r63
+. 445r35 452r42 469r59 590m16 594r64
+30m7*Samplerate{18|80M9} 21|249r45 428r43 429r18 591m16 595r64 599r57
+31m7*Samples{18|80M9} 21|125r19 128r19 405r32 428r19 437r19 440r19 463r49
+. 466r54 592m16 596r64 599r38
+32a7*lms{26A9} 21|271r46 276r46 299r42 385m22 453m22 454m22 455m22 456m22
+. 458m25
+35M9*Unsigned_Char 36r51 21|18r12
+36A9*Bytes_Char(35M9)<integer> 37r47 21|137r16 449r16
+37P9*Bytes_Char_Acc(36A9) 71r54 75r39 118r28 124r51 21|11r39 136r20 207r28
+. 399r54 416r51 448r18
+39A9*My_Int_Array(integer)<integer> 40r20
+40a4*Qoa_Quant_Tab{39A9} 21|323r34
+43A9*My_Int_Array_16(integer)<integer> 45r26 48r26
+45a4*Qoa_ScaleFactor_Tab{43A9}
+48a4*Qoa_Reciprocal_Tab{43A9} 21|90r45
+52A9*Audio_Buffer(18|50I9)<integer> 53r43 21|603r16
+53P9*Audio_Buffer_Access(52A9) 101r45 113r30 116r28 123r25 21|113r45 205r28
+. 415r25 524r30 602r34
+55A9*Qoa_Dequant_Tab_Type(integer)<integer> 56r22
+56a4*Qoa_Dequant_Tab{55A9} 21|329r34
+70U14*Qoa_Encode_Header 71>7 71<42 72=7 21|398b14 412l8 412t25 461s10
+71r7 Qoa_Desc{28R9} 21|399b7 405r23
+71p42 Bytes{37P9} 21|399b42 406m10
+72m7 P{18|80M9} 21|400b7 406m17
+74U14*Qoa_Write_U64 75>7 75=24 75=55 21|10b14 21l8 21t21 247s7 281s13 282s13
+. 390s13 403s7
+75m7 V{18|83M9} 21|11b7 18r28
+75p24 Bytes{37P9} 21|11b24 17r10
+75m55 P{18|80M9} 21|11b55 17r30 19m10 19r37
+83V13*Qoa_Clamp_s16{integer} 83>28 21|29b13 38l8 38t21 334s36
+83i28 V{integer} 21|29b28 34r25
+85V13*Qoa_Lms_Predict{integer} 85>30 21|50b13 60l8 60t23 312s32
+85r30 lms{21R9} 21|50b30 57r24 57r54
+87U14*Qoa_Lms_Update 88<7 88>28 88>46 21|62b14 87l8 87t22 370s19
+88r7 lms{21R9} 21|63b7 75r13 76m13 76r31 78m13 78r31 83m10 83r29 85m7
+88i28 Sample{integer} 21|63b28 85r52
+88i46 Residual{integer} 21|63b46 66r22 66r34
+90U14*Qoaconv_Fwrite_U32_Le 90>37 90>54 21|156b14 168l8 168t29
+90m37 v{18|80M9} 21|156b37 163r33 164r58 165r58 166r58
+90i54 Fd{33|201I9} 21|156b54 167r28
+92U14*Qoaconv_Fwrite_U16_Le 92>37 92>54 21|170b14 180l8 180t29
+92m37 v{18|72M9} 21|170b37 177r33 178r58
+92i54 Fd{33|201I9} 21|170b54 179r28
+94V13*Qoa_Frame_Size{18|80M9} 95>7 95>31 21|196b13 202l8 202t22 213s44
+95m7 Channels{18|80M9} 21|197b7 201r45 201r69
+95m31 Slices{18|80M9} 21|197b31 201r60
+97V13*Qoa_Clamp{integer} 98>7 98>20 98>35 21|182b13 194l8 194t17 292s15 320s30
+. 465s15
+98i7 v{integer} 21|183b7 186r10 189r10 192r17
+98i20 min{integer} 21|183b20 186r14 187r17
+98i35 max{integer} 21|183b35 189r14 190r17
+100U14*Qoa_Write 101>7 101>31 102<7 102<40 21|112b14 154l8 154t17
+101a7 File_Path{string} 21|113b7 134r36
+101p31 Sample_Data{53P9} 21|113b31 142r22
+102r7 Qoa_Desc{28R9} 21|114b7 125r10 128r10 132r54 133r26 142m35
+102i40 Bytes_writte{integer} 21|114b40 152m10
+104V13*Get_Chunk_Id{18|80M9} 104>27 21|511b13 520l8 520t20 545s41 546s41
+. 547s41 548s41
+104a27 S{string} 21|511b27 515r37 516r37 517r37 518r37
+107V13*Qoaconv_Fread_u16_le{18|72M9} 107>35 21|481b13 493l8 493t28 568s32
+. 569s45 572s32 573s32 576s32
+107i35 Fd{33|201I9} 21|481b35 489r22
+109V13*Qoaconv_Fread_u32_le{18|80M9} 109>35 21|495b13 509l8 509t28 552s25
+. 556s19 557s19 562s24 563s24 570s32 571s32
+109i35 Fd{33|201I9} 21|495b35 503r22
+111U14*Qoaconv_Wav_Read 112>7 112<38 113<7 21|522b14 609l8 609t24
+112a7 File_Path{string} 21|523b7 551r36
+112r38 Qoa_Desc{28R9} 21|523b38 590m7 591m7 592m7 594r55 595r55 596r55 599r29
+. 599r48
+113p7 Sample_data_Read{53P9} 21|524b7 607m10
+115U14*Qoa_Encode_Frame 116>7 116>49 117=7 117>45 118<7 118=44 21|204b14
+. 396l8 396t24 470s13
+116p7 Sample_Data{53P9} 21|205b7 309r41
+116i49 Frame_Samples{integer} 21|205b49 309r54
+117r7 Qoa_Desc{28R9} 21|206b7 209r44 248r36 249r36 271r37 276r37 299r33 385m13
+117m45 Frame_Len{18|80M9} 21|206b45 211r10 250r36 289r37 292r53
+118p7 Bytes{37P9} 21|207b7 252m10 281m37 282m37 390m40
+118m44 P{18|80M9} 21|207b44 252m17 281m44 282m44 390m47
+120V13*Qoa_Div{integer} 120>22 120>35 21|89b13 110l8 110t15 317s29
+120i22 V{integer} 21|89b22 92r23 95r10 97r13 99r13 101r13 103r13 105r13
+120i35 ScaleFactor{integer} 21|89b25 90r65
+122U14*Qoa_Encode 123>7 123=46 124<7 124<38 21|142s10 414b14 479l8 479t18
+123p7 Sample_Data{53P9} 21|415b7 471r16
+123r46 Qoa_Desc{28R9} 21|415b46 428r10 428r34 429r9 429r46 430r9 437r10 440r10
+. 444r54 445r26 452r33 453m13 454m13 455m13 456m13 458m16 461r29 463r40 466r45
+. 469r50 471m44
+124m7 Out_Len{18|80M9} 21|416b7 476m10
+124p38 Encode{37P9} 21|416b38 477m10
+X 21 qoaconv.adb
+7V13 u_64[14|20]{18|83M9} 271s19 276s19
+8V13 i_64[14|20]{18|56I9}
+13i7 Index{integer} 15r21 18r38
+15i11 i{integer} 18r46
+23V13 Shift_Left{integer} 23>25 23>42
+23i25 Value{integer}
+23i42 Amount{natural}
+26V13 Shift_Right{integer} 26>26 26>43 338s22
+26i26 Value{integer}
+26i43 Amount{natural}
+40U14 print_lms 40b14 40>25 48l8 48t17
+40r25 lms{20|21R9} 45r39 46r31
+43i11 i{integer} 45r51 46r44
+51i7 Prediction{18|56I9} 55m10 56r12 59r24 59r38
+54i11 i{integer} 57r36 57r67
+65i7 Delta_q{18|50I9} 76r48 78r48
+74i11 i{integer} 75r26 76r25 76r43 78r25 78r43
+82i11 i{integer} 83r23 83r42
+90i7 Reciprocal{integer} 92r42
+91i7 Tmp{long_integer} 93r46 93r53
+93i7 N{integer} 95r25 96r17 97r28 98r17 99r28 100r17 101r28 102r17 103r28
+. 104r17 105r28 106r17 108r17
+117m7 Num_Frames{18|80M9} 124m7 131r13 132r9
+118m7 Num_Slices{18|80M9} 127m7 133r9
+119i7 FD{33|201I9} 134m7 139r13 148r20 150r27 151r17
+120i7 Size{natural} 142m58 142r58 150r52 152r26
+121i7 Result{integer} 150m10
+122m7 Encoded_Size{18|80M9} 130m7 137r42
+136p10 Encoded{20|37P9} 142m65 142r65 147r13 150r31
+159A12 Buf_Type(18|69M9)<integer> 160r16
+160a7 Buffer{159A12} 163m7 164m7 165m7 166m7 167m32 167r32
+161i7 Value{integer} 167m7
+173A12 Buf_Type(18|69M9)<integer> 174r16
+174a7 Buffer{173A12} 177m7 178m7 179m32 179r32
+175i7 Value{integer} 179m7
+209m7 Channels{18|80M9} 213r60 262r30 290r33 293r52 294r66 372r42
+210m7 Slices{18|80M9} 213r70
+213m7 Frame_Size{18|80M9} 251r25
+215A12 Ch_Buffer(integer)<integer> 216r26
+216a7 Prev_ScaleFactor{215A12} 298r40 384m13
+218i7 Sample_Index{integer} 289r13 292r66 293r28 294r29 393m10 393r26
+219i7 Slice_Len{integer} 291m13 294r44 388r56
+220i7 Slice_Start{integer} 293m13 304r22
+221i7 Slice_End{integer} 294m13 306r27
+222m7 Best_Rank{18|83M9} 295m13 365r37 375r34 376m19
+223m7 Best_Error{18|83M9} 296m13 377m19
+224m7 Best_Slice{18|83M9} 378m19 387m13 388r27 389r39 390r28
+225r7 Best_Lms{20|21R9} 379m19 385r37
+226i7 Best_ScaleFactor{integer} 380m19 384r37
+227i7 ScaleFactor{integer} 298m16 300r46 317r48 329r51 380r39
+228r7 lms{20|21R9} 299m16 312r49 339r34 340r34 341r34 342r34 370m35 379r39
+229m7 Slice{18|83M9} 300m16 371m19 371r41 378r39
+230m7 Current_Rank{18|83M9} 301m16 358m19 359r21 365r22 375r19 376r39
+231m7 Current_Error{18|83M9} 302m16 361m19 361r36 377r39
+232i7 Si{integer} 304m16 306r22 309r70 372m19 372r28
+234i7 Sample{integer} 309m19 315r31 349r47
+235i7 Predicted{integer} 312m19 315r40 334r51
+236i7 Residual{integer} 315m19 317r38
+237i7 Scaled{integer} 317m19 320r41
+238i7 Clamped{integer} 320m19 323r49
+239i7 Quantized{integer} 323m19 329r69 371r68
+240i7 Dequantized{integer} 329m19 334r63 370r55
+241i7 Reconstructed{integer} 334m19 349r56 370r40
+243i7 Weights_Penalty{integer} 337m19 346r22 347m22 360r34 360r52
+244i7 Error{long_long_integer} 349m19 354r44 354r52
+245m7 Error_Sq{18|83M9} 354m19 359r36 361r52
+262i11 c{integer} 271r51 276r51
+264m13 Weights{18|83M9} 274m16 275r30 282r28
+265m13 History{18|83M9} 269m16 270r30 281r28
+267i17 i{integer} 271r63 276r62
+290i14 c{integer} 293r64 294r78 298r58 299r47 384r31 385r27
+297i17 sfi{integer} 298r34
+418m7 Num_Frames{18|80M9} 436m7 443r13 444r9
+419m7 Num_Slices{18|80M9} 439m7 445r9
+420m7 Encoded_Size{18|80M9} 442m7 449r42
+421i7 Frame_Len{integer} 462m10 464m13 471r67 474r44
+422i7 Frame_Samples{integer} 468m13 471r29
+423m7 P{18|80M9} 461m46 461r46 472m23 472r23 476r21
+424i7 Sample_Index{integer} 463r16 466r65 469r25 474m13 474r29
+426i7 Test_D{18|53I9}
+448p10 Bytes{20|37P9} 461m39 461r39 472m16 472r16 477r21
+452i14 c{integer} 453r27 454r27 455r27 456r27 458r30
+457i17 j{integer} 458r42
+484i7 Count{integer} 489m7 490r22
+485M12 Unsigned_Char 486r38
+486A12 buff(485M12)<integer> 487r16
+487a7 Buffer{486A12} 489m26 489r26 492r34 492r66
+498i7 Count{integer} 503m7 504r22
+499M12 Unsigned_Char 500r38
+500A12 buff(499M12)<integer> 501r16
+501a7 Buffer{500A12} 503m26 503r26 506r34 507r34 508r34 508r66
+512m7 Chunk_ID{18|80M9} 514m7 519r14
+527i7 Fd{33|201I9} 551m7 552r47 556r41 557r41 562r46 563r46 568r54 569r67
+. 570r54 571r54 572r54 573r54 576r54 587r20 605r25 606r17
+528i7 Count{integer} 605m10
+529m7 Container_Type{18|80M9} 552m7 553r10
+530m7 Wav_Size{18|80M9} 556m7
+531m7 Data_Size{18|80M9} 584m13 593r9 601r54 605r61
+532m7 Format_Length{18|72M9}
+533m7 Format_Type{18|72M9} 568m13
+534m7 Byte_Rate{18|80M9} 571m13
+535m7 Block_Align{18|72M9} 572m13
+536m7 Bits_Per_Sample{18|72M9} 573m13 593r47
+537m7 Chunk_Type{18|80M9} 562m10 564r13 583r16
+538m7 Chunk_Size{18|80M9} 563m10 566r16 566r35 575r16 584r26 587r38
+539m7 Extra_Params{18|72M9} 576m16 578r19
+540i7 Result{integer}
+541m7 Channels{18|80M9} 569m13 590r30 593r22
+542m7 Samplerate{18|80M9} 570m13 591r30
+543m7 Wav_Id{18|80M9} 557m7 558r10
+545m7 RIFF_ID{18|80M9} 553r28
+546m7 WAVE_ID{18|80M9} 558r20
+547m7 FMT_ID{18|80M9} 564r26
+548m7 DATA_ID{18|80M9} 583r29
+601i10 Sample_Count{natural} 603r35
+602p10 Wav_Bytes{20|53P9} 605r29 607r30
+X 33 s-os_lib.ads
+201I9*File_Descriptor<integer> 20|90r59 92r59 107r40 109r40 21|119r22 156r59
+. 170r59 481r40 495r40 527r25
+209i4*Invalid_FD{201I9} 21|139r18
+220U14*Close 21|148s13 151s10 606s10
+296n18*Binary{296E9} 21|134r47 551r47
+307V13*Create_File{201I9} 21|134s23
+525N4*Seek_Cur 21|587r51
+530U14*Lseek 21|587s13
+586V13*Open_Read{201I9} 21|551s25
+599V13*Read{integer} 21|489s16 503s16 605s19
+669V13*Write{integer} 21|150s20 167s21 179s21
+1040V13*Errno_Message{string} 21|140s23
+1063U14*OS_Exit 21|433s10
+

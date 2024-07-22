@@ -1,0 +1,71 @@
+qoaconv.adb:3:06: warning: redundant with clause in body [-gnatwr]
+qoaconv.adb:8:13: warning: function "i_64" is not referenced [-gnatwu]
+qoaconv.adb:11:24: warning: formal parameter "Bytes" is not modified [-gnatwk]
+qoaconv.adb:11:24: warning: mode could be "in" instead of "in out" [-gnatwk]
+qoaconv.adb:16:12: (style) two spaces required
+qoaconv.adb:23:13: warning: function "Shift_Left" is not referenced [-gnatwu]
+qoaconv.adb:36:09: (style) two spaces required
+qoaconv.adb:37:09: (style) two spaces required
+qoaconv.adb:40:14: warning: procedure "print_lms" is not referenced [-gnatwu]
+qoaconv.adb:53:09: (style) two spaces required
+qoaconv.adb:65:07: warning: "Delta_q" is not modified, could be declared constant [-gnatwk]
+qoaconv.adb:73:09: (style) two spaces required
+qoaconv.adb:86:09: (style) two spaces required
+qoaconv.adb:89:30: (style) bad casing of "ScaleFactor" declared at qoaconv.ads:120
+qoaconv.adb:90:70: (style) bad casing of "ScaleFactor" declared at qoaconv.ads:120
+qoaconv.adb:121:07: warning: variable "Result" is assigned but never read [-gnatwm]
+qoaconv.adb:125:10: warning: "Qoa_Desc.Samples" may be referenced before it has a value [enabled by default]
+qoaconv.adb:150:10: warning: possibly useless assignment to "Result", value might not be referenced [-gnatwm]
+qoaconv.adb:161:07: warning: variable "Value" is assigned but never read [-gnatwm]
+qoaconv.adb:167:07: warning: possibly useless assignment to "Value", value might not be referenced [-gnatwm]
+qoaconv.adb:175:07: warning: variable "Value" is assigned but never read [-gnatwm]
+qoaconv.adb:179:07: warning: possibly useless assignment to "Value", value might not be referenced [-gnatwm]
+qoaconv.adb:223:07: warning: variable "Best_Error" is assigned but never read [-gnatwm]
+qoaconv.adb:268:18: (style) two spaces required
+qoaconv.adb:278:18: (style) two spaces required
+qoaconv.adb:279:18: (style) two spaces required
+qoaconv.adb:305:18: (style) two spaces required
+qoaconv.adb:307:21: (style) two spaces required
+qoaconv.adb:310:21: (style) two spaces required
+qoaconv.adb:311:21: (style) two spaces required
+qoaconv.adb:313:21: (style) two spaces required
+qoaconv.adb:318:21: (style) two spaces required
+qoaconv.adb:321:21: (style) two spaces required
+qoaconv.adb:324:21: (style) two spaces required
+qoaconv.adb:325:21: (style) two spaces required
+qoaconv.adb:332:21: (style) two spaces required
+qoaconv.adb:335:21: (style) two spaces required
+qoaconv.adb:350:21: (style) two spaces required
+qoaconv.adb:351:21: (style) two spaces required
+qoaconv.adb:352:21: (style) two spaces required
+qoaconv.adb:355:21: (style) two spaces required
+qoaconv.adb:356:21: (style) two spaces required
+qoaconv.adb:362:21: (style) two spaces required
+qoaconv.adb:363:21: (style) two spaces required
+qoaconv.adb:368:21: (style) two spaces required
+qoaconv.adb:386:15: (style) two spaces required
+qoaconv.adb:395:10: (style) space required
+qoaconv.adb:426:07: warning: variable "Test_D" is not referenced [-gnatwu]
+qoaconv.adb:428:31: (style) "or else" required
+qoaconv.adb:428:58: (style) "or else" required
+qoaconv.adb:429:43: (style) "or else" required
+qoaconv.adb:429:68: (style) "or else" required
+qoaconv.adb:461:46: warning: "P" may be referenced before it has a value [enabled by default]
+qoaconv.adb:473:16: (style) space required
+qoaconv.adb:515:40: warning: index for "S" may assume lower bound of 1 [-gnatww]
+qoaconv.adb:515:40: warning: suggested replacement: "S'First" [-gnatww]
+qoaconv.adb:516:40: warning: index for "S" may assume lower bound of 1 [-gnatww]
+qoaconv.adb:516:40: warning: suggested replacement: "S'First + 1" [-gnatww]
+qoaconv.adb:517:40: warning: index for "S" may assume lower bound of 1 [-gnatww]
+qoaconv.adb:517:40: warning: suggested replacement: "S'First + 2" [-gnatww]
+qoaconv.adb:518:40: warning: index for "S" may assume lower bound of 1 [-gnatww]
+qoaconv.adb:518:40: warning: suggested replacement: "S'First + 3" [-gnatww]
+qoaconv.adb:528:07: warning: variable "Count" is assigned but never read [-gnatwm]
+qoaconv.adb:530:07: warning: variable "Wav_Size" is assigned but never read [-gnatwm]
+qoaconv.adb:532:07: warning: variable "Format_Length" is not referenced [-gnatwu]
+qoaconv.adb:533:07: warning: variable "Format_Type" is assigned but never read [-gnatwm]
+qoaconv.adb:534:07: warning: variable "Byte_Rate" is assigned but never read [-gnatwm]
+qoaconv.adb:535:07: warning: variable "Block_Align" is assigned but never read [-gnatwm]
+qoaconv.adb:540:07: warning: variable "Result" is not referenced [-gnatwu]
+qoaconv.adb:566:32: (style) "or else" required
+qoaconv.adb:605:10: warning: possibly useless assignment to "Count", value might not be referenced [-gnatwm]

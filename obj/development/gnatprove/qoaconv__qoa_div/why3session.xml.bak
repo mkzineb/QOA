@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="CVC5" version="0.0.7-gnatprove" timelimit="0" steplimit="18500" memlimit="0"/>
+<file format="gnat-json">
+<path name=".."/><path name="qoaconv__qoa_div.gnat-json"/>
+<theory name="Qoaconv__qoa_div__subprogram_def">
+ <goal name="def&#39;vc">
+ <transf name="split_goal_wp_conj" >
+  <goal name="def&#39;vc.0">
+  <proof prover="0"><result status="unknown" steps="2853"/></proof>
+  </goal>
+  <goal name="def&#39;vc.1">
+  </goal>
+  <goal name="def&#39;vc.2">
+  <proof prover="0"><result status="unknown" steps="5548"/></proof>
+  </goal>
+  <goal name="def&#39;vc.3">
+  </goal>
+  <goal name="def&#39;vc.4" proved="true">
+  <proof prover="0"><result status="valid" steps="3131"/></proof>
+  </goal>
+  <goal name="def&#39;vc.5">
+  <proof prover="0"><result status="unknown" steps="5322"/></proof>
+  </goal>
+  <goal name="def&#39;vc.6">
+  <proof prover="0"><result status="steplimitexceeded" steps="18511"/></proof>
+  </goal>
+  <goal name="def&#39;vc.7">
+  </goal>
+  <goal name="def&#39;vc.8">
+  <proof prover="0"><result status="steplimitexceeded" steps="18577"/></proof>
+  </goal>
+  <goal name="def&#39;vc.9">
+  </goal>
+  <goal name="def&#39;vc.10">
+  <proof prover="0"><result status="steplimitexceeded" steps="18522"/></proof>
+  </goal>
+  <goal name="def&#39;vc.11">
+  </goal>
+  <goal name="def&#39;vc.12">
+  <proof prover="0"><result status="steplimitexceeded" steps="19182"/></proof>
+  </goal>
+  <goal name="def&#39;vc.13">
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

@@ -1,0 +1,55 @@
+Summary of SPARK analysis
+=========================
+
+--------------------------------------------------------------------------------
+SPARK Analysis results        Total        Flow   Provers   Justified   Unproved
+--------------------------------------------------------------------------------
+Data Dependencies                 .           .         .           .          .
+Flow Dependencies                 .           .         .           .          .
+Initialization                   35          27         .           .          8
+Non-Aliasing                      .           .         .           .          .
+Run-time Checks                   .           .         .           .          .
+Assertions                        .           .         .           .          .
+Functional Contracts              .           .         .           .          .
+LSP Verification                  .           .         .           .          .
+Termination                       .           .         .           .          .
+Concurrency                       .           .         .           .          .
+--------------------------------------------------------------------------------
+Total                            35    27 (77%)         .           .    8 (23%)
+
+
+max steps used for successful proof: 0
+
+Analyzed 2 units
+in unit qoaconv, 16 subprograms and packages out of 28 analyzed
+proof skipped for this unit (only flow analysis was requested)
+  Qoaconv at qoaconv.ads:3 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements)
+  Qoaconv.Get_Chunk_Id at qoaconv.ads:104 flow analyzed (0 errors, 0 checks, 1 warnings and 0 pragma Assume statements)
+  Qoaconv.I_32gp372 at qoaconv.adb:10 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements)
+  Qoaconv.I_32gp372.i_32 at qoaconv.adb:10 skipped; body is SPARK_Mode => Off
+  Qoaconv.I_64gp220 at qoaconv.adb:8 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements)
+  Qoaconv.I_64gp220.i_64 at qoaconv.adb:8 skipped; body is SPARK_Mode => Off
+  Qoaconv.Qoa_Clamp at qoaconv.ads:97 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements)
+  Qoaconv.Qoa_Clamp_s16 at qoaconv.ads:83 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements)
+  Qoaconv.Qoa_Div at qoaconv.ads:121 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements)
+  Qoaconv.Qoa_Encode at qoaconv.ads:123 flow analyzed (0 errors, 2 checks, 5 warnings and 0 pragma Assume statements)
+  Qoaconv.Qoa_Encode_Frame at qoaconv.ads:115 flow analyzed (0 errors, 3 checks, 10 warnings and 0 pragma Assume statements)
+  Qoaconv.Qoa_Encode_Header at qoaconv.ads:70 flow analyzed (0 errors, 1 checks, 0 warnings and 0 pragma Assume statements)
+  Qoaconv.Qoa_Frame_Size at qoaconv.ads:94 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements)
+  Qoaconv.Qoa_Lms_Predict at qoaconv.ads:85 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements)
+  Qoaconv.Qoa_Lms_Update at qoaconv.ads:87 flow analyzed (0 errors, 2 checks, 1 warnings and 0 pragma Assume statements)
+  Qoaconv.Qoa_Write at qoaconv.ads:100 skipped; body is SPARK_Mode => Off
+  Qoaconv.Qoa_Write_U64 at qoaconv.ads:74 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements)
+  Qoaconv.Qoaconv_Fread_u16_le at qoaconv.ads:107 skipped; body is SPARK_Mode => Off
+  Qoaconv.Qoaconv_Fread_u32_le at qoaconv.ads:109 skipped; body is SPARK_Mode => Off
+  Qoaconv.Qoaconv_Fwrite_U16_Le at qoaconv.ads:92 skipped; body is SPARK_Mode => Off
+  Qoaconv.Qoaconv_Fwrite_U32_Le at qoaconv.ads:90 skipped; body is SPARK_Mode => Off
+  Qoaconv.Qoaconv_Wav_Read at qoaconv.ads:111 skipped; body is SPARK_Mode => Off
+  Qoaconv.Shift_Left at qoaconv.adb:25 skipped; body is SPARK_Mode => Off
+  Qoaconv.Shift_Right at qoaconv.adb:28 skipped; body is SPARK_Mode => Off
+  Qoaconv.U_32gp296 at qoaconv.adb:9 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements)
+  Qoaconv.U_32gp296.u_32 at qoaconv.adb:9 skipped; body is SPARK_Mode => Off
+  Qoaconv.U_64gp144 at qoaconv.adb:7 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements)
+  Qoaconv.U_64gp144.u_64 at qoaconv.adb:7 skipped; body is SPARK_Mode => Off
+in unit qoaproject, 0 subprograms and packages out of 1 analyzed
+  Qoaproject at qoaproject.adb:3 skipped; SPARK_Mode => Off
